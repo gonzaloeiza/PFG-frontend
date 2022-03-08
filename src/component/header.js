@@ -4,18 +4,19 @@ import { logout, isLogin } from '../middleware/auth';
 import { getUsername } from "../services/user.service"
 
 const Header = props => {
-    const [isLoggedIn, setisLoggedIn] = useState(false);
-    const [username, setUsername] = useState("Gonzalo");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState(null);
 
     useEffect(() => {
-        setisLoggedIn(isLogin());
+        setIsLoggedIn(isLogin());
         setUsername(getUsername());
     }, [props]);
 
 
     const handleLogout = () => {
         logout();
-        setisLoggedIn(false)
+        setIsLoggedIn(false);
+        setUsername(null);
     }
 
     return (

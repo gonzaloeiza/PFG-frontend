@@ -3,9 +3,9 @@ import { message } from 'antd';
 
 
 // LOGIN
-export const login = (props, username, password) => {
+export const login = (props, email, password) => {
     var details = {
-        'username': username,
+        'email': email,
         'password': password
     };
 
@@ -28,16 +28,17 @@ export const login = (props, username, password) => {
         if (response.status === 200) {
             response.json().then((data) => {
                 localStorage.setItem("auth", data.accessToken);
-                localStorage.setItem("username", data.username);
+                localStorage.setItem("name", data.name);
                 props.history.push("/home");
             });
         } else if (response.status === 400) {
-          response.json().then((data) => {
-            message.error(data.error);
-          });
+            response.json().then((data) => {
+                message.error(data.error);
+            });
+        } else {
+            message.error('Ha ocurrido un error, intentar de nuevo mas tarde.')
         }
     }).catch((err) => {
-        console.log(err);
         message.error('Ha ocurrido un error, intentar de nuevo mas tarde.')
     });
 }
@@ -45,7 +46,7 @@ export const login = (props, username, password) => {
 // LOGOUT
 export const logout = () => {
     localStorage.removeItem('auth')
-    localStorage.removeItem("username");
+    localStorage.removeItem("name");
     message.success("Sesion cerrada correctamente.")
 }
 

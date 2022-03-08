@@ -8,7 +8,7 @@ class Login extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            username: null,
+            email: null,
             password: null
         }
     }
@@ -17,10 +17,10 @@ class Login extends Component {
             const inputs = e.target.getElementsByTagName("input");
 
             this.setState({
-                username: inputs.username.value,
+                email: inputs.email.value,
                 password: inputs.password.value
             }, () => {
-                login(this.props, this.state.username, this.state.password);
+                login(this.props, this.state.email, this.state.password);
             })
         };
 
@@ -28,8 +28,8 @@ class Login extends Component {
         return (
             <Layout className="app-login" isHeader={true}>           
                 <div className="container">
-                    <div className="row pt-5">
-                        <div className="col-md-6 offset-md-3 p-5">
+                    <div className="row justify-content-center pt-5">
+                        <div className="col-xs-12 col-sm-10 col-md-8 col-lg-7">
                             <div className="card my-5"> 
                                 <form className="card-body cardbody-color p-lg-5" onSubmit={this.handleSubmit}>
                                     <div className="text-center">
@@ -37,10 +37,10 @@ class Login extends Component {
                                      {/* <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" className="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="50px" alt="profile" /> */}
                                     </div>
                                     <div className="mb-3">
-                                        <input type="text" className="form-control" name="username" id="username" placeholder="Nombre de usuario" />
+                                        <input type="text" className="form-control" name="email" id="email" placeholder="Correo electrónico" />
                                     </div>
                                     <div className="mb-3">
-                                        <input type="password" className="form-control" name="password" id="password" placeholder="Contraseña" />
+                                        <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" />
                                     </div>
                                     <div className="text-center">
                                         <button type="submit" className="btn btn-color px-5 mb-5 w-100">Iniciar Sesión</button>
