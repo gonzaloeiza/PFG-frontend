@@ -1,22 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
-import { logout, isLogin } from '../middleware/auth';
-import { getUsername } from "../services/user.service"
+import { logout } from '../middleware/auth';
 
 const Header = props => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState(null);
-
-    useEffect(() => {
-        setIsLoggedIn(isLogin());
-        setUsername(getUsername());
-    }, [props]);
-
 
     const handleLogout = () => {
         logout();
-        setIsLoggedIn(false);
-        setUsername(null);
     }
 
     return (
@@ -26,19 +15,19 @@ const Header = props => {
                 <Navbar.Toggle  />
                 <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
                     <Nav className='mx-auto'>
-                        <Nav.Link href="/novedades">Novedades</Nav.Link>                        
-                        <Nav.Link href="/bookings">Reservas</Nav.Link>
-                        <Nav.Link href="/rankings">Rankings</Nav.Link>
+                        <Nav.Link href="/">Novedades</Nav.Link>                        
+                        <Nav.Link href="/booking">Reservas</Nav.Link>
+                        <Nav.Link href="/ranking">Rankings</Nav.Link>
                     </Nav>
                     <Nav>
-                        {!isLoggedIn ? (
+                        {props.username === null || props.username === undefined ? (
                             <>
                             <Nav.Link href="/login">Acceso a usuarios</Nav.Link>
                             <Nav.Link href="/signup">Registrarse</Nav.Link>
                             </>
                         ) : (
                             <>
-                                <NavDropdown title={username} align="end">
+                                <NavDropdown title={props.username} align="end">
                                 <NavDropdown.Item href="#action/3.2">Perfil</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">Mis reservas</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">Ajustes</NavDropdown.Item>

@@ -6,7 +6,6 @@ const Home = () => (
   <Layout className="app-home" isHeader={true}>
     <h1>Welcome to Home</h1>
     <Link to="/page-1" >Page_One</Link>
-    <Link to="/page-2" className="ml-3">Page_Two</Link>
   </Layout>
 )
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout } from '../component'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
-const PageOne = () => {
+const PageOne = (props) => {
   return (
     <Layout className="app-livecamera" isHeader={true}>
       <h1>Welcome to Page One</h1>

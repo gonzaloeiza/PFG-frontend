@@ -29,7 +29,7 @@ export const login = (props, email, password) => {
             response.json().then((data) => {
                 localStorage.setItem("auth", data.accessToken);
                 localStorage.setItem("name", data.name);
-                props.history.push("/home");
+                props.history.push("/");
             });
         } else if (response.status === 400) {
             response.json().then((data) => {

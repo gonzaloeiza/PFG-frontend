@@ -20,14 +20,17 @@ export const signUp = (props, userData) => {
     }).then((response) => {
         if (response.status === 200) {
             response.json().then((data) => {
-                console.log(data);
+                message.success("Su formulario de registro se está tramitando. Se le avisará a su correo electronico.");
+                props.history.push("/");
             });
         } else if (response.status === 400) {
             response.json().then((data) => {
                 message.error(data.error);
             });
+        } else {
+            message.error('Ha ocurrido un error, intentar de nuevo mas tarde.')
         }
     }).catch((err) => {
-        
+        message.error('Ha ocurrido un error, intentar de nuevo mas tarde.')        
     });
 }
