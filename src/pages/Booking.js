@@ -16,7 +16,7 @@ class Booking extends Component {
     componentDidMount() {
         this.setState({
             username: getUsername(),
-            courts: getCourts(),
+            courts: getCourts(this.props),
             loading:false
         });
     }

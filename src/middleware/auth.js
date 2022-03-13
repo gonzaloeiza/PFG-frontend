@@ -27,13 +27,13 @@ export const login = (props, email, password) => {
     }).then((response) => {
         if (response.status === 200) {
             response.json().then((data) => {
-                localStorage.setItem("auth", data.accessToken);
-                localStorage.setItem("name", data.name);
+                localStorage.setItem("auth", data.message.accessToken);
+                localStorage.setItem("name", data.message.name);
                 props.history.push("/");
             });
         } else if (response.status === 400) {
             response.json().then((data) => {
-                message.error(data.error);
+                message.error(data.message);
             });
         } else {
             message.error('Ha ocurrido un error, intentar de nuevo mas tarde.')
@@ -44,10 +44,12 @@ export const login = (props, email, password) => {
 }
 
 // LOGOUT
-export const logout = () => {
+export const logout = (showMessage = true) => {
     localStorage.removeItem('auth')
     localStorage.removeItem("name");
-    message.success("Sesion cerrada correctamente.")
+    if (showMessage) {
+        message.success("Sesion cerrada correctamente.")
+    }
 }
 
 // LOGIN STATUS
