@@ -1,29 +1,51 @@
-import { message } from "antd";
 import { logout } from "../middleware/auth";
+import { message } from "antd";
 
-export function getCourts(props) {
-
-    fetch("http://localhost:5000/api/booking/courts", {
+export async function getCourts(props) {
+    const response = await fetch("http://localhost:5000/api/booking/courts", {
         method: "GET",
         headers: {
             "x-access-token": localStorage.getItem("auth")
-        },
-    }).then((response) => {
+        }
+    }).catch((err) => {
+        return null;
+    });
+
+    if (response !== null) {
         if (response.status === 200) {
-            response.json().then((data) => {
-                console.log(data.message);
-            });
-            return null;
+            const data = await response.json();
+            return data.message;
         } else if (response.status === 401 || response.status === 403) {
             message.error("Tu sesión ha caducado. Inicia sesión de nuevo");
             logout(false);
-            props.history.push("/login");
-        } else {
+            return props.history.push("/login");
+        }
+            else {
             message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
+            return [];
+        }
+    } else {
+        message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
+        return [];
+    }   
+}
+
+
+export async function getDisponibility(props, day, court) {
+    const response = await fetch("http://localhost:5000/api/booking/disponibility", {
+        method: "POST",
+        headers: {
+            "x-access-token": localStorage.getItem("auth")
         }
     }).catch((err) => {
-
+        return null;
     });
 
-    return ["pista1", "pista2"]
+    if (response !== null) {
+        
+    } else {
+        message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
+        return [];
+    }
+
 }
