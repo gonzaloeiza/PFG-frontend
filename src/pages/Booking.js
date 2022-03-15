@@ -66,13 +66,19 @@ class Booking extends Component {
         if (this.state.availableTimes.length > 0) {
             for (i = 0; i < this.state.availableTimes.length; i++) {
                 const date = new Date(this.state.availableTimes[i]);
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                hours = ("0" + hours).slice(-2); //adds a 0 if hour < 10
+                minutes = ("0" + minutes).slice(-2); //adds a 0 if minutes < 10
                 availableTimes.push(
                     <div key={i} className="mb-4 col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                        <div className="card text-white">
-                            <div className="card-header bg-dark">{`${date.getHours()}:${date.getMinutes()}`}</div>
-                            <div className="card-body bg-light">
-                                <h5 className="card-title">precio con luz</h5>
-                                <h5 className="card-title">precio sin luz</h5>
+                        <div className="card border-dark">
+                            <div className="card-header bg-dark">
+                                <h4 className="strong text-white my-auto">{`${hours}:${minutes}`}</h4>
+                            </div>
+                            <div className="card-body">
+                                <p className="card-text">Precio con luz</p>
+                                <p className="card-text">Precio sin luz</p>
                             </div>
                         </div>
                     </div>
@@ -113,14 +119,16 @@ class Booking extends Component {
                     </div>
                 </div>
             {
-                this.state.availableTimes.length > 0 && (
+                this.state.availableTimes.length > 0 ? (
                     <div className="container">
                         <div className="row justify-content-start">
                             {availableTimes}
                         </div>
                     </div>
-            )}
-                
+                ) : (
+                    <h1>No se han encontrado resultados</h1>
+                )
+            }
             </Layout>
         );
     }
