@@ -14,22 +14,27 @@ class Booking extends Component {
             username: null,
             courts: [],
             bookingDay: new Date().toJSON().slice(0,10),
-            selectedCourt: null
+            selectedCourt: null,
+            availableTimes: []
         }
     }
 
-    handleSubmit = (e) => {
+    async handleSubmit (e) {
         e.preventDefault();
-        const selectedCourt = e.target.getElementsByTagName("select").court.value;
-        if (selectedCourt === "Pistas") {
+        const selectedCourt = e.target.getElementsByTagName("select").court;
+        if (selectedCourt.value === "Pistas") {
             return message.error("Debes seleccionar una pista");
         }
-        this.setState({
-            selectedCourt: selectedCourt
-        }, () => {
-            // fetcheamos resultados
-            console.log(this.state);
-        })
+        await this.setState({
+            selectedCourt: selectedCourt.value,
+            loading: true
+        });
+        const availableTimes = await getDisponibility(this.props, this.state.bookingDay, this.state.selectedCourt);
+        await this.setState({
+            availableTimes: availableTimes,
+            loading: false
+        });
+        document.getElementById("court").selectedIndex = selectedCourt.selectedIndex
     }
 
 
@@ -50,10 +55,29 @@ class Booking extends Component {
         }
         
         var courtsOption = [];
-        for (var i = 0; i < this.state.courts.length; i++) {
+        var i = 0;
+        for (i = 0; i < this.state.courts.length; i++) {
             courtsOption.push(
                 <option value={this.state.courts[i].name} key={i}>{this.state.courts[i].name}</option>
             );
+        }
+
+        var availableTimes = [];
+        if (this.state.availableTimes.length > 0) {
+            for (i = 0; i < this.state.availableTimes.length; i++) {
+                const date = new Date(this.state.availableTimes[i]);
+                availableTimes.push(
+                    <div key={i} className="mb-4 col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                        <div className="card text-white">
+                            <div className="card-header bg-dark">{`${date.getHours()}:${date.getMinutes()}`}</div>
+                            <div className="card-body bg-light">
+                                <h5 className="card-title">precio con luz</h5>
+                                <h5 className="card-title">precio sin luz</h5>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
         }
 
         return (
@@ -88,7 +112,14 @@ class Booking extends Component {
                         </div>
                     </div>
                 </div>
-
+            {
+                this.state.availableTimes.length > 0 && (
+                    <div className="container">
+                        <div className="row justify-content-start">
+                            {availableTimes}
+                        </div>
+                    </div>
+            )}
                 
             </Layout>
         );
