@@ -1,24 +1,30 @@
 import React, { Component }  from 'react';
 import { Layout } from '../component';
-import { Form } from 'react-bootstrap';
+import { Form, Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
 import { getCourts, getDisponibility, book } from '../services/booking.service'
 import { message } from 'antd';
 import moment from 'moment';
+import "../assets/css/pages/booking.css"
 
 class Booking extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.book = this.book.bind(this);
+        this.showConfirmationModal = this.showConfirmationModal.bind(this);
+        this.hideConfirmationModal = this.hideConfirmationModal.bind(this);
         this.state =  {
             loading: true,
+            showConfirmationModal: false,
             username: null,
             courts: [],
+            availableTimes: [],
             bookingDay: moment().format("YYYY-MM-DD"),
             selectedCourt: null,
             selectedCourtId: -1,
-            availableTimes: []
+            selectedTime: null,
+            selectedCourtWithLight: false,
         }
     }
 
@@ -42,10 +48,32 @@ class Booking extends Component {
         
     }
 
-    async book (e, withLight = true) {
-        const date = moment(this.state.bookingDay + " " + this.state.availableTimes[e.target.value], "YYYY-MM-DD HH:mm");
-        const response = await book(this.props, this.state.courts[this.state.selectedCourtId].name, date.format("YYYY-MM-DD HH:mm"), withLight);
-        console.log(response);
+    showConfirmationModal(e, withLight = true) {
+        this.setState({
+            selectedCourtWithLight: withLight,
+            selectedTime: this.state.availableTimes[e.target.value],
+            showConfirmationModal: true
+        });
+    }
+
+    hideConfirmationModal() {
+        this.setState({
+            selectedCourtWithLight: null,
+            selectedTime: null,
+            showConfirmationModal: false
+        });
+    }
+
+    async book () {
+        const date = moment(this.state.bookingDay + " " + this.state.selectedTime, "YYYY-MM-DD HH:mm");
+        await book(this.props, this.state.courts[this.state.selectedCourtId].name, date.format("YYYY-MM-DD HH:mm"), this.state.selectedCourtWithLight);
+        this.hideConfirmationModal();
+        const availableTimes = await getDisponibility(this.props, this.state.bookingDay, this.state.selectedCourt);
+        await this.setState({
+            availableTimes: availableTimes,
+            loading: false
+        });
+        document.getElementById("court").selectedIndex = this.state.selectedCourtId + 1;
     }
 
     async componentDidMount() {
@@ -60,7 +88,11 @@ class Booking extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <h1>Loading</h1>
+                <div className="center">
+                    <div className="spinner-border" style={{width: "5rem", height: "5rem"}} role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>
             );
         }
         
@@ -96,10 +128,10 @@ class Booking extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-xs-12 col-sm-6 my-2 text-center">
-                                        <button value={i} className="btn btn-success" onClick={(e) => this.book(e)}>reservar con luz</button>
+                                        <button value={i} className="btn btn-success" onClick={(e) => this.showConfirmationModal(e, true)}>reservar con luz</button>
                                     </div>
                                     <div className="col-xs-12 col-sm-6 my-2 text-center">
-                                        <button value={i} className="btn btn-success" onClick={(e) => this.book(e, false)}>reservar sin luz</button>
+                                        <button value={i} className="btn btn-success" onClick={(e) => this.showConfirmationModal(e, false)}>reservar sin luz</button>
                                     </div>
                                 </div>
                             </div>
@@ -147,9 +179,47 @@ class Booking extends Component {
                         <div className="row justify-content-start">
                             {availableTimes}
                         </div>
+                        <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                            <Modal.Header closeButton>
+                            <Modal.Title>Confirmación de reserva</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <ul>
+                                    <li>{this.state.selectedCourt}</li>
+                                    <li>Fecha: {this.state.bookingDay} a las {this.state.selectedTime}</li>
+                                    <li>{this.state.courts[this.state.selectedCourtId].bookReservationTime} minutos</li>
+                                {this.state.selectedCourtWithLight ? (
+                                    <>
+                                        <li>Con luz</li>
+                                        <li>Precio final: {this.state.courts[this.state.selectedCourtId].priceWithLight} €</li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li>Sin luz</li>
+                                        <li>Precio final: {this.state.courts[this.state.selectedCourtId].priceWithoutLight} €</li>
+                                    </>
+                                )}                          
+                                </ul>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <button className="btn btn-light" onClick={this.hideConfirmationModal}>
+                                Cancelar
+                            </button>
+                            <button className="btn btn-success" onClick={this.book}>
+                                Reservar
+                            </button>
+                            </Modal.Footer>
+                        </Modal>
+
                     </div>
                 ) : (
-                    <h1>No se han encontrado resultados</h1>
+                    <div className="container">
+                        {this.state.selectedCourtId === -1 ? (
+                            <h1>Debes seleccionar una pista</h1>                           
+                        ) : (
+                            <h1>No se han encontrado resultados</h1>
+                        )}
+                    </div>
                 )
             }
             </Layout>

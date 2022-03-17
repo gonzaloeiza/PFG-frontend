@@ -22,7 +22,7 @@ export async function getCourts(props) {
         } else if (response.status === 400) {
             const data = await response.json();
             message.error(data.message);
-            return [];  
+            return [];
         } else {
             message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
             return [];
@@ -96,7 +96,6 @@ export async function book(props, courtName, date, withLight) {
     }
 
     formBody = formBody.join("&");
-    console.log(formBody);
 
     const response = await fetch("http://localhost:5000/api/booking/bookCourt", {
         method: "POST",
@@ -111,8 +110,9 @@ export async function book(props, courtName, date, withLight) {
 
     if (response !== null) {
         if (response.status === 200) {
-            const data = await response.json();
-            return data.message;
+            // const data = await response.json();
+            message.success("Reserva realizada con éxito");
+            return;
         } else if (response.status === 401 || response.status === 403) {
             message.error("Tu sesión ha caducado. Inicia sesión de nuevo");
             logout(false);
