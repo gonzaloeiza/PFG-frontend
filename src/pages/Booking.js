@@ -2,8 +2,9 @@ import React, { Component }  from 'react';
 import { Layout } from '../component';
 import { Form } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
-import { getCourts, getDisponibility } from '../services/booking.service'
+import { getCourts, getDisponibility, book } from '../services/booking.service'
 import { message } from 'antd';
+import moment from 'moment';
 
 class Booking extends Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class Booking extends Component {
             loading: true,
             username: null,
             courts: [],
-            bookingDay: new Date().toJSON().slice(0,10),
+            bookingDay: moment().format("YYYY-MM-DD"),
             selectedCourt: null,
             selectedCourtId: -1,
             availableTimes: []
@@ -42,7 +43,9 @@ class Booking extends Component {
     }
 
     async book (e, withLight = true) {
-        console.log(this.state.courts[this.state.selectedCourtId].name + " " + this.state.availableTimes[e.target.value] + " " + withLight);
+        const date = moment(this.state.bookingDay + " " + this.state.availableTimes[e.target.value], "YYYY-MM-DD HH:mm");
+        const response = await book(this.props, this.state.courts[this.state.selectedCourtId].name, date.format("YYYY-MM-DD HH:mm"), withLight);
+        console.log(response);
     }
 
     async componentDidMount() {
@@ -72,19 +75,14 @@ class Booking extends Component {
         var availableTimes = [];
         if (this.state.availableTimes.length > 0) {
             for (i = 0; i < this.state.availableTimes.length; i++) {
-                var date = new Date(this.state.availableTimes[i]);
-                date.setTime(date.getTime() + new Date().getTimezoneOffset()*60*1000);
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                hours = ("0" + hours).slice(-2); //adds a 0 if hour < 10
-                minutes = ("0" + minutes).slice(-2); //adds a 0 if minutes < 10
+                const startTime = moment(this.state.availableTimes[i], "HH:mm");
+                const finishTime = startTime.clone().add(this.state.courts[this.state.selectedCourtId].bookReservationTime, "minutes");
                 availableTimes.push(
                     <div key={i} className="mb-4 col-xs-12 col-sm-6 col-md-6 col-lg-4">
                         <div className="card bg-light border-dark">
-                            <div className="card-header bg-dark">
-                                <div className="card-text d-flex row">
-                                    <h4 className="col fw-bold text-white">{`${hours}:${minutes}`}</h4>
-                                    <h4 className="col text-end fw-bold text-white">{this.state.courts[this.state.selectedCourtId].bookReservationTime}'</h4>
+                            <div className="card-header bg-dark text-center">
+                                <div className="card-text row">
+                                    <h4 className="col fw-bold text-white">{startTime.format("HH:mm")}-{finishTime.format("HH:mm")}</h4>
                                </div>
                             </div>
                             <div className="card-body">
