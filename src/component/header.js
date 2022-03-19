@@ -29,7 +29,7 @@ const Header = props => {
                             <>
                                 <NavDropdown title={props.username} align="end">
                                 <NavDropdown.Item href="#action/3.2">Perfil</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Mis reservas</NavDropdown.Item>
+                                <NavDropdown.Item href="/mybookings">Mis reservas</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">Ajustes</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={handleLogout} href="/">Cerrar sesión</NavDropdown.Item>
