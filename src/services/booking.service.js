@@ -129,6 +129,8 @@ export async function book(props, courtName, date, withLight) {
         message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
         return;
     }
+}
 
+export async function getBookings(props) {
 
 }

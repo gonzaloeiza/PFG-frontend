@@ -25,7 +25,7 @@ export const signUp = (props, userData) => {
             });
         } else if (response.status === 400) {
             response.json().then((data) => {
-                message.error(data.error);
+                message.error(data.message);
             });
         } else {
             message.error('Ha ocurrido un error, intentar de nuevo mas tarde.')

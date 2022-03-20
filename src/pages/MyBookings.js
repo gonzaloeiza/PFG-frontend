@@ -11,6 +11,7 @@ class MyBookings extends Component {
             loading: true,
             showConfirmationModal: false,
             username: null,
+            bookings: []
         }
     }
 
@@ -88,9 +89,8 @@ class MyBookings extends Component {
                                         </div>
                                         <div className='col-md-4 mb-1'>
                                             <select className="custom-select form-select" id="activeBooking">
-                                                <option hidden>Todas</option>
+                                                <option>Todas</option>
                                                 <option>Activas</option>
-                                                <option>Pasadas</option>                                                
                                             </select>
                                         </div>
                                         <div className='col-md-3 mt-2 d-flex justify-content-center'>
