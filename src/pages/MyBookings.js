@@ -1,7 +1,9 @@
 import React, { Component }  from 'react';
 import { Layout } from '../component';
 import { getUsername } from '../services/user.service'
+import { getBookings } from '../services/booking.service'
 import "../assets/css/pages/myBookings.css"
+import moment from 'moment';
 
 class MyBookings extends Component {
     constructor(props) {
@@ -11,12 +13,28 @@ class MyBookings extends Component {
             loading: true,
             showConfirmationModal: false,
             username: null,
+            fromDay: null,
+            toDay: null,
+            onlyActiveBookings: "false",
+            selectedOnlyBookingId: 0,
             bookings: []
         }
     }
 
     async handleSubmit (e) {
         e.preventDefault();
+        const selectedActiveBooking = e.target.getElementsByTagName("select").activeBooking;
+        this.setState({ 
+            loading: true,
+            selectedOnlyBookingId: selectedActiveBooking.selectedIndex -1
+        });
+        const bookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.onlyActiveBookings);
+        await this.setState({
+            bookings: bookings,
+            loading: false
+        });
+        document.getElementById("activeBooking").selectedIndex = selectedActiveBooking.selectedIndex;
+
     }
 
     async componentDidMount() {
@@ -38,25 +56,27 @@ class MyBookings extends Component {
         }
 
         var tableBody = []
-        for (var i=0; i < 100; i++) {
-            tableBody.push( 
+        for (var i = 0; i < this.state.bookings.length; i++) {
+            const numberOfHoursToCancelCourt= this.state.bookings[i]["court.numberOfHoursToCancelCourt"];
+            const reservationDate = moment(this.state.bookings[i].day + " " + this.state.bookings[i].startTime, "YYYY-MM-DD HH:mm:ss");
+            var startTime = moment(this.state.bookings[i].startTime, "HH:mm:ss").format("HH:mm");
+            var finishTime = moment(this.state.bookings[i].finishTime, "HH:mm:ss").format("HH:mm");
+            tableBody.push(
                 <tr key={i}>
-                    <th scope="row">19/03/2022</th>
-                    <td>16:30 - 18:00</td>
-                    <td>Si</td>
-                    <td>Pista DAM</td>
-                    <td>12.5 €</td>
-                    <td></td>
-                </tr>
-            );
-            tableBody.push( 
-                <tr key={i + 100}>
-                    <th scope="row">15/06/2022</th>
-                    <td>09:30 - 10:30</td>
-                    <td>No</td>
-                    <td>Pista Cupra</td>
-                    <td>33.50 €</td>
-                    <td><button className="btn btn-danger">cancelar</button></td>
+                    <th scope="row">{this.state.bookings[i].day}</th>
+                    <td>{startTime} - {finishTime}</td>
+                    {this.state.bookings[i].withLight ? (
+                        <td>Si</td>
+                    ) : (
+                        <td>No</td>
+                    )}
+                    <td>{this.state.bookings[i]["court.name"]}</td>
+                    <td>{this.state.bookings[i].amountToPay} €</td>
+                    {moment().add(numberOfHoursToCancelCourt, "hours") < reservationDate ? (
+                        <td><button className="btn btn-danger">Cancelar</button></td>
+                    ) : (
+                        <td></td>                        
+                    )}
                 </tr>
             );
         }
@@ -75,6 +95,8 @@ class MyBookings extends Component {
                                                 type="date"
                                                 name="bookingDay" 
                                                 placeholder="Desde"
+                                                defaultValue={this.state.fromDay}
+                                                onChange={(e) => this.setState({fromDay: e.target.value})}
                                                 required
                                             />
                                         </div>
@@ -84,13 +106,15 @@ class MyBookings extends Component {
                                                 type="date"
                                                 name="bookingDay" 
                                                 placeholder="Hasta"
+                                                defaultValue={this.state.toDay}
+                                                onChange={(e) => this.setState({toDay: e.target.value})}
                                                 required
                                             />
                                         </div>
                                         <div className='col-md-4 mb-1'>
-                                            <select className="custom-select form-select" id="activeBooking">
-                                                <option>Todas</option>
-                                                <option>Activas</option>
+                                            <select className="custom-select form-select" id="activeBooking" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
+                                                <option value={false}>Todas</option>
+                                                <option value={true}>Activas</option>
                                             </select>
                                         </div>
                                         <div className='col-md-3 mt-2 d-flex justify-content-center'>

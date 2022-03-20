@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { Layout } from '../component';
-import { Form, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
 import { getCourts, getDisponibility, book } from '../services/booking.service'
 import { message } from 'antd';
@@ -35,7 +35,6 @@ class Booking extends Component {
             return message.error("Debes seleccionar una pista");
         }
         await this.setState({
-            selectedCourt: selectedCourt.value,
             selectedCourtId: selectedCourt.selectedIndex - 1,
             loading: true
         });
@@ -45,7 +44,6 @@ class Booking extends Component {
             loading: false
         });
         document.getElementById("court").selectedIndex = selectedCourt.selectedIndex;
-        
     }
 
     showConfirmationModal(e, withLight = true) {
@@ -150,7 +148,8 @@ class Booking extends Component {
                                 <form className="card-body cardbody-color" onSubmit={this.handleSubmit}>
                                     <div className='row justify-content-center'>
                                         <div className='col-md-4 mb-1'>
-                                            <Form.Control
+                                            <input
+                                                className="form-control"
                                                 type="date"
                                                 name="bookingDay" 
                                                 placeholder="Día de reserva"
@@ -159,7 +158,7 @@ class Booking extends Component {
                                             />
                                         </div>
                                         <div className='col-md-4 mb-1'>
-                                            <select className="custom-select form-select" id="court" onChange={(e) => this.setState({selectedCourt: e})}>
+                                            <select className="custom-select form-select" id="court" onChange={(e) => this.setState({selectedCourt: e.target.value})}>
                                                 <option hidden>Pistas</option>
                                                 {courtsOption}
                                             </select>
