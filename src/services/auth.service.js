@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { backendURL } from '../config';
 
 export const signUp = (props, userData) => {
     
@@ -11,7 +12,7 @@ export const signUp = (props, userData) => {
 
     formBody = formBody.join("&");
 
-    fetch("http://localhost:5000/api/auth/signup", {
+    fetch(`${backendURL}/api/auth/signup`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

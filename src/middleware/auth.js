@@ -1,6 +1,6 @@
 /* Authetifacation actions */
 import { message } from 'antd';
-
+import { backendURL } from '../config';
 
 // LOGIN
 export const login = (props, email, password) => {
@@ -18,7 +18,7 @@ export const login = (props, email, password) => {
 
     formBody = formBody.join("&");
 
-    fetch("http://localhost:5000/api/auth/signin", {
+    fetch(`${backendURL}/api/auth/signin`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

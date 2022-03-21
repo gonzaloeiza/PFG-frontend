@@ -1,5 +1,6 @@
 import React, { Component }  from 'react';
 import { Layout } from '../component';
+import { Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
 import { getBookings } from '../services/booking.service'
 import "../assets/css/pages/myBookings.css"
@@ -9,6 +10,9 @@ class MyBookings extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showConfirmationModal = this.showConfirmationModal.bind(this);
+        this.hideConfirmationModal = this.hideConfirmationModal.bind(this);
+        this.cancelReservation = this.cancelReservation.bind(this);
         this.state =  {
             loading: true,
             showConfirmationModal: false,
@@ -17,7 +21,8 @@ class MyBookings extends Component {
             toDay: null,
             onlyActiveBookings: "false",
             selectedOnlyBookingId: 0,
-            bookings: []
+            bookings: [],
+            selectedBookIndex: null
         }
     }
 
@@ -34,6 +39,22 @@ class MyBookings extends Component {
             loading: false
         });
         document.getElementById("activeBooking").selectedIndex = selectedActiveBooking.selectedIndex;
+
+    }
+
+    showConfirmationModal(e, withLight = true) {
+        this.setState({
+            showConfirmationModal: true
+        });
+    }
+
+    hideConfirmationModal() {
+        this.setState({
+            showConfirmationModal: false
+        });
+    }
+
+    async cancelReservation() {
 
     }
 
@@ -73,7 +94,7 @@ class MyBookings extends Component {
                     <td>{this.state.bookings[i]["court.name"]}</td>
                     <td>{this.state.bookings[i].amountToPay} €</td>
                     {moment().add(numberOfHoursToCancelCourt, "hours") < reservationDate ? (
-                        <td><button className="btn btn-danger">Cancelar</button></td>
+                        <td><button className="btn btn-danger" onClick={this.showConfirmationModal}>Cancelar</button></td>
                     ) : (
                         <td></td>                        
                     )}
@@ -142,6 +163,28 @@ class MyBookings extends Component {
                             {tableBody}
                         </tbody>
                     </table>
+                    {tableBody.length > 0 || (
+                        <h1>No hay reservas en este periodo de tiempo</h1>
+                    )}
+                    <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                            <Modal.Header closeButton>
+                            <Modal.Title>Confirmación de reserva</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <ul>
+                                <li></li>
+                                <li></li>
+                                </ul>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <button className="btn btn-light" onClick={this.hideConfirmationModal}>
+                                Cancelar
+                            </button>
+                            <button className="btn btn-danger" onClick={this.cancelReservation}>
+                                Cancelar reserva
+                            </button>
+                            </Modal.Footer>
+                        </Modal>
                 </div>
             </Layout>
         );

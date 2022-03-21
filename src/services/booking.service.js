@@ -1,8 +1,9 @@
 import { logout } from "../middleware/auth";
 import { message } from "antd";
+import { backendURL } from '../config';
 
 export async function getCourts(props) {
-    const response = await fetch("http://localhost:5000/api/booking/courts", {
+    const response = await fetch(`${backendURL}/api/booking/courts`, {
         method: "GET",
         headers: {
             "x-access-token": localStorage.getItem("auth")
@@ -48,7 +49,7 @@ export async function getDisponibility(props, bookingDay, courtName) {
     }
 
     formBody = formBody.join("&");
-    const response = await fetch("http://localhost:5000/api/booking/disponibility", {
+    const response = await fetch(`${backendURL}/api/booking/disponibility`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -97,7 +98,7 @@ export async function book(props, courtName, date, withLight) {
 
     formBody = formBody.join("&");
 
-    const response = await fetch("http://localhost:5000/api/booking/bookCourt", {
+    const response = await fetch(`${backendURL}/api/booking/bookCourt`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -147,7 +148,7 @@ export async function getBookings(props, fromDay, toDay, onlyActiveBookings) {
 
     formBody = formBody.join("&");
 
-    const response = await fetch("http://localhost:5000/api/booking/", {
+    const response = await fetch(`${backendURL}/api/booking/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
