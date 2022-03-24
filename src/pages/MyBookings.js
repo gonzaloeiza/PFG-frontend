@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import { Layout } from '../component';
 import { Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
-import { getBookings } from '../services/booking.service'
+import { getBookings, cancelBooking } from '../services/booking.service'
 import "../assets/css/pages/myBookings.css"
 import moment from 'moment';
 
@@ -31,31 +31,43 @@ class MyBookings extends Component {
         const selectedActiveBooking = e.target.getElementsByTagName("select").activeBooking;
         this.setState({ 
             loading: true,
-            selectedOnlyBookingId: selectedActiveBooking.selectedIndex -1
+            selectedOnlyBookingId: selectedActiveBooking.selectedIndex
         });
         const bookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.onlyActiveBookings);
         await this.setState({
             bookings: bookings,
             loading: false
         });
-        document.getElementById("activeBooking").selectedIndex = selectedActiveBooking.selectedIndex;
+        document.getElementById("activeBooking").selectedIndex = this.state.selectedOnlyBookingId;
 
     }
 
-    showConfirmationModal(e, withLight = true) {
+    showConfirmationModal(e) {
         this.setState({
-            showConfirmationModal: true
+            showConfirmationModal: true,
+            selectedBookIndex: e.target.value
         });
     }
 
     hideConfirmationModal() {
         this.setState({
-            showConfirmationModal: false
+            showConfirmationModal: false,
+            selectedBookIndex: null
         });
     }
 
     async cancelReservation() {
-
+        this.setState({
+            loading: true
+        });
+        await cancelBooking(this.props, this.state.bookings[this.state.selectedBookIndex].id);
+        this.hideConfirmationModal();
+        const bookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.onlyActiveBookings);
+        await this.setState({
+            bookings: bookings,
+            loading: false
+        });
+        document.getElementById("activeBooking").selectedIndex = this.state.selectedOnlyBookingId;
     }
 
     async componentDidMount() {
@@ -94,7 +106,7 @@ class MyBookings extends Component {
                     <td>{this.state.bookings[i]["court.name"]}</td>
                     <td>{this.state.bookings[i].amountToPay} €</td>
                     {moment().add(numberOfHoursToCancelCourt, "hours") < reservationDate ? (
-                        <td><button className="btn btn-danger" onClick={this.showConfirmationModal}>Cancelar</button></td>
+                        <td><button value={i} className="btn btn-danger" onClick={(e) => this.showConfirmationModal(e)}>Cancelar</button></td>
                     ) : (
                         <td></td>                        
                     )}
@@ -165,15 +177,24 @@ class MyBookings extends Component {
                     </table>
                     {tableBody.length > 0 || (
                         <h1>No hay reservas en este periodo de tiempo</h1>
-                    )}
-                    <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                        )}
+                    {this.state.selectedBookIndex !== null && (
+                        <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
                             <Modal.Header closeButton>
-                            <Modal.Title>Confirmación de reserva</Modal.Title>
+                            <Modal.Title>Confirmación de cancelación</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <ul>
-                                <li></li>
-                                <li></li>
+                                    <li>Fecha: {this.state.bookings[this.state.selectedBookIndex].day}</li>
+                                    <li>De {this.state.bookings[this.state.selectedBookIndex].startTime} a {this.state.bookings[this.state.selectedBookIndex].finishTime}</li>
+                                    <li>Pista: {this.state.bookings[this.state.selectedBookIndex]["court.name"]}</li>
+                                    {this.state.bookings[this.state.selectedBookIndex].withLight ? (
+                                        <li>Con luz</li>
+                                    ) : (
+                                        <li>Sin luz
+
+                                        </li>
+                                    )}
                                 </ul>
                             </Modal.Body>
                             <Modal.Footer>
@@ -185,6 +206,7 @@ class MyBookings extends Component {
                             </button>
                             </Modal.Footer>
                         </Modal>
+                    )}
                 </div>
             </Layout>
         );
