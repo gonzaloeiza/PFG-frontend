@@ -1,12 +1,11 @@
 // DEFUALT IMPORT 
-import Login from './Login';
-import Home from './home';
-import PageOne from './page-1';
-import NoMatch from './404';
-import Signup from './Signup'
 import LandingPage from './LandingPage';
+import Login from './Login';
+import Signup from './Signup'
 import Booking from './Booking'
 import MyBookings from './MyBookings'
+import AdminLogin from './AdminLogin'
+import NoMatch from './404';
 
 // DEFUALT EXPORT 
-export { LandingPage, Login, Signup, Booking, MyBookings, Home, PageOne, NoMatch };
+export { LandingPage, Login, Signup, Booking, MyBookings, AdminLogin, NoMatch };
