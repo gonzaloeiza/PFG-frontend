@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-// import { login } from '../middleware/auth';
+import { adminLogin } from '../middleware/adminAuth';
 import { AdminLayout } from '../component';
 import "../assets/css/pages/login.css";
 
@@ -14,8 +14,7 @@ class AdminLogin extends Component {
     }
        handleSubmit = (e) => {
             e.preventDefault();
-            console.log(this.state);
-            
+            adminLogin(this.props, this.state.email, this.state.password);
         };
 
     render() {
