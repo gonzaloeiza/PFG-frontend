@@ -29,7 +29,7 @@ class MyBookings extends Component {
     async handleSubmit (e) {
         e.preventDefault();
         const selectedActiveBooking = e.target.getElementsByTagName("select").activeBooking;
-        this.setState({ 
+        await this.setState({ 
             loading: true,
             selectedOnlyBookingId: selectedActiveBooking.selectedIndex
         });
@@ -42,22 +42,22 @@ class MyBookings extends Component {
 
     }
 
-    showConfirmationModal(e) {
-        this.setState({
+    async showConfirmationModal(e) {
+        await this.setState({
             showConfirmationModal: true,
             selectedBookIndex: e.target.value
         });
     }
 
-    hideConfirmationModal() {
-        this.setState({
+    async hideConfirmationModal() {
+        await this.setState({
             showConfirmationModal: false,
             selectedBookIndex: null
         });
     }
 
     async cancelReservation() {
-        this.setState({
+        await this.setState({
             loading: true
         });
         await cancelBooking(this.props, this.state.bookings[this.state.selectedBookIndex].id);
@@ -65,13 +65,13 @@ class MyBookings extends Component {
         const bookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.onlyActiveBookings);
         await this.setState({
             bookings: bookings,
-            loading: false
+            loading: false,
         });
         document.getElementById("activeBooking").selectedIndex = this.state.selectedOnlyBookingId;
     }
 
     async componentDidMount() {
-        this.setState({
+        await this.setState({
             username: getUsername(),
             loading: false
         });
@@ -178,36 +178,36 @@ class MyBookings extends Component {
                     {tableBody.length > 0 || (
                         <h1>No hay reservas en este periodo de tiempo</h1>
                         )}
-                    {this.state.selectedBookIndex !== null && (
-                        <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
-                            <Modal.Header closeButton>
-                            <Modal.Title>Confirmación de cancelación</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <ul>
-                                    <li>Fecha: {this.state.bookings[this.state.selectedBookIndex].day}</li>
-                                    <li>De {this.state.bookings[this.state.selectedBookIndex].startTime} a {this.state.bookings[this.state.selectedBookIndex].finishTime}</li>
-                                    <li>Pista: {this.state.bookings[this.state.selectedBookIndex]["court.name"]}</li>
-                                    {this.state.bookings[this.state.selectedBookIndex].withLight ? (
-                                        <li>Con luz</li>
-                                    ) : (
-                                        <li>Sin luz
-
-                                        </li>
-                                    )}
-                                </ul>
-                            </Modal.Body>
-                            <Modal.Footer>
-                            <button className="btn btn-light" onClick={this.hideConfirmationModal}>
-                                Cancelar
-                            </button>
-                            <button className="btn btn-danger" onClick={this.cancelReservation}>
-                                Cancelar reserva
-                            </button>
-                            </Modal.Footer>
-                        </Modal>
-                    )}
                 </div>
+                {this.state.selectedBookIndex !== null && (
+                    <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                        <Modal.Header closeButton>
+                        <Modal.Title>Confirmación de cancelación</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <ul>
+                                <li>Fecha: {this.state.bookings[this.state.selectedBookIndex].day}</li>
+                                <li>De {this.state.bookings[this.state.selectedBookIndex].startTime} a {this.state.bookings[this.state.selectedBookIndex].finishTime}</li>
+                                <li>Pista: {this.state.bookings[this.state.selectedBookIndex]["court.name"]}</li>
+                                {this.state.bookings[this.state.selectedBookIndex].withLight ? (
+                                    <li>Con luz</li>
+                                ) : (
+                                    <li>Sin luz
+
+                                    </li>
+                                )}
+                            </ul>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <button className="btn btn-light" onClick={this.hideConfirmationModal}>
+                            Cancelar
+                        </button>
+                        <button className="btn btn-danger" onClick={this.cancelReservation}>
+                            Cancelar reserva
+                        </button>
+                        </Modal.Footer>
+                    </Modal>
+                )}
             </Layout>
         );
     }

@@ -46,16 +46,16 @@ class Booking extends Component {
         document.getElementById("court").selectedIndex = selectedCourt.selectedIndex;
     }
 
-    showConfirmationModal(e, withLight = true) {
-        this.setState({
+    async showConfirmationModal(e, withLight = true) {
+        await this.setState({
             selectedCourtWithLight: withLight,
             selectedTime: this.state.availableTimes[e.target.value],
             showConfirmationModal: true
         });
     }
 
-    hideConfirmationModal() {
-        this.setState({
+    async hideConfirmationModal() {
+        await this.setState({
             selectedCourtWithLight: null,
             selectedTime: null,
             showConfirmationModal: false
@@ -76,7 +76,7 @@ class Booking extends Component {
 
     async componentDidMount() {
         const courts = await getCourts(this.props);
-        this.setState({
+        await this.setState({
             username: getUsername(),
             courts: courts,
             loading: false

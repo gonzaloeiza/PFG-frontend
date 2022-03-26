@@ -6,7 +6,7 @@ import Booking from './Booking'
 import MyBookings from './MyBookings'
 import AdminLogin from './AdminLogin'
 import AdminPage from './adminPage'
-import AdminUsersPage from './AdminUsersPage'
+import AdminUsersPendingPage from './AdminUsersPendingPage'
 import NoMatch from './404';
 
 // DEFUALT EXPORT 
@@ -18,6 +18,6 @@ export {
     MyBookings,
     AdminLogin,
     AdminPage,
-    AdminUsersPage,
+    AdminUsersPendingPage,
     NoMatch
 };
