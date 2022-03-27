@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { AdminLayout } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getCourts } from '../services/admin.services/bookings.service'
+import { getCourts, getBookings } from '../services/admin.services/bookings.service'
 import "../assets/css/pages/adminBookingsPage.css"
 import moment from 'moment';
 
@@ -16,16 +16,20 @@ class AdminBookingsPage extends Component {
             showConfirmationModal: false,
             fromDay: null,
             toDay: null,
-            courts: [],
             onlyActiveBookings: "false",
-            selectedOnlyBookingId: 0,
+            courts: [],
             bookings: [],
-            selectedBookIndex: null
+            selectedOnlyBookingId: 0,
+            selectedBookIndex: null,
+            selectedCourtName: "Todas",
+            paidBookings: null
         }
     }
 
     async handleSubmit (e) {
         e.preventDefault();
+        // console.log(this.state);
+        await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.selectedCourtName, this.state.onlyActiveBookings, this.state.paidBookings);
     }
 
     async showConfirmationModal(e) {
@@ -65,7 +69,7 @@ class AdminBookingsPage extends Component {
         var courts = []
         for (var i = 0; i < this.state.courts.length; i++) {
             courts.push(
-                <option key={i + 1} value={i + 1}>{this.state.courts[i].name}</option>
+                <option key={i} value={this.state.courts[i].name}>{this.state.courts[i].name}</option>
             );
         }
 
@@ -108,17 +112,28 @@ class AdminBookingsPage extends Component {
 
                                     <div className="row justify-content-center">
                                         <div className='col-md-6 mb-1'>
-                                            <select className="custom-select form-select" id="activeBooking" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
-                                                <option key={0} value={0}>Todas</option>
+                                            <select className="custom-select form-select" id="courts" onChange={(e) => this.setState({selectedCourtName: e.target.value})}>
+                                                <option key={-1} value={"Todas"}>Todas las pistas</option>
                                                 {courts}
                                             </select>
                                         </div>                                        
                                         <div className='col-md-6 mb-1'>
-                                            <select className="custom-select form-select" id="activeBooking" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
-                                                <option value={false}>Todas</option>
-                                                <option value={true}>Activas</option>
+                                            <select className="custom-select form-select" id="activeBookings" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
+                                                <option value={false}>Todas las reservas</option>
+                                                <option value={true}>Reservas activas (no se han jugado todavía)</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div className="row justify-content-center">
+                                    <div className='col-md-6 mb-1'>
+                                            <select className="custom-select form-select" id="paidBookings" onChange={(e) => this.setState({paidBookings: e.target.value})}>
+                                                <option>Reservas pagadas y sin pagar</option>
+                                                <option value={true}>Reservas pagadas</option>                              
+                                                <option value={false}>Reservas sin pagar</option>                      
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row justify-content-center">
                                         <div className='col-md-3 mt-2 d-flex justify-content-center'>
                                             <button type="submit" className="btn btn-color">Buscar</button>
                                         </div>
