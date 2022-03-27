@@ -14,11 +14,13 @@ const Header = props => {
                 <Navbar.Brand className="ml-auto" href="/">Padel play</Navbar.Brand>
                 <Navbar.Toggle  />
                 <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
+                {(props.username === null || props.username === undefined) || (  
                     <Nav className='mx-auto'>
                         <Nav.Link href="/">Novedades</Nav.Link>                        
                         <Nav.Link href="/booking">Reservas</Nav.Link>
                         <Nav.Link href="/ranking">Rankings</Nav.Link>
                     </Nav>
+                )}
                     <Nav>
                         {props.username === null || props.username === undefined ? (
                             <>

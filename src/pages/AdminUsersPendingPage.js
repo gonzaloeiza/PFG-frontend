@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 import { getPendingUsers, acceptRequest, rejectRequest } from '../services/admin.services/users.service'
 import moment from 'moment';
 
-class AdminUsersPage extends Component {
+class AdminUsersPendingPage extends Component {
     constructor(props) {
         super(props);
         this.showConfirmationModal = this.showConfirmationModal.bind(this);
@@ -194,4 +194,4 @@ class AdminUsersPage extends Component {
     }
 }
 
-export default AdminUsersPage;
+export default AdminUsersPendingPage;

@@ -23,14 +23,14 @@ export async function getPendingUsers(props) {
         } else if (response.status === 400) {
             const data = await response.json();
             message.error(data.message);
-            return;
+            return [];
         } else {
             message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
             return;
         }
     } else {
         message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
-        return;
+        return [];
     }
 }
 
