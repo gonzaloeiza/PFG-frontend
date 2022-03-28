@@ -211,7 +211,6 @@ class Booking extends Component {
                             </button>
                             </Modal.Footer>
                         </Modal>
-
                     </div>
                 ) : (
                     <div className="container">

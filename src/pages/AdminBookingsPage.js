@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { AdminLayout } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getCourts, getBookings } from '../services/admin.services/bookings.service'
+import { getCourts, getBookings, handlePaid, cancelBooking } from '../services/admin.services/bookings.service'
 import "../assets/css/pages/adminBookingsPage.css"
 import moment from 'moment';
 
@@ -9,6 +9,8 @@ class AdminBookingsPage extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePaid = this.handlePaid.bind(this);
+        this.cancelBooking = this.cancelBooking.bind(this);
         this.showConfirmationModal = this.showConfirmationModal.bind(this);
         this.hideConfirmationModal = this.hideConfirmationModal.bind(this);
         this.state =  {
@@ -16,44 +18,112 @@ class AdminBookingsPage extends Component {
             showConfirmationModal: false,
             fromDay: null,
             toDay: null,
-            onlyActiveBookings: "false",
             courts: [],
             bookings: [],
-            selectedOnlyBookingId: 0,
-            selectedBookIndex: null,
             selectedCourtName: "Todas",
-            paidBookings: null
+            onlyActiveBookings: "false",
+            paidBookings: null,
+            selectedCourtIndex: 0,
+            selectedOnlyActiveIndex: 0,
+            selectedPaidBookingsIndex: 0,
+            selectedBookingIndex: null,
         }
     }
 
     async handleSubmit (e) {
         e.preventDefault();
-        // console.log(this.state);
-        await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.selectedCourtName, this.state.onlyActiveBookings, this.state.paidBookings);
-    }
+        const selectedCourtIndex = e.target.getElementsByTagName("select").courts;
+        const selectedOnlyActiveIndex = e.target.getElementsByTagName("select").activeBookings;
+        const selectedPaidBookingsIndex = e.target.getElementsByTagName("select").paidBookings;
 
-    async showConfirmationModal(e) {
         await this.setState({
-            showConfirmationModal: true,
-            selectedBookIndex: e.target.value
+            loading: true,
+            selectedCourtIndex: selectedCourtIndex.selectedIndex,
+            selectedOnlyActiveIndex: selectedOnlyActiveIndex.selectedIndex,
+            selectedPaidBookingsIndex: selectedPaidBookingsIndex.selectedIndex,
         });
-    }
 
-    async hideConfirmationModal() {
+        const bookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.selectedCourtName, this.state.onlyActiveBookings, this.state.paidBookings);
+        
         await this.setState({
-            showConfirmationModal: false,
-            selectedBookIndex: null
+            loading: false,
+            bookings: bookings
         });
-    }
 
+        document.getElementById("courts").selectedIndex = this.state.selectedCourtIndex;
+        document.getElementById("activeBookings").selectedIndex = this.state.selectedOnlyActiveIndex;
+        document.getElementById("paidBookings").selectedIndex = this.state.selectedPaidBookingsIndex;
+
+    }
 
     async componentDidMount() {
         await this.setState({
             loading: false,
             courts: await getCourts()
         });
-
     }
+
+    async handlePaid(e) {
+        const bookingIndex = e.target.value;
+        var bookings = [...this.state.bookings];
+        bookings[bookingIndex].paid = !bookings[bookingIndex].paid;
+        await this.setState({
+            loading: true,
+            bookings: bookings
+        });
+
+        if (this.state.bookings[bookingIndex].paid) {
+            await handlePaid(this.props, this.state.bookings[bookingIndex].id, true);
+        } else {
+            await handlePaid(this.props, this.state.bookings[bookingIndex].id, false);
+        }
+
+        const updatedBookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.selectedCourtName, this.state.onlyActiveBookings, this.state.paidBookings);
+        
+        await this.setState({
+            loading: false,
+            bookings: updatedBookings
+        });
+       
+        document.getElementById("courts").selectedIndex = this.state.selectedCourtIndex;
+        document.getElementById("activeBookings").selectedIndex = this.state.selectedOnlyActiveIndex;
+        document.getElementById("paidBookings").selectedIndex = this.state.selectedPaidBookingsIndex;
+    }
+
+    async cancelBooking(e) {
+        const bookingIndex = e.target.value;
+        await this.setState({
+            loading: true,
+        });
+
+        await cancelBooking(this.props, this.state.bookings[bookingIndex].id);
+        
+        const updatedBookings = await getBookings(this.props, this.state.fromDay, this.state.toDay, this.state.selectedCourtName, this.state.onlyActiveBookings, this.state.paidBookings);
+        
+        await this.setState({
+            loading: false,
+            bookings: updatedBookings
+        });
+       
+        document.getElementById("courts").selectedIndex = this.state.selectedCourtIndex;
+        document.getElementById("activeBookings").selectedIndex = this.state.selectedOnlyActiveIndex;
+        document.getElementById("paidBookings").selectedIndex = this.state.selectedPaidBookingsIndex;
+    }
+
+    async showConfirmationModal(e) {
+        await this.setState({
+            selectedBookingIndex: e.target.value,
+            showConfirmationModal: true,
+        });
+    }
+
+    async hideConfirmationModal() {
+        await this.setState({
+            selectedBookingIndex: null,
+            showConfirmationModal: false
+        });
+    }
+
 
     render() {
         if (this.state.loading) {
@@ -74,9 +144,23 @@ class AdminBookingsPage extends Component {
         }
 
         var tableBody = []
-        // for (var i = 0; i < this.state.bookings.length; i++) {
+        for (i = 0; i < this.state.bookings.length; i++) {
+            const startTime = moment(this.state.bookings[i].startTime, "HH:mm:ss").format("HH:mm");
+            const finishTime = moment(this.state.bookings[i].finishTime, "HH:mm:ss").format("HH:mm");
 
-        // }
+            
+            tableBody.push(
+                <tr key={i}>
+                    <th scope="row">{this.state.bookings[i].day}</th>
+                    <td>{startTime}-{finishTime}</td>
+                    <td>{this.state.bookings[i]["user.name"]} {this.state.bookings[i]["user.firstSurname"]}</td>
+                    <td>{this.state.bookings[i].amountToPay} €</td>
+                    <td><input className="form-check-input" type="checkbox" value={i} checked={this.state.bookings[i].paid} onChange={this.handlePaid}/></td>
+                    <td><button className='btn btn-success' value={i} onClick={this.showConfirmationModal}>Más detalles</button></td>
+                    <td><button className='btn btn-danger' value={i} onClick={this.cancelBooking}>Anular</button></td>
+                </tr>
+            );
+        }
 
         return (
             <AdminLayout isHeader={true} username={this.state.username}>
@@ -149,10 +233,11 @@ class AdminBookingsPage extends Component {
                             <tr>
                             <th scope="col">Fecha</th>
                             <th scope="col">Hora</th>
-                            <th scope="col">Con luz</th>
-                            <th scope="col">Pista</th>
+                            <th scope="col">Nombre</th>
                             <th scope="col">Importe</th>
-                            <th scope="col">Cancelar</th>
+                            <th scope="col">Pagado</th>
+                            <th scope="col">Ver más detalles</th>
+                            <th scope="col">Anular pista</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,35 +248,61 @@ class AdminBookingsPage extends Component {
                         <h1>No hay reservas en este periodo de tiempo</h1>
                         )}
                 </div>
-                {/* {this.state.selectedBookIndex !== null && (
-                    <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
-                        <Modal.Header closeButton>
-                        <Modal.Title>Confirmación de cancelación</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <ul>
-                                <li>Fecha: {this.state.bookings[this.state.selectedBookIndex].day}</li>
-                                <li>De {this.state.bookings[this.state.selectedBookIndex].startTime} a {this.state.bookings[this.state.selectedBookIndex].finishTime}</li>
-                                <li>Pista: {this.state.bookings[this.state.selectedBookIndex]["court.name"]}</li>
-                                {this.state.bookings[this.state.selectedBookIndex].withLight ? (
-                                    <li>Con luz</li>
-                                ) : (
-                                    <li>Sin luz
-
+                {(this.state.selectedBookingIndex !== null && this.state.selectedBookingIndex !== undefined) && (
+                    <Modal centered show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                            <Modal.Header closeButton>
+                            <Modal.Title>Detalles de reserva</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <ul>
+                                    <li>Pista: {this.state.bookings[this.state.selectedBookingIndex]["court.name"]}</li>
+                                    <li>
+                                        Usuario:
+                                        &nbsp;{/* white space */}                                        
+                                        {this.state.bookings[this.state.selectedBookingIndex]["user.name"]}
+                                        &nbsp;{/* white space */}
+                                        {this.state.bookings[this.state.selectedBookingIndex]["user.firstSurname"]}
+                                        &nbsp;{/* white space */}
+                                        {this.state.bookings[this.state.selectedBookingIndex]["user.secondSurname"]}                                    
                                     </li>
-                                )}
-                            </ul>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <button className="btn btn-light" onClick={this.hideConfirmationModal}>
-                            Cancelar
-                        </button>
-                        <button className="btn btn-danger" onClick={this.cancelReservation}>
-                            Cancelar reserva
-                        </button>
-                        </Modal.Footer>
+                                    <li>Correo electrónico: {this.state.bookings[this.state.selectedBookingIndex]["user.email"]}</li>
+                                    <li>Día: {this.state.bookings[this.state.selectedBookingIndex].day}</li>
+                                    <li>
+                                        Hora: {this.state.bookings[this.state.selectedBookingIndex].startTime}
+                                        -
+                                        {this.state.bookings[this.state.selectedBookingIndex].finishTime}
+                                    </li>
+                                    {this.state.bookings[this.state.selectedBookingIndex].withLight ? (
+                                        <li>Con luz</li>
+                                    ) : (
+                                        <li>Sin luz</li>
+                                    )}
+                                    <li>Importe: {this.state.bookings[this.state.selectedBookingIndex].amountToPay} €</li>
+                                    {this.state.bookings[this.state.selectedBookingIndex].paid ? (
+                                        <li>Pagado:
+                                            &nbsp;{/* white space */}
+                                            <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
+                                            &nbsp;{/* white space */}
+                                            (Actualmente pagado)
+                                        </li>
+                                        
+                                    ) : (
+                                        <li>Pagado:
+                                            &nbsp;{/* white space */}
+                                            <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
+                                            &nbsp;{/* white space */}
+                                            (Actualmente no pagado)
+                                        </li>
+                                    )}
+                                </ul>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <button className="btn btn-light" onClick={this.hideConfirmationModal}>
+                                Menos detalles
+                            </button>
+                            </Modal.Footer>
                     </Modal>
-                )} */}
+                )}
             </AdminLayout>
         );
     }
