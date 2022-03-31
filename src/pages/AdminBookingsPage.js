@@ -157,7 +157,7 @@ class AdminBookingsPage extends Component {
                     <td>{this.state.bookings[i].amountToPay} €</td>
                     <td><input className="form-check-input" type="checkbox" value={i} checked={this.state.bookings[i].paid} onChange={this.handlePaid}/></td>
                     <td><button className='btn btn-success' value={i} onClick={this.showConfirmationModal}>Más detalles</button></td>
-                    <td><button className='btn btn-danger' value={i} onClick={this.cancelBooking}>Anular</button></td>
+                    <td><button className='btn btn-danger' value={i} onClick={this.cancelBooking}>Eliminar</button></td>
                 </tr>
             );
         }
@@ -219,7 +219,7 @@ class AdminBookingsPage extends Component {
                                     </div>
                                     <div className="row justify-content-center">
                                         <div className='col-md-3 mt-2 d-flex justify-content-center'>
-                                            <button type="submit" className="btn btn-color">Buscar</button>
+                                            <button type="submit" className="btn btn-primary">Buscar</button>
                                         </div>
                                     </div>
                                 </form>
@@ -237,7 +237,7 @@ class AdminBookingsPage extends Component {
                             <th scope="col">Importe</th>
                             <th scope="col">Pagado</th>
                             <th scope="col">Ver más detalles</th>
-                            <th scope="col">Anular pista</th>
+                            <th scope="col">Eliminar reserva</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -297,7 +297,7 @@ class AdminBookingsPage extends Component {
                                 </ul>
                             </Modal.Body>
                             <Modal.Footer>
-                            <button className="btn btn-light" onClick={this.hideConfirmationModal}>
+                            <button className="btn btn-secondary" onClick={this.hideConfirmationModal}>
                                 Menos detalles
                             </button>
                             </Modal.Footer>

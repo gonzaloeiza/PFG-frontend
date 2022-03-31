@@ -43,7 +43,7 @@ class Login extends Component {
                                         <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" />
                                     </div>
                                     <div className="text-center">
-                                        <button type="submit" className="btn btn-color px-5 mb-5 w-100">Iniciar Sesión</button>
+                                        <button type="submit" className="btn btn-primary px-5 mb-5 w-100">Iniciar Sesión</button>
                                     </div>    
                                     <div id="emailHelp" className="form-text text-center mb-3 text-dark">¿No tienes cuenta todavía?
                                         <a href="/signup" className="text-dark fw-bold"> Registrate</a>

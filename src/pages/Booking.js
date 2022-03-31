@@ -166,7 +166,7 @@ class Booking extends Component {
                                     </div>
                                     <div className='row justify-content-center'>
                                         <div className='col-md-3 mt-2 d-flex justify-content-center'>
-                                            <button type="submit" className="btn btn-color">Buscar</button>
+                                            <button type="submit" className="btn btn-primary">Buscar</button>
                                         </div>
                                     </div>   
                                 </form>

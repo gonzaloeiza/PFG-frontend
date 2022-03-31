@@ -192,7 +192,7 @@ class Signup extends Component {
                                         <input type="text" className="form-control" id="province" placeholder="Provincia" />
                                     </div>
                                     <div className="text-center">
-                                    <button type="submit" className="btn btn-color px-5 w-100">Enviar solicitud</button>
+                                    <button type="submit" className="btn btn-primary px-5 w-100">Enviar solicitud</button>
                                 </div>
                             </form>
                         </div>

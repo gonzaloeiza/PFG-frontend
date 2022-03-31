@@ -36,7 +36,7 @@ class AdminLogin extends Component {
                                         <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" onChange={(e) => this.setState({password: e.target.value})}/>
                                     </div>
                                     <div className="text-center">
-                                        <button type="submit" className="btn btn-color px-5 mb-5 w-100">Iniciar Sesión como administrador</button>
+                                        <button type="submit" className="btn btn-primary px-5 mb-5 w-100">Iniciar Sesión como administrador</button>
                                     </div>
                                 </form>
                             </div>
