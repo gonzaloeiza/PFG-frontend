@@ -105,6 +105,11 @@ class MyBookings extends Component {
                     )}
                     <td>{this.state.bookings[i]["court.name"]}</td>
                     <td>{this.state.bookings[i].amountToPay} €</td>
+                    {this.state.bookings[i].paid ? (
+                            <td>Pagado</td>                    
+                    ) : (
+                        <td>Sin pagar</td>                    
+                    )}
                     {moment().add(numberOfHoursToCancelCourt, "hours") < reservationDate ? (
                         <td><button value={i} className="btn btn-danger" onClick={(e) => this.showConfirmationModal(e)}>Cancelar</button></td>
                     ) : (
@@ -168,6 +173,7 @@ class MyBookings extends Component {
                             <th scope="col">Con luz</th>
                             <th scope="col">Pista</th>
                             <th scope="col">Importe</th>
+                            <th scope="col">Pagado</th>
                             <th scope="col">Cancelar</th>
                             </tr>
                         </thead>
