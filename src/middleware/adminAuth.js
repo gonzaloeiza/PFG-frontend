@@ -46,7 +46,6 @@ export const adminLogin = (props, email, password) => {
 // LOGOUT
 export const adminLogout = (showMessage = true) => {
     localStorage.removeItem('adminAuth')
-    localStorage.removeItem("name");
     if (showMessage) {
         message.success("Sesion cerrada correctamente.")
     }
