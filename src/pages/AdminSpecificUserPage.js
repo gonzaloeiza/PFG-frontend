@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { AdminLayout } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getUserData } from '../services/admin.services/users.service';
+import { getUserData, updateUserData, deleteProfile } from '../services/admin.services/users.service';
 import { handlePaid, cancelBooking } from '../services/admin.services/bookings.service';
 import PhoneInput from 'react-phone-input-2';
 import moment from 'moment';
@@ -10,6 +10,7 @@ class AdminSpecificUserPage extends Component {
     constructor(props) {
         super(props);
         this.updateProfile = this.updateProfile.bind(this);
+        this.deleteProfile = this.deleteProfile.bind(this);
         this.changeDNI = this.changeDNI.bind(this);
         this.changeName = this.changeName.bind(this);
         this.changeFirstSurname = this.changeFirstSurname.bind(this);
@@ -23,14 +24,18 @@ class AdminSpecificUserPage extends Component {
         this.changePoblation = this.changePoblation.bind(this);
         this.changePostalCode = this.changePostalCode.bind(this);
         this.changeProvince = this.changeProvince.bind(this);
+        this.changePendingSignUp = this.changePendingSignUp.bind(this);
         this.handlePaid = this.handlePaid.bind(this);
         this.cancelBooking = this.cancelBooking.bind(this);
         this.showConfirmationModal = this.showConfirmationModal.bind(this);
         this.hideConfirmationModal = this.hideConfirmationModal.bind(this);
-
+        this.showDeleteAccountModal = this.showDeleteAccountModal.bind(this);
+        this.hideDeleteAccountModal = this.hideDeleteAccountModal.bind(this);
         this.state =  {
             loading: true,
             showConfirmationModal: false,
+            showDeleteAccountModal: false,
+            disableEdit: true,
             user: null,
             bookings: [],
             selectedGenderIndex: 0,
@@ -56,11 +61,6 @@ class AdminSpecificUserPage extends Component {
             selectedGenderIndex: genderIndex
         });
         document.getElementById("gender").selectedIndex = this.state.selectedGenderIndex;
-    }
-    
-    async updateProfile(e) {
-        e.preventDefault();
-        console.log(this.state.user);
     }
 
     async changeDNI(e) {
@@ -109,7 +109,8 @@ class AdminSpecificUserPage extends Component {
         var user = {...this.state.user};
         user.gender = e.target.value;
         await this.setState({
-            user: user
+            user: user,
+            selectedGenderIndex: e.target.selectedIndex
         });
     }
     
@@ -169,6 +170,14 @@ class AdminSpecificUserPage extends Component {
         });
     }
 
+    async changePendingSignUp(e) {
+        var user = {...this.state.user};
+        user.pendingSignUp = !e.target.checked;
+        await this.setState({
+            user: user
+        });
+    }
+
     async handlePaid(e) {
         const bookingIndex = e.target.value;
         var bookings = [...this.state.bookings];
@@ -185,7 +194,7 @@ class AdminSpecificUserPage extends Component {
         }
 
         const data = await getUserData(this.props, this.props.match.params.userId);
-
+        data[0].newPassword = "";
         await this.setState({
             loading: false,
             user: data[0],
@@ -202,6 +211,7 @@ class AdminSpecificUserPage extends Component {
         await cancelBooking(this.props, this.state.bookings[bookingIndex].id);
         
         const data = await getUserData(this.props, this.props.match.params.userId);
+        data[0].newPassword = "";
 
         await this.setState({
             loading: false,
@@ -223,6 +233,44 @@ class AdminSpecificUserPage extends Component {
             showConfirmationModal: false
         });
     }
+
+    async showDeleteAccountModal(e) {
+        await this.setState({
+            showDeleteAccountModal: true
+        });
+    }
+
+    async hideDeleteAccountModal() {
+        await this.setState({
+            showDeleteAccountModal: false,
+            disableEdit: true
+        });
+    }
+
+    async updateProfile(e) {
+        e.preventDefault();
+        await this.setState({
+            loading: true
+        })
+        console.log(this.state.user.newPassword);
+        await updateUserData(this.props, this.state.user);
+
+        const data = await getUserData(this.props, this.props.match.params.userId);
+        data[0].newPassword = "";
+        await this.setState({
+            loading: false,
+            disableEdit: true,
+            user: data[0],
+            bookings: data[1]
+        });
+        console.log(this.state.user.newPassword);
+        document.getElementById("gender").selectedIndex = this.state.selectedGenderIndex;        
+    }
+
+    async deleteProfile() {   
+        await deleteProfile(this.props, this.state.user.id);
+    }
+
 
     render() {
         if (this.state.loading) {
@@ -254,77 +302,89 @@ class AdminSpecificUserPage extends Component {
         return (
             <AdminLayout isHeader={true}>
                     <div className="row">
-                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                             <div className="card my-5">
                                 <div className="card-body cardbody-color text-center">
                                     <div className='row justify-content-center'>
-                                        <form className="card-body cardbody-color p-lg-5" onSubmit={this.updateProfile}>
+                                        <div className="card-body cardbody-color p-lg-5">
                                             <div className="text-center">
                                                 <h1 className="text-center mb-4 text-dark">{this.state.user.name} {this.state.user.firstSurname} {this.state.user.secondSurname}</h1>
                                             </div>
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="dni" value={this.state.user.dni} onChange={this.changeDNI} placeholder="DNI *" />
+                                            <div className="row justify-content-end mb-3 mx-0">
+                                                <button className="col-5 btn btn-secondary" onClick={(e) => this.setState({disableEdit: !this.state.disableEdit})}>
+                                                    <i className="bi bi-pencil"> Editar perfil</i>
+                                                </button>
                                             </div>
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="name" value={this.state.user.name} onChange={this.changeName} placeholder="Nombre *" />
-                                            </div>
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="firstSurname" value={this.state.user.firstSurname} onChange={this.changeFirstSurname} placeholder="Primer apellido *" />
-                                            </div>
-                                            <div className="mb-3">
-                                                <input type="text" className="form-control" id="secondSurname" value={this.state.user.secondSurname} onChange={this.changeSecondSurname} placeholder="Segundo apellido" />
-                                            </div>
-                                            <div className="mb-3">
-                                                <p className='mx-1 my-1'>Fecha de nacimiento</p>
-                                                <input type="date" className="form-control" id="dateBirth" value={this.state.user.dateBirth} onChange={this.changeBirthDate} />
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <div className="input-group">
-                                                    <select  className="custom-select form-select" id="gender" value={this.state.gender} onChange={this.changeGender}>
-                                                        <option hidden>Sexo</option>
-                                                        <option value="HOMBRE">Hombre</option>
-                                                        <option value="MUJER">Mujer</option>
-                                                        <option value="OTRO">Otro</option>
-                                                    </select>
+                                            <form onSubmit={this.updateProfile}>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="dni" value={this.state.user.dni} onChange={this.changeDNI} placeholder="DNI *" />
                                                 </div>
-                                            </div>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="name" value={this.state.user.name} onChange={this.changeName} placeholder="Nombre *" />
+                                                </div>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="firstSurname" value={this.state.user.firstSurname} onChange={this.changeFirstSurname} placeholder="Primer apellido *" />
+                                                </div>
+                                                <div className="mb-3">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="secondSurname" value={this.state.user.secondSurname} onChange={this.changeSecondSurname} placeholder="Segundo apellido" />
+                                                </div>
+                                                <div className="mb-1">
+                                                    <p className='mx-1 my-1'>Fecha de nacimiento</p>
+                                                    <input type="date" className="form-control" disabled={this.state.disableEdit} id="dateBirth" value={this.state.user.dateBirth} onChange={this.changeBirthDate} />
+                                                </div>
+                                                <div className='col-md-6 mb-1'>
+                                                    <div className="input-group">
+                                                        <select  className="custom-select form-select" disabled={this.state.disableEdit} id="gender" value={this.state.gender} onChange={this.changeGender}>
+                                                            <option hidden>Sexo</option>
+                                                            <option value="HOMBRE">Hombre</option>
+                                                            <option value="MUJER">Mujer</option>
+                                                            <option value="OTRO">Otro</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="email" value={this.state.user.email} onChange={this.changeEmail} placeholder="Correo electrónico *" />
-                                            </div>
-                                            <div className="mb-3">
-                                                <PhoneInput
-                                                placeholder="Numero de teléfono"
-                                                country={"es"}
-                                                value={this.state.user.phoneNumber}
-                                                onChange={this.changePhoneNumber}
-                                                />
-                                            </div>
-                                            <div className="mb-1">
-                                                <input type="password" className="form-control" id="password" value={this.state.user.newPassword} onChange={this.changePassword} placeholder="***********" />
-                                            </div>
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="direction" value={this.state.user.direction} onChange={this.changeDirection} placeholder="Dirección" />
-                                            </div>
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="poblation" value={this.state.user.poblation} onChange={this.changePoblation} placeholder="Población" />
-                                            </div>
-                                            <div className="mb-1">
-                                                <input type="text" className="form-control" id="postalCode" value={this.state.user.postalCode} onChange={this.changePostalCode} placeholder="Código postal" />
-                                            </div>
-                                            <div className="mb-3">
-                                                <input type="text" className="form-control" id="province" value={this.state.user.province} onChange={this.changeProvince} placeholder="Provincia" />
-                                            </div>
-                                            <div className="text-center">
-                                                <button type="submit" className="btn btn-primary px-5 w-100">Actualizar datos</button>
-                                                <button type="submit" className="btn btn-danger mt-2 px-5 w-100">Eliminar cuenta</button>
-                                            </div>
-                                        </form>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="email" value={this.state.user.email} onChange={this.changeEmail} placeholder="Correo electrónico *" />
+                                                </div>
+                                                <div className="mb-3">
+                                                    <PhoneInput
+                                                    placeholder="Numero de teléfono"
+                                                    country={"es"}
+                                                    disabled={this.state.disableEdit}
+                                                    value={this.state.user.phoneNumber}
+                                                    onChange={this.changePhoneNumber}
+                                                    />
+                                                </div>
+                                                <div className="mb-1">
+                                                    <input type="password" className="form-control" disabled={this.state.disableEdit} id="password" value={this.state.user.newPassword} onChange={this.changePassword} placeholder="***********" />
+                                                </div>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="direction" value={this.state.user.direction} onChange={this.changeDirection} placeholder="Dirección" />
+                                                </div>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="poblation" value={this.state.user.poblation} onChange={this.changePoblation} placeholder="Población" />
+                                                </div>
+                                                <div className="mb-1">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="postalCode" value={this.state.user.postalCode} onChange={this.changePostalCode} placeholder="Código postal" />
+                                                </div>
+                                                <div className="mb-3">
+                                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="province" value={this.state.user.province} onChange={this.changeProvince} placeholder="Provincia" />
+                                                </div>
+                                                <div className="row justify-content-center mx-0 mb-3">
+                                                    <p className="col-12 mb-1">Solicitud de registro aprobada</p>
+                                                    <input  disabled={this.state.disableEdit} className="col-2 form-check-input" type="checkbox" checked={!this.state.user.pendingSignUp} onChange={this.changePendingSignUp} />
+                                                </div>
+                                                <div className="text-center">
+                                                    <button type="submit" disabled={this.state.disableEdit} className="btn btn-primary px-5 w-100">Actualizar datos</button>
+                                                </div>
+                                            </form>
+                                            <button disabled={this.state.disableEdit} onClick={this.showDeleteAccountModal} className="btn btn-danger mt-2 px-5 w-100">Eliminar cuenta</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                                 <div className="card my-5">
                                     <div className="card-body cardbody-color text-center">
                                         <h1>Reservas de {this.state.user.name}</h1>
@@ -348,60 +408,78 @@ class AdminSpecificUserPage extends Component {
                             </div>
                         </div>
                         {(this.state.selectedBookingIndex !== null && this.state.selectedBookingIndex !== undefined) && (
-                    <Modal centered show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                            <Modal centered show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                                    <Modal.Header closeButton>
+                                    <Modal.Title>Detalles de reserva</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <ul>
+                                            <li>Pista: {this.state.bookings[this.state.selectedBookingIndex]["court.name"]}</li>
+                                            <li>
+                                                Usuario:
+                                                &nbsp;{/* white space */}                                        
+                                                {this.state.bookings[this.state.selectedBookingIndex]["user.name"]}
+                                                &nbsp;{/* white space */}
+                                                {this.state.bookings[this.state.selectedBookingIndex]["user.firstSurname"]}
+                                                &nbsp;{/* white space */}
+                                                {this.state.bookings[this.state.selectedBookingIndex]["user.secondSurname"]}                                    
+                                            </li>
+                                            <li>Correo electrónico: {this.state.bookings[this.state.selectedBookingIndex]["user.email"]}</li>
+                                            <li>Día: {this.state.bookings[this.state.selectedBookingIndex].day}</li>
+                                            <li>
+                                                Hora: {this.state.bookings[this.state.selectedBookingIndex].startTime}
+                                                -
+                                                {this.state.bookings[this.state.selectedBookingIndex].finishTime}
+                                            </li>
+                                            {this.state.bookings[this.state.selectedBookingIndex].withLight ? (
+                                                <li>Con luz</li>
+                                            ) : (
+                                                <li>Sin luz</li>
+                                            )}
+                                            <li>Importe: {this.state.bookings[this.state.selectedBookingIndex].amountToPay} €</li>
+                                            {this.state.bookings[this.state.selectedBookingIndex].paid ? (
+                                                <li>Pagado:
+                                                    &nbsp;{/* white space */}
+                                                    <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
+                                                    &nbsp;{/* white space */}
+                                                    (Actualmente pagado)
+                                                </li>
+                                                
+                                            ) : (
+                                                <li>Pagado:
+                                                    &nbsp;{/* white space */}
+                                                    <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
+                                                    &nbsp;{/* white space */}
+                                                    (Actualmente no pagado)
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <button className="btn btn-secondary" onClick={this.hideConfirmationModal}>
+                                            Menos detalles
+                                        </button>
+                                    </Modal.Footer>
+                            </Modal>
+                        )}
+
+                        <Modal show={this.state.showDeleteAccountModal} onHide={this.hideDeleteAccountModal}>
                             <Modal.Header closeButton>
-                            <Modal.Title>Detalles de reserva</Modal.Title>
+                                <Modal.Title>Eliminar cuenta</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <ul>
-                                    <li>Pista: {this.state.bookings[this.state.selectedBookingIndex]["court.name"]}</li>
-                                    <li>
-                                        Usuario:
-                                        &nbsp;{/* white space */}                                        
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.name"]}
-                                        &nbsp;{/* white space */}
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.firstSurname"]}
-                                        &nbsp;{/* white space */}
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.secondSurname"]}                                    
-                                    </li>
-                                    <li>Correo electrónico: {this.state.bookings[this.state.selectedBookingIndex]["user.email"]}</li>
-                                    <li>Día: {this.state.bookings[this.state.selectedBookingIndex].day}</li>
-                                    <li>
-                                        Hora: {this.state.bookings[this.state.selectedBookingIndex].startTime}
-                                        -
-                                        {this.state.bookings[this.state.selectedBookingIndex].finishTime}
-                                    </li>
-                                    {this.state.bookings[this.state.selectedBookingIndex].withLight ? (
-                                        <li>Con luz</li>
-                                    ) : (
-                                        <li>Sin luz</li>
-                                    )}
-                                    <li>Importe: {this.state.bookings[this.state.selectedBookingIndex].amountToPay} €</li>
-                                    {this.state.bookings[this.state.selectedBookingIndex].paid ? (
-                                        <li>Pagado:
-                                            &nbsp;{/* white space */}
-                                            <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
-                                            &nbsp;{/* white space */}
-                                            (Actualmente pagado)
-                                        </li>
-                                        
-                                    ) : (
-                                        <li>Pagado:
-                                            &nbsp;{/* white space */}
-                                            <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
-                                            &nbsp;{/* white space */}
-                                            (Actualmente no pagado)
-                                        </li>
-                                    )}
-                                </ul>
+                                <p>Estas seguro de que deseas eliminar permanentemente la cuenta de: {this.state.user.name} {this.state.user.firstSurname} {this.state.user.secondSurname}</p>
                             </Modal.Body>
                             <Modal.Footer>
-                            <button className="btn btn-secondary" onClick={this.hideConfirmationModal}>
-                                Menos detalles
-                            </button>
+                                <button className="btn btn-secondary" onClick={this.hideDeleteAccountModal}>
+                                    Cancelar
+                                </button>
+                                <button className="btn btn-danger" onClick={this.deleteProfile}>
+                                    Eliminar
+                                </button>
                             </Modal.Footer>
-                    </Modal>
-                )}
+                        </Modal>
+
             </AdminLayout>   
         );
     }
