@@ -13,6 +13,7 @@ import {
   AdminBookingsPage,
   AdminUsersPage,
   AdminSpecificUserPage,
+  AdminCourtsPage,
   NoMatch
 } from './pages/'
 import PublicRoute from './hooks/PublicRoute'
@@ -41,7 +42,7 @@ function AppRouter() {
             <AdminRoute component={AdminBookingsPage} path="/admin/bookings" exact />
             <AdminRoute component={AdminUsersPage} path="/admin/users" exact  />
             <AdminRoute component={AdminSpecificUserPage} path="/admin/users/:userId" exact  />
-
+            <AdminRoute component={AdminCourtsPage} path="/admin/courts" exact />
             {/* <AdminRoute component={AdminPage} path="" exact /> */}
             {/* <AdminRoute component={AdminPage} path="/admin/courts" exact /> */}
             {/* <AdminRoute component={AdminPage} path="/admin/bookings" exact /> */}
