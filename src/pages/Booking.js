@@ -1,11 +1,10 @@
 import React, { Component }  from 'react';
-import { Layout } from '../component';
+import { Layout, Loading, BlueCard } from '../component';
 import { Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
 import { getCourts, getDisponibility, book } from '../services/booking.service'
 import { message } from 'antd';
 import moment from 'moment';
-import "../assets/css/pages/booking.css"
 
 class Booking extends Component {
     constructor(props) {
@@ -86,11 +85,7 @@ class Booking extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <div className="center">
-                    <div className="spinner-border" style={{width: "5rem", height: "5rem"}} role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
+                <Loading />
             );
         }
         
@@ -141,87 +136,81 @@ class Booking extends Component {
 
         return (
             <Layout isHeader={true} username={this.state.username}>
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9">
-                            <div className="card my-5">
-                                <form className="card-body cardbody-color" onSubmit={this.handleSubmit}>
-                                    <div className='row justify-content-center'>
-                                        <div className='col-md-4 mb-1'>
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                name="bookingDay" 
-                                                placeholder="Día de reserva"
-                                                defaultValue={this.state.bookingDay}
-                                                onChange={(e) => this.setState({bookingDay: e.target.value})}
-                                            />
-                                        </div>
-                                        <div className='col-md-4 mb-1'>
-                                            <select className="custom-select form-select" id="court" onChange={(e) => this.setState({selectedCourt: e.target.value})}>
-                                                <option hidden>Pistas</option>
-                                                {courtsOption}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className='row justify-content-center'>
-                                        <div className='col-md-3 mt-2 d-flex justify-content-center'>
-                                            <button type="submit" className="btn btn-primary">Buscar</button>
-                                        </div>
-                                    </div>   
-                                </form>
+                <BlueCard>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className='row justify-content-center'>
+                            <div className='col-md-4 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="date"
+                                    name="bookingDay" 
+                                    placeholder="Día de reserva"
+                                    defaultValue={this.state.bookingDay}
+                                    onChange={(e) => this.setState({bookingDay: e.target.value})}
+                                />
+                            </div>
+                            <div className='col-md-4 mb-1'>
+                                <select className="custom-select form-select" id="court" onChange={(e) => this.setState({selectedCourt: e.target.value})}>
+                                    <option hidden>Pistas</option>
+                                    {courtsOption}
+                                </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-            {
-                this.state.availableTimes.length > 0 ? (
-                    <div className="container">
-                        <div className="row justify-content-start">
-                            {availableTimes}
+                        <div className='row justify-content-center'>
+                            <div className='col-md-3 mt-2 d-flex justify-content-center'>
+                                <button type="submit" className="btn btn-primary">Buscar</button>
+                            </div>
+                        </div>   
+                    </form>
+                </BlueCard>
+                {
+                    this.state.availableTimes.length > 0 ? (
+                        <div className="container">
+                            <div className="row justify-content-start">
+                                {availableTimes}
+                            </div>
+                            <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
+                                <Modal.Header closeButton>
+                                <Modal.Title>Confirmación de reserva</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <ul>
+                                        <li>{this.state.selectedCourt}</li>
+                                        <li>Fecha: {this.state.bookingDay} a las {this.state.selectedTime}</li>
+                                        <li>{this.state.courts[this.state.selectedCourtId].bookReservationTime} minutos</li>
+                                    {this.state.selectedCourtWithLight ? (
+                                        <>
+                                            <li>Con luz</li>
+                                            <li>Precio final: {this.state.courts[this.state.selectedCourtId].priceWithLight} €</li>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <li>Sin luz</li>
+                                            <li>Precio final: {this.state.courts[this.state.selectedCourtId].priceWithoutLight} €</li>
+                                        </>
+                                    )}                          
+                                    </ul>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <button className="btn btn-light" onClick={this.hideConfirmationModal}>
+                                    Cancelar
+                                </button>
+                                <button className="btn btn-success" onClick={this.book}>
+                                    Reservar
+                                </button>
+                                </Modal.Footer>
+                            </Modal>
                         </div>
-                        <Modal show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
-                            <Modal.Header closeButton>
-                            <Modal.Title>Confirmación de reserva</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <ul>
-                                    <li>{this.state.selectedCourt}</li>
-                                    <li>Fecha: {this.state.bookingDay} a las {this.state.selectedTime}</li>
-                                    <li>{this.state.courts[this.state.selectedCourtId].bookReservationTime} minutos</li>
-                                {this.state.selectedCourtWithLight ? (
-                                    <>
-                                        <li>Con luz</li>
-                                        <li>Precio final: {this.state.courts[this.state.selectedCourtId].priceWithLight} €</li>
-                                    </>
-                                ) : (
-                                    <>
-                                        <li>Sin luz</li>
-                                        <li>Precio final: {this.state.courts[this.state.selectedCourtId].priceWithoutLight} €</li>
-                                    </>
-                                )}                          
-                                </ul>
-                            </Modal.Body>
-                            <Modal.Footer>
-                            <button className="btn btn-light" onClick={this.hideConfirmationModal}>
-                                Cancelar
-                            </button>
-                            <button className="btn btn-success" onClick={this.book}>
-                                Reservar
-                            </button>
-                            </Modal.Footer>
-                        </Modal>
-                    </div>
-                ) : (
-                    <div className="container">
-                        {this.state.selectedCourtId === -1 ? (
-                            <h1>Debes seleccionar una pista</h1>                           
-                        ) : (
-                            <h1>No se han encontrado resultados</h1>
-                        )}
-                    </div>
-                )
-            }
+                    ) : (
+                        <div className="container">
+                            {this.state.selectedCourtId === -1 ? (
+                                <h1>Debes seleccionar una pista</h1>                           
+                            ) : (
+                                <h1>No se han encontrado resultados</h1>
+                            )}
+                        </div>
+                    )
+                }
             </Layout>
         );
     }

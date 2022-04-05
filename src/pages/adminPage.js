@@ -1,6 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout } from '../component';
-import "../assets/css/pages/login.css";
+import { AdminLayout, BlueCard } from '../component';
 
 class AdminPage extends Component {
     constructor(props) {     
@@ -17,9 +16,11 @@ class AdminPage extends Component {
     render() {
         return (
             <AdminLayout isHeader={true}>
-                <div className="container">
-                   <h1>admin</h1>
-                </div>
+                <BlueCard>
+                    <div>
+                        <h1>Pagina admin</h1>
+                    </div>
+                </BlueCard>
             </AdminLayout>   
         ); 
     }

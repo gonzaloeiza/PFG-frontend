@@ -1,10 +1,10 @@
 import React, { Component }  from 'react';
-import { Layout } from '../component';
+import { BlueCard, Layout, Loading } from '../component';
 import { Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.service'
 import { getBookings, cancelBooking } from '../services/booking.service'
-import "../assets/css/pages/myBookings.css"
 import moment from 'moment';
+import '../assets/css/main.css'
 
 class MyBookings extends Component {
     constructor(props) {
@@ -80,11 +80,7 @@ class MyBookings extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <div className="center">
-                    <div className="spinner-border" style={{width: "5rem", height: "5rem"}} role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
+                <Loading />
             );
         }
 
@@ -121,49 +117,43 @@ class MyBookings extends Component {
 
         return (
             <Layout isHeader={true} username={this.state.username}>
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9">
-                            <div className="card my-5">
-                                <form className="card-body cardbody-color" onSubmit={this.handleSubmit}>
-                                    <div className='row justify-content-center'>
-                                        <div className='col-md-4 mb-1'>
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                name="bookingDay" 
-                                                placeholder="Desde"
-                                                defaultValue={this.state.fromDay}
-                                                onChange={(e) => this.setState({fromDay: e.target.value})}
-                                                required
-                                            />
-                                        </div>
-                                        <div className='col-md-4 mb-1'>
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                name="bookingDay" 
-                                                placeholder="Hasta"
-                                                defaultValue={this.state.toDay}
-                                                onChange={(e) => this.setState({toDay: e.target.value})}
-                                                required
-                                            />
-                                        </div>
-                                        <div className='col-md-4 mb-1'>
-                                            <select className="custom-select form-select" id="activeBooking" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
-                                                <option value={false}>Todas</option>
-                                                <option value={true}>Activas</option>
-                                            </select>
-                                        </div>
-                                        <div className='col-md-3 mt-2 d-flex justify-content-center'>
-                                            <button type="submit" className="btn btn-primary">Buscar</button>
-                                        </div>
-                                    </div>
-                                </form>
+                <BlueCard>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className='row justify-content-center'>
+                            <div className='col-md-4 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="date"
+                                    name="bookingDay" 
+                                    placeholder="Desde"
+                                    defaultValue={this.state.fromDay}
+                                    onChange={(e) => this.setState({fromDay: e.target.value})}
+                                    required
+                                />
+                            </div>
+                            <div className='col-md-4 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="date"
+                                    name="bookingDay" 
+                                    placeholder="Hasta"
+                                    defaultValue={this.state.toDay}
+                                    onChange={(e) => this.setState({toDay: e.target.value})}
+                                    required
+                                />
+                            </div>
+                            <div className='col-md-4 mb-1'>
+                                <select className="custom-select form-select" id="activeBooking" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
+                                    <option value={false}>Todas</option>
+                                    <option value={true}>Activas</option>
+                                </select>
+                            </div>
+                            <div className='col-md-3 mt-2 d-flex justify-content-center'>
+                                <button type="submit" className="btn btn-primary">Buscar</button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </form>
+                </BlueCard>
                 <div className="container table-responsive">
                     <table className="table table-striped">
                         <thead className="table-dark">

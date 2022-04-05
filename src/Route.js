@@ -8,7 +8,7 @@ import {
   Booking,
   MyBookings,
   AdminLogin,
-  // AdminPage,
+  AdminPage,
   AdminUsersPendingPage,
   AdminBookingsPage,
   AdminUsersPage,
@@ -37,7 +37,8 @@ function AppRouter() {
 
             <PrivateRoute component={Booking} path="/booking" exact />
             <PrivateRoute component={MyBookings} path="/mybookings" exact />
-
+  
+            <AdminRoute component={AdminPage} path="/admin" exact />
             <AdminRoute component={AdminUsersPendingPage} path="/admin/pendingusers" exact />
             <AdminRoute component={AdminBookingsPage} path="/admin/bookings" exact />
             <AdminRoute component={AdminUsersPage} path="/admin/users" exact  />

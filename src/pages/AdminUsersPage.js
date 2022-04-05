@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout } from '../component';
+import { AdminLayout, Loading, BlueCard } from '../component';
 import { getAllUsers } from '../services/admin.services/users.service'
 
 class AdminUsersPage extends Component {
@@ -63,11 +63,7 @@ class AdminUsersPage extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <div className="center">
-                    <div className="spinner-border" style={{width: "5rem", height: "5rem"}} role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
+                <Loading />
             );
         }
 
@@ -86,33 +82,27 @@ class AdminUsersPage extends Component {
         
         return (
             <AdminLayout isHeader={true}>
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9">
-                            <div className="card my-5">
-                                <form className="card-body cardbody-color text-center" onSubmit={this.filterByFirstSurname}>
-                                    <div className='row justify-content-center'>
-                                        <h1>Usuarios</h1>
-                                    </div>
-                                    <div className='row justify-content-center'>
-                                        <div className='col-md-8 mb-1'>
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                id="nameFilter" 
-                                                placeholder="Filtrar por nombre o apellidos"
-                                                onChange={(e) => this.setState({nameFiler: e.target.value})}
-                                            />
-                                        </div>
-                                        <div className='col-md-4 mb-1'>
-                                            <button type="submit" className="btn btn-primary" >Filtrar busqueda</button>
-                                        </div>
-                                    </div>
-                                </form>
+                <BlueCard>
+                    <form className="text-center" onSubmit={this.filterByFirstSurname}>
+                        <div className='row justify-content-center'>
+                            <h1>Usuarios</h1>
+                        </div>
+                        <div className='row justify-content-center'>
+                            <div className='col-md-8 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    id="nameFilter" 
+                                    placeholder="Filtrar por nombre o apellidos"
+                                    onChange={(e) => this.setState({nameFiler: e.target.value})}
+                                />
+                            </div>
+                            <div className='col-md-4 mb-1'>
+                                <button type="submit" className="btn btn-primary" >Filtrar busqueda</button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </form>
+                </BlueCard>
                 <div className="container table-responsive">
                     <table className="table table-striped">
                         <thead className="table-dark">

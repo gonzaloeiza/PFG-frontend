@@ -1,8 +1,7 @@
 import React, { Component }  from 'react';
-import { AdminLayout } from '../component';
+import { AdminLayout, BlueCard, Loading } from '../component';
 import { Modal } from 'react-bootstrap';
 import { getCourts, getBookings, handlePaid, cancelBooking } from '../services/admin.services/bookings.service'
-import "../assets/css/pages/adminBookingsPage.css"
 import moment from 'moment';
 
 class AdminBookingsPage extends Component {
@@ -128,11 +127,7 @@ class AdminBookingsPage extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <div className="center">
-                    <div className="spinner-border" style={{width: "5rem", height: "5rem"}} role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
+                <Loading />
             );
         }
 
@@ -164,69 +159,62 @@ class AdminBookingsPage extends Component {
 
         return (
             <AdminLayout isHeader={true} username={this.state.username}>
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9">
-                            <div className="card my-5">
-                                <form className="card-body cardbody-color" onSubmit={this.handleSubmit}>
-                                    <div className='row justify-content-center'>
-                                        <div className='col-md-6 mb-1'>
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                name="bookingDay" 
-                                                placeholder="Desde"
-                                                defaultValue={this.state.fromDay}
-                                                onChange={(e) => this.setState({fromDay: e.target.value})}
-                                                required
-                                            />
-                                        </div>
-                                        <div className='col-md-6 mb-1'>
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                name="bookingDay" 
-                                                placeholder="Hasta"
-                                                defaultValue={this.state.toDay}
-                                                onChange={(e) => this.setState({toDay: e.target.value})}
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="row justify-content-center">
-                                        <div className='col-md-6 mb-1'>
-                                            <select className="custom-select form-select" id="courts" onChange={(e) => this.setState({selectedCourtName: e.target.value})}>
-                                                <option key={-1} value={"Todas"}>Todas las pistas</option>
-                                                {courts}
-                                            </select>
-                                        </div>                                        
-                                        <div className='col-md-6 mb-1'>
-                                            <select className="custom-select form-select" id="activeBookings" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
-                                                <option value={false}>Todas las reservas</option>
-                                                <option value={true}>Reservas activas (no se han jugado todavía)</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row justify-content-center">
-                                    <div className='col-md-6 mb-1'>
-                                            <select className="custom-select form-select" id="paidBookings" onChange={(e) => this.setState({paidBookings: e.target.value})}>
-                                                <option>Reservas pagadas y sin pagar</option>
-                                                <option value={true}>Reservas pagadas</option>                              
-                                                <option value={false}>Reservas sin pagar</option>                      
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row justify-content-center">
-                                        <div className='col-md-3 mt-2 d-flex justify-content-center'>
-                                            <button type="submit" className="btn btn-primary">Buscar</button>
-                                        </div>
-                                    </div>
-                                </form>
+                <BlueCard>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className='row justify-content-center'>
+                            <div className='col-md-6 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="date"
+                                    name="bookingDay" 
+                                    placeholder="Desde"
+                                    defaultValue={this.state.fromDay}
+                                    onChange={(e) => this.setState({fromDay: e.target.value})}
+                                    required
+                                />
+                            </div>
+                            <div className='col-md-6 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="date"
+                                    name="bookingDay" 
+                                    placeholder="Hasta"
+                                    defaultValue={this.state.toDay}
+                                    onChange={(e) => this.setState({toDay: e.target.value})}
+                                    required
+                                />
                             </div>
                         </div>
-                    </div>
-                </div>
+                        <div className="row justify-content-center">
+                            <div className='col-md-6 mb-1'>
+                                <select className="custom-select form-select" id="courts" onChange={(e) => this.setState({selectedCourtName: e.target.value})}>
+                                    <option key={-1} value={"Todas"}>Todas las pistas</option>
+                                    {courts}
+                                </select>
+                            </div>                                        
+                            <div className='col-md-6 mb-1'>
+                                <select className="custom-select form-select" id="activeBookings" onChange={(e) => this.setState({onlyActiveBookings: e.target.value})}>
+                                    <option value={false}>Todas las reservas</option>
+                                    <option value={true}>Reservas activas (no se han jugado todavía)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className='col-md-6 mb-1'>
+                                <select className="custom-select form-select" id="paidBookings" onChange={(e) => this.setState({paidBookings: e.target.value})}>
+                                    <option>Reservas pagadas y sin pagar</option>
+                                    <option value={true}>Reservas pagadas</option>                              
+                                    <option value={false}>Reservas sin pagar</option>                      
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className='col-md-3 mt-2 d-flex justify-content-center'>
+                                <button type="submit" className="btn btn-primary">Buscar</button>
+                            </div>
+                        </div>
+                    </form>
+                </BlueCard>
                 <div className="container table-responsive">
                     <table className="table table-striped">
                         <thead className="table-dark">
@@ -250,57 +238,57 @@ class AdminBookingsPage extends Component {
                 </div>
                 {(this.state.selectedBookingIndex !== null && this.state.selectedBookingIndex !== undefined) && (
                     <Modal centered show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
-                            <Modal.Header closeButton>
+                        <Modal.Header closeButton>
                             <Modal.Title>Detalles de reserva</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <ul>
-                                    <li>Pista: {this.state.bookings[this.state.selectedBookingIndex]["court.name"]}</li>
-                                    <li>
-                                        Usuario:
-                                        &nbsp;{/* white space */}                                        
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.name"]}
+                        </Modal.Header>
+                        <Modal.Body>
+                            <ul>
+                                <li>Pista: {this.state.bookings[this.state.selectedBookingIndex]["court.name"]}</li>
+                                <li>
+                                    Usuario:
+                                    &nbsp;{/* white space */}                                        
+                                    {this.state.bookings[this.state.selectedBookingIndex]["user.name"]}
+                                    &nbsp;{/* white space */}
+                                    {this.state.bookings[this.state.selectedBookingIndex]["user.firstSurname"]}
+                                    &nbsp;{/* white space */}
+                                    {this.state.bookings[this.state.selectedBookingIndex]["user.secondSurname"]}                                    
+                                </li>
+                                <li>Correo electrónico: {this.state.bookings[this.state.selectedBookingIndex]["user.email"]}</li>
+                                <li>Día: {this.state.bookings[this.state.selectedBookingIndex].day}</li>
+                                <li>
+                                    Hora: {this.state.bookings[this.state.selectedBookingIndex].startTime}
+                                    -
+                                    {this.state.bookings[this.state.selectedBookingIndex].finishTime}
+                                </li>
+                                {this.state.bookings[this.state.selectedBookingIndex].withLight ? (
+                                    <li>Con luz</li>
+                                ) : (
+                                    <li>Sin luz</li>
+                                )}
+                                <li>Importe: {this.state.bookings[this.state.selectedBookingIndex].amountToPay} €</li>
+                                {this.state.bookings[this.state.selectedBookingIndex].paid ? (
+                                    <li>Pagado:
                                         &nbsp;{/* white space */}
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.firstSurname"]}
+                                        <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
                                         &nbsp;{/* white space */}
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.secondSurname"]}                                    
+                                        (Actualmente pagado)
                                     </li>
-                                    <li>Correo electrónico: {this.state.bookings[this.state.selectedBookingIndex]["user.email"]}</li>
-                                    <li>Día: {this.state.bookings[this.state.selectedBookingIndex].day}</li>
-                                    <li>
-                                        Hora: {this.state.bookings[this.state.selectedBookingIndex].startTime}
-                                        -
-                                        {this.state.bookings[this.state.selectedBookingIndex].finishTime}
+                                    
+                                ) : (
+                                    <li>Pagado:
+                                        &nbsp;{/* white space */}
+                                        <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
+                                        &nbsp;{/* white space */}
+                                        (Actualmente no pagado)
                                     </li>
-                                    {this.state.bookings[this.state.selectedBookingIndex].withLight ? (
-                                        <li>Con luz</li>
-                                    ) : (
-                                        <li>Sin luz</li>
-                                    )}
-                                    <li>Importe: {this.state.bookings[this.state.selectedBookingIndex].amountToPay} €</li>
-                                    {this.state.bookings[this.state.selectedBookingIndex].paid ? (
-                                        <li>Pagado:
-                                            &nbsp;{/* white space */}
-                                            <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
-                                            &nbsp;{/* white space */}
-                                            (Actualmente pagado)
-                                        </li>
-                                        
-                                    ) : (
-                                        <li>Pagado:
-                                            &nbsp;{/* white space */}
-                                            <input className="form-check-input" type="checkbox" value={this.state.selectedBookingIndex} checked={this.state.bookings[this.state.selectedBookingIndex].paid} onChange={this.handlePaid}/>
-                                            &nbsp;{/* white space */}
-                                            (Actualmente no pagado)
-                                        </li>
-                                    )}
-                                </ul>
-                            </Modal.Body>
-                            <Modal.Footer>
+                                )}
+                            </ul>
+                        </Modal.Body>
+                        <Modal.Footer>
                             <button className="btn btn-secondary" onClick={this.hideConfirmationModal}>
                                 Menos detalles
                             </button>
-                            </Modal.Footer>
+                        </Modal.Footer>
                     </Modal>
                 )}
             </AdminLayout>

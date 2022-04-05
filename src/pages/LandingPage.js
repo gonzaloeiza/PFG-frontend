@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { Layout } from '../component';
+import { Layout, BlueCard, Loading } from '../component';
 import { getUsername } from '../services/user.service'
 
 class LandingPage extends Component {
@@ -21,12 +21,14 @@ class LandingPage extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <h1>Loading</h1>
+                <Loading />
             );
         }
         return (
             <Layout isHeader={true} username={this.state.username}>
-                <h1>Landing Page: {this.state.username}</h1>
+                <BlueCard>
+                    <h1>Landing Page: {this.state.username}</h1>
+                </BlueCard>
             </Layout>
         );
     }

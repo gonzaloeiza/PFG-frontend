@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout } from '../component';
+import { AdminLayout, Loading, BlueCard } from '../component';
 import { Modal } from 'react-bootstrap';
 import { getPendingUsers, acceptRequest, rejectRequest } from '../services/admin.services/users.service'
 import moment from 'moment';
@@ -73,6 +73,11 @@ class AdminUsersPendingPage extends Component {
     }
 
     render() {
+        if (this.state.loading) {
+            return (
+                <Loading />
+            );
+        }
 
         var tableBody = []
         for (var i = 0; i < this.state.pendingUsers.length; i++) {
@@ -93,17 +98,9 @@ class AdminUsersPendingPage extends Component {
 
         return (
             <AdminLayout isHeader={true}>
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9">
-                            <div className="card my-5">
-                                <div className="card-body cardbody-color text-center">
-                                    <h1>Solicitudes de registro</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <BlueCard>
+                    <h1>Solicitudes de registro</h1>
+                </BlueCard>
                 <div className="container table-responsive">
                     <table className="table table-striped">
                         <thead className="table-dark">

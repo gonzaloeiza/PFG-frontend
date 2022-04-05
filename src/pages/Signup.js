@@ -1,11 +1,9 @@
 import React, { Component }  from 'react';
-import { Layout } from '../component';
+import { BlueCard, Layout } from '../component';
 import { message } from 'antd';
 import { signUp } from '../services/auth.service'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import "../assets/css/pages/signup.css"
-
 
 class Signup extends Component {
     constructor(props) {
@@ -98,108 +96,102 @@ class Signup extends Component {
         }
 
         return (
-            <Layout className="app-login" isHeader={true}>           
-            <div className="container">
-                <div className="row justify-content-center pt-5">
-                    <div className="col-xs-12 col-sm-10 col-md-8 col-lg-7">
-                        <div className="card my-5"> 
-                            <form className="card-body cardbody-color p-lg-5" onSubmit={this.handleSubmit}>
-                                <div className="text-center">
-                                    <h2 className="text-center mb-4 text-dark">Formulario de inscripción</h2>
-                                </div>
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="dni" placeholder="DNI *" />
-                                    </div>
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="name" placeholder="Nombre *" />
-                                    </div>
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="firstSurname" placeholder="Primer apellido *" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <input type="text" className="form-control" id="secondSurname" placeholder="Segundo apellido" />
-                                    </div>
-                                    <div className='row mb-3'>
-                                        <p className='mx-1 my-1'>Fecha de nacimiento</p>
-                                        <div className='col-md-4 mb-1'>
-                                            <div className="input-group">
-                                                <select  className="custom-select form-select" id="day">
-                                                    <option key="0" hidden>Dia</option>
-                                                    {dayOptions}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className='col-md-4 mb-1'>
-                                            <div className="input-group">
-                                                <select  className="custom-select form-select" id="month">
-                                                    <option key="0" hidden>Mes</option>
-                                                    {monthOptions}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className='col-md-4'>
-                                            <div className="input-group">
-                                                <select  className="custom-select form-select" id="year">
-                                                    <option id="0" hidden>Año</option>
-                                                    {yearOptions}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <div className='col-md-4'>
-                                            <div className="input-group">
-                                                <select  className="custom-select form-select" id="gender">
-                                                    <option hidden>Sexo</option>
-                                                    <option value="HOMBRE">Hombre</option>
-                                                    <option value="MUJER">Mujer</option>
-                                                    <option value="OTRO">Otro</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="email" placeholder="Correo electrónico *" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <input type="text" className="form-control" id="emailConfirmation" placeholder="Confirma correo ectrónico *" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <PhoneInput
-                                        placeholder="Numero de teléfono"
-                                        country={"es"}
-                                        value={this.state.phoneNumber}
-                                        onChange={phoneNumber => this.setState({ phoneNumber })}
-                                        />
-                                    </div>
-                                    <div className="mb-1">
-                                        <input type="password" className="form-control" id="password" placeholder="Contraseña *" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <input type="password" className="form-control" id="passwordConfirmation" placeholder="Confirma contraseña *" />
-                                    </div>
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="direction" placeholder="Dirección" />
-                                    </div>
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="poblation" placeholder="Población" />
-                                    </div>
-                                    <div className="mb-1">
-                                        <input type="text" className="form-control" id="postalCode" placeholder="Código postal" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <input type="text" className="form-control" id="province" placeholder="Provincia" />
-                                    </div>
-                                    <div className="text-center">
-                                    <button type="submit" className="btn btn-primary px-5 w-100">Enviar solicitud</button>
-                                </div>
-                            </form>
+            <Layout className="app-login" isHeader={true}>
+                <BlueCard className="col-xs-12 col-sm-10 col-md-8 col-lg-7">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="text-center">
+                            <h2 className="text-center mb-4 text-dark">Formulario de inscripción</h2>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </Layout>     
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="dni" placeholder="DNI *" />
+                            </div>
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="name" placeholder="Nombre *" />
+                            </div>
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="firstSurname" placeholder="Primer apellido *" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="text" className="form-control" id="secondSurname" placeholder="Segundo apellido" />
+                            </div>
+                            <div className='row mb-3'>
+                                <p className='mx-1 my-1'>Fecha de nacimiento</p>
+                                <div className='col-md-4 mb-1'>
+                                    <div className="input-group">
+                                        <select  className="custom-select form-select" id="day">
+                                            <option key="0" hidden>Dia</option>
+                                            {dayOptions}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className='col-md-4 mb-1'>
+                                    <div className="input-group">
+                                        <select  className="custom-select form-select" id="month">
+                                            <option key="0" hidden>Mes</option>
+                                            {monthOptions}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className='col-md-4'>
+                                    <div className="input-group">
+                                        <select  className="custom-select form-select" id="year">
+                                            <option id="0" hidden>Año</option>
+                                            {yearOptions}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row mb-3">
+                                <div className='col-md-4'>
+                                    <div className="input-group">
+                                        <select  className="custom-select form-select" id="gender">
+                                            <option hidden>Sexo</option>
+                                            <option value="HOMBRE">Hombre</option>
+                                            <option value="MUJER">Mujer</option>
+                                            <option value="OTRO">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="email" placeholder="Correo electrónico *" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="text" className="form-control" id="emailConfirmation" placeholder="Confirma correo ectrónico *" />
+                            </div>
+                            <div className="mb-3">
+                                <PhoneInput
+                                placeholder="Numero de teléfono"
+                                country={"es"}
+                                value={this.state.phoneNumber}
+                                onChange={phoneNumber => this.setState({ phoneNumber })}
+                                />
+                            </div>
+                            <div className="mb-1">
+                                <input type="password" className="form-control" id="password" placeholder="Contraseña *" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="password" className="form-control" id="passwordConfirmation" placeholder="Confirma contraseña *" />
+                            </div>
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="direction" placeholder="Dirección" />
+                            </div>
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="poblation" placeholder="Población" />
+                            </div>
+                            <div className="mb-1">
+                                <input type="text" className="form-control" id="postalCode" placeholder="Código postal" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="text" className="form-control" id="province" placeholder="Provincia" />
+                            </div>
+                            <div className="text-center">
+                            <button type="submit" className="btn btn-primary px-5 w-100">Enviar solicitud</button>
+                        </div>
+                    </form>
+                </BlueCard>          
+            </Layout>     
         );
     }
 }
