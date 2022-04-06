@@ -17,6 +17,26 @@ input[type="date"]:valid::before {
 	content: "" !important;
 }
 
+
+input[type="time"]::before {
+	color: #999999;
+	content: attr(placeholder);
+}
+
+input[type="time"] {
+	color: #ffffff;
+}
+
+input[type="time"]:focus,
+input[type="time"]:valid {
+	color: #666666;
+}
+
+input[type="time"]:focus::before,
+input[type="time"]:valid::before {
+	content: "" !important;
+}
+
 table th {
 	text-align: center; 
 }
@@ -31,4 +51,16 @@ table td {
     left: 50%;
     transform: translate(0, -50%);
     padding: 10px;
+}
+
+.cardbody {
+	background-color: rgb(255, 255, 255);
+}
+
+.cardbody-blue {
+	background-color: #ebf2fa;
+}
+
+ .card-courts {
+	background-color: #ebf2fa;
 }
