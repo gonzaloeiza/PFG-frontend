@@ -330,24 +330,24 @@ class AdminSpecificUserPage extends Component {
                             </div>
                             <form onSubmit={this.updateProfile}>
                                 <div className="mb-1">
-                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="dni" value={this.state.user.dni} onChange={this.changeDNI} placeholder="DNI *" />
+                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="dni" value={this.state.user.dni} onChange={this.changeDNI} placeholder="DNI *" required/>
                                 </div>
                                 <div className="mb-1">
-                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="name" value={this.state.user.name} onChange={this.changeName} placeholder="Nombre *" />
+                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="name" value={this.state.user.name} onChange={this.changeName} placeholder="Nombre *" required/>
                                 </div>
                                 <div className="mb-1">
-                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="firstSurname" value={this.state.user.firstSurname} onChange={this.changeFirstSurname} placeholder="Primer apellido *" />
+                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="firstSurname" value={this.state.user.firstSurname} onChange={this.changeFirstSurname} placeholder="Primer apellido *" required/>
                                 </div>
                                 <div className="mb-3">
                                     <input type="text" className="form-control" disabled={this.state.disableEdit} id="secondSurname" value={this.state.user.secondSurname} onChange={this.changeSecondSurname} placeholder="Segundo apellido" />
                                 </div>
                                 <div className="mb-1">
                                     <p className='mx-1 my-1'>Fecha de nacimiento</p>
-                                    <input type="date" className="form-control" disabled={this.state.disableEdit} id="dateBirth" value={this.state.user.dateBirth} onChange={this.changeBirthDate} />
+                                    <input type="date" className="form-control" disabled={this.state.disableEdit} id="dateBirth" value={this.state.user.dateBirth} onChange={this.changeBirthDate} required/>
                                 </div>
                                 <div className='col-md-6 mb-1'>
                                     <div className="input-group">
-                                        <select  className="custom-select form-select" disabled={this.state.disableEdit} id="gender" value={this.state.gender} onChange={this.changeGender}>
+                                        <select  className="custom-select form-select" disabled={this.state.disableEdit} id="gender" value={this.state.gender} onChange={this.changeGender} required>
                                             <option hidden>Sexo</option>
                                             <option value="HOMBRE">Hombre</option>
                                             <option value="MUJER">Mujer</option>
@@ -356,7 +356,7 @@ class AdminSpecificUserPage extends Component {
                                     </div>
                                 </div>
                                 <div className="mb-1">
-                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="email" value={this.state.user.email} onChange={this.changeEmail} placeholder="Correo electrónico *" />
+                                    <input type="text" className="form-control" disabled={this.state.disableEdit} id="email" value={this.state.user.email} onChange={this.changeEmail} placeholder="Correo electrónico *" required/>
                                 </div>
                                 <div className="mb-3">
                                     <PhoneInput

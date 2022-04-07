@@ -25,10 +25,10 @@ class AdminLogin extends Component {
                             <h1 className="text-center mb-4 text-dark">Panel de administración</h1>
                         </div>
                         <div className="mb-3">
-                            <input type="text" className="form-control" name="email" id="email" placeholder="Correo electrónico de administrador" onChange={(e) => this.setState({email: e.target.value})}/>
+                            <input type="text" className="form-control" name="email" id="email" placeholder="Correo electrónico de administrador" onChange={(e) => this.setState({email: e.target.value})} required/>
                         </div>
                         <div className="mb-3">
-                            <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" onChange={(e) => this.setState({password: e.target.value})}/>
+                            <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" onChange={(e) => this.setState({password: e.target.value})} required/>
                         </div>
                         <div className="text-center">
                             <button type="submit" className="btn btn-primary px-5 mb-5 w-100">Iniciar Sesión como administrador</button>

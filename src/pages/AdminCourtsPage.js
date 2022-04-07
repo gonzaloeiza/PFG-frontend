@@ -466,7 +466,7 @@ class AdminCourtsPage extends Component {
                     <Modal size="lg" centered show={this.state.showCreateModal} onHide={this.hideCreateModal}>
                         <form onSubmit={this.createCourt}> 
                             <Modal.Header closeButton>
-                                <Modal.Title>Modificar pista</Modal.Title>
+                                <Modal.Title>Crear pista</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <div className="mx-1 mb-1">

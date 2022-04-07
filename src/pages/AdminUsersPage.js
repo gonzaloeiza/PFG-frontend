@@ -74,6 +74,7 @@ class AdminUsersPage extends Component {
                     <th scope="row">{this.state.tableUsers[i].firstSurname}</th>
                     <td>{this.state.tableUsers[i].secondSurname}</td>
                     <td>{this.state.tableUsers[i].name}</td>
+                    <td>{this.state.tableUsers[i].email}</td>
                     <td>+{this.state.tableUsers[i].phoneNumber}</td>
                     <td><button className="btn btn-success" value={this.state.tableUsers[i].id} onClick={this.viewUserProfile}>Perfil completo</button></td>
                 </tr>
@@ -110,6 +111,7 @@ class AdminUsersPage extends Component {
                             <th scope="col">Primer Apellido</th>
                             <th scope="col">Segundo apellido</th>
                             <th scope="col">Nombre</th>
+                            <th scope="col">correo electrónico</th>
                             <th scope="col">número de teléfono</th>
                             <th scope="col">ficha completa</th>
                             </tr>

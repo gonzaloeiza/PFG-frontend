@@ -33,10 +33,10 @@ class Login extends Component {
                             {/* <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" className="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="50px" alt="profile" /> */}
                         </div>
                         <div className="mb-3">
-                            <input type="text" className="form-control" name="email" id="email" placeholder="Correo electrónico" />
+                            <input type="email" className="form-control" name="email" id="email" placeholder="Correo electrónico" required/>
                         </div>
                         <div className="mb-3">
-                            <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" />
+                            <input type="password" className="form-control" name="email" id="password" placeholder="Contraseña" required/>
                         </div>
                         <div className="text-center">
                             <button type="submit" className="btn btn-primary px-5 mb-5 w-100">Iniciar Sesión</button>

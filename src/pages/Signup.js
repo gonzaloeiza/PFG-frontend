@@ -103,13 +103,13 @@ class Signup extends Component {
                             <h2 className="text-center mb-4 text-dark">Formulario de inscripción</h2>
                         </div>
                             <div className="mb-1">
-                                <input type="text" className="form-control" id="dni" placeholder="DNI *" />
+                                <input type="text" className="form-control" id="dni" placeholder="DNI *" required/>
                             </div>
                             <div className="mb-1">
-                                <input type="text" className="form-control" id="name" placeholder="Nombre *" />
+                                <input type="text" className="form-control" id="name" placeholder="Nombre *" required/>
                             </div>
                             <div className="mb-1">
-                                <input type="text" className="form-control" id="firstSurname" placeholder="Primer apellido *" />
+                                <input type="text" className="form-control" id="firstSurname" placeholder="Primer apellido *" required/>
                             </div>
                             <div className="mb-3">
                                 <input type="text" className="form-control" id="secondSurname" placeholder="Segundo apellido" />
@@ -118,7 +118,7 @@ class Signup extends Component {
                                 <p className='mx-1 my-1'>Fecha de nacimiento</p>
                                 <div className='col-md-4 mb-1'>
                                     <div className="input-group">
-                                        <select  className="custom-select form-select" id="day">
+                                        <select  className="custom-select form-select" id="day" required>
                                             <option key="0" hidden>Dia</option>
                                             {dayOptions}
                                         </select>
@@ -126,7 +126,7 @@ class Signup extends Component {
                                 </div>
                                 <div className='col-md-4 mb-1'>
                                     <div className="input-group">
-                                        <select  className="custom-select form-select" id="month">
+                                        <select  className="custom-select form-select" id="month" required>
                                             <option key="0" hidden>Mes</option>
                                             {monthOptions}
                                         </select>
@@ -134,7 +134,7 @@ class Signup extends Component {
                                 </div>
                                 <div className='col-md-4'>
                                     <div className="input-group">
-                                        <select  className="custom-select form-select" id="year">
+                                        <select  className="custom-select form-select" id="year" required>
                                             <option id="0" hidden>Año</option>
                                             {yearOptions}
                                         </select>
@@ -144,7 +144,7 @@ class Signup extends Component {
                             <div className="row mb-3">
                                 <div className='col-md-4'>
                                     <div className="input-group">
-                                        <select  className="custom-select form-select" id="gender">
+                                        <select  className="custom-select form-select" id="gender" required>
                                             <option hidden>Sexo</option>
                                             <option value="HOMBRE">Hombre</option>
                                             <option value="MUJER">Mujer</option>
@@ -155,10 +155,10 @@ class Signup extends Component {
                             </div>
 
                             <div className="mb-1">
-                                <input type="text" className="form-control" id="email" placeholder="Correo electrónico *" />
+                                <input type="text" className="form-control" id="email" placeholder="Correo electrónico *" required/>
                             </div>
                             <div className="mb-3">
-                                <input type="text" className="form-control" id="emailConfirmation" placeholder="Confirma correo ectrónico *" />
+                                <input type="text" className="form-control" id="emailConfirmation" placeholder="Confirma correo ectrónico *" required/>
                             </div>
                             <div className="mb-3">
                                 <PhoneInput
@@ -169,10 +169,10 @@ class Signup extends Component {
                                 />
                             </div>
                             <div className="mb-1">
-                                <input type="password" className="form-control" id="password" placeholder="Contraseña *" />
+                                <input type="password" className="form-control" id="password" placeholder="Contraseña *" required/>
                             </div>
                             <div className="mb-3">
-                                <input type="password" className="form-control" id="passwordConfirmation" placeholder="Confirma contraseña *" />
+                                <input type="password" className="form-control" id="passwordConfirmation" placeholder="Confirma contraseña *" required/>
                             </div>
                             <div className="mb-1">
                                 <input type="text" className="form-control" id="direction" placeholder="Dirección" />
