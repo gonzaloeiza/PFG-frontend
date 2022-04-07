@@ -18,7 +18,8 @@ import {
 } from './pages/'
 import PublicRoute from './hooks/PublicRoute'
 import PrivateRoute from './hooks/PrivateRoute'
-import AdminRoute from './hooks/AdminRoute'
+import AdminPublicRoute from './hooks/AdminPublicRoute'
+import AdminPrivateRoute from './hooks/AdminPrivateRoute'
 
 function AppRouter() {
   const [user, setUser] = useState(null);
@@ -32,21 +33,21 @@ function AppRouter() {
           <Switch>
             <PublicRoute restricted={true} component={Login} path="/login" exact />
             <PublicRoute restricted={true} component={Signup} path="/signup" exact />
-            <PublicRoute restricted={true} component={AdminLogin} path="/admin/login" exact/>
             <PublicRoute component={LandingPage} path="/" exact />            
 
             <PrivateRoute component={Booking} path="/booking" exact />
             <PrivateRoute component={MyBookings} path="/mybookings" exact />
   
-            <AdminRoute component={AdminPage} path="/admin" exact />
-            <AdminRoute component={AdminUsersPendingPage} path="/admin/pendingusers" exact />
-            <AdminRoute component={AdminBookingsPage} path="/admin/bookings" exact />
-            <AdminRoute component={AdminUsersPage} path="/admin/users" exact  />
-            <AdminRoute component={AdminSpecificUserPage} path="/admin/users/:userId" exact  />
-            <AdminRoute component={AdminCourtsPage} path="/admin/courts" exact />
-            {/* <AdminRoute component={AdminPage} path="" exact /> */}
-            {/* <AdminRoute component={AdminPage} path="/admin/courts" exact /> */}
-            {/* <AdminRoute component={AdminPage} path="/admin/bookings" exact /> */}
+
+            <AdminPublicRoute restricted={true} component={AdminLogin} path="/admin/login" exact/>
+  
+            <AdminPrivateRoute component={AdminPage} path="/admin" exact />
+            <AdminPrivateRoute component={AdminUsersPendingPage} path="/admin/pendingusers" exact />
+            <AdminPrivateRoute component={AdminBookingsPage} path="/admin/bookings" exact />
+            <AdminPrivateRoute component={AdminUsersPage} path="/admin/users" exact  />
+            <AdminPrivateRoute component={AdminSpecificUserPage} path="/admin/users/:userId" exact  />
+            <AdminPrivateRoute component={AdminCourtsPage} path="/admin/courts" exact />
+
 
             <PublicRoute component={NoMatch} path="*" />
           </Switch>

@@ -15,7 +15,7 @@ const Header = props => {
                 <Navbar.Toggle  />
                 <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
                 {(props.username === null || props.username === undefined) || (  
-                    <Nav className='mx-auto'>
+                    <Nav className=''>
                         <Nav.Link href="/">Novedades</Nav.Link>                        
                         <Nav.Link href="/booking">Reservas</Nav.Link>
                         <Nav.Link href="/ranking">Rankings</Nav.Link>

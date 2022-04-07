@@ -1,43 +1,29 @@
 import React from 'react'
-import { Navbar, Container } from 'react-bootstrap'
-// import { logout } from '../middleware/auth';
+import { Navbar, Nav, Container } from 'react-bootstrap'
+import { adminLogout, isAdminLogin } from '../middleware/adminAuth';
 
 const AdminHeader = props => {
 
-    // const handleLogout = () => {
-    //     logout();
-    // }
+    const handleLogout = () => {
+        adminLogout();
+    }
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container fluid>
-                <Navbar.Brand className="ml-auto" href="/">Padel play: panel administración</Navbar.Brand>
-                {/* <Navbar.Toggle  /> */}
-                {/* <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
-                    <Nav className='mx-auto'>
-                        <Nav.Link href="/">Novedades</Nav.Link>                        
-                        <Nav.Link href="/booking">Reservas</Nav.Link>
-                        <Nav.Link href="/ranking">Rankings</Nav.Link>
-                    </Nav>
-                    <Nav>
-                        {props.username === null || props.username === undefined ? (
-                            <>
-                            <Nav.Link href="/login">Acceso a usuarios</Nav.Link>
-                            <Nav.Link href="/signup">Registrarse</Nav.Link>
-                            </>
-                        ) : (
-                            <>
-                                <NavDropdown title={props.username} align="end">
-                                <NavDropdown.Item href="#action/3.2">Perfil</NavDropdown.Item>
-                                <NavDropdown.Item href="/mybookings">Mis reservas</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ajustes</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={handleLogout} href="/">Cerrar sesión</NavDropdown.Item>
-                                </ NavDropdown>
-                            </>
+                <Navbar.Brand className="ml-auto" href="/admin">Padel play: panel administración</Navbar.Brand>
+                <Navbar.Toggle  />
+                <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
+                    <Nav className=''>              
+                        <Nav.Link href="/admin/pendingUsers">Solicitudes de registro</Nav.Link>
+                        <Nav.Link href="/admin/users">Usuarios</Nav.Link>
+                        <Nav.Link href="/admin/bookings">Reservas</Nav.Link>
+                        {isAdminLogin() && (
+                            <Nav.Link href="/admin/login" onClick={handleLogout}>Logout</Nav.Link>
                         )}
+                        
                     </Nav>
-                </Navbar.Collapse> */}
+                </Navbar.Collapse>
             </Container>
         </Navbar>
     );
