@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { AdminLayout, BlueCard, Loading } from '../component';
 import { getCourts } from '../services/admin.services/bookings.service'
-import { updateCourtData, deleteCourt } from '../services/admin.services/courts.services'
+import { updateCourtData, deleteCourt, createNewCourt } from '../services/admin.services/courts.services'
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 
@@ -12,8 +12,11 @@ class AdminCourtsPage extends Component {
         this.hideModificationModal = this.hideModificationModal.bind(this);
         this.showDeleteModal = this.showDeleteModal.bind(this);
         this.hideDeleteModal = this.hideDeleteModal.bind(this);
+        this.showCreateModal = this.showCreateModal.bind(this);
+        this.hideCreateModal = this.hideCreateModal.bind(this);
         this.modifyCourtData = this.modifyCourtData.bind(this);
         this.deleteCourt = this.deleteCourt.bind(this);
+        this.createCourt = this.createCourt.bind(this);
         this.changeName = this.changeName.bind(this);
         this.changeDescription = this.changeDescription.bind(this);
         this.changeBookReservationTime = this.changeBookReservationTime.bind(this);
@@ -23,14 +26,25 @@ class AdminCourtsPage extends Component {
         this.changeNumberOfHoursToCancelCourt = this.changeNumberOfHoursToCancelCourt.bind(this);
         this.changeOpensAt = this.changeOpensAt.bind(this);
         this.changeClosesAt = this.changeClosesAt.bind(this);
+        this.changeCreatedCourtName = this.changeCreatedCourtName.bind(this);
+        this.changeCreatedCourtDescription = this.changeCreatedCourtDescription.bind(this);
+        this.changeCreatedCourtBookReservationTime = this.changeCreatedCourtBookReservationTime.bind(this);
+        this.changeCreatedCourtPriceWithoutLight = this.changeCreatedCourtPriceWithoutLight.bind(this);
+        this.changeCreatedCourtPriceWithLight = this.changeCreatedCourtPriceWithLight.bind(this);
+        this.changeCreatedCourtNumberOfDaysToBookBefore = this.changeCreatedCourtNumberOfDaysToBookBefore.bind(this);
+        this.changeCreatedCourtNumberOfHoursToCancelCourt = this.changeCreatedCourtNumberOfHoursToCancelCourt.bind(this);
+        this.changeCreatedCourtOpensAt = this.changeCreatedCourtOpensAt.bind(this);
+        this.changeCreatedCourtClosesAt = this.changeCreatedCourtClosesAt.bind(this);
         this.state =  {
             loading: true,
             showModificationModal: false,
             showDeleteModal: false,
+            showCreateModal: false,
             courts: [],
             selectedCourtIndexToModify: null,
             selectedCourtIndexToDelete: null,
-            courtModifiedData: null
+            courtModifiedData: null,
+            createdCourt: null,
         }
     }
 
@@ -70,6 +84,20 @@ class AdminCourtsPage extends Component {
         await this.setState({
             showDeleteModal: false,
             selectedCourtIndexToDelete: null,
+        });
+    }
+
+    async showCreateModal(e) {
+        await this.setState({
+            showCreateModal: true,
+            createdCourt: {},
+        });
+    }
+
+    async hideCreateModal(e) {
+        await this.setState({
+            showCreateModal: false,
+            createdCourt: null,
         });
     }
 
@@ -145,6 +173,81 @@ class AdminCourtsPage extends Component {
         });
     }
 
+
+    async changeCreatedCourtName(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.name = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtDescription(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.description = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtBookReservationTime(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.bookReservationTime = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtPriceWithoutLight(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.priceWithoutLight = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtPriceWithLight(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.priceWithLight = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtNumberOfDaysToBookBefore(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.numberOfDaysToBookBefore = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtNumberOfHoursToCancelCourt(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.numberOfHoursToCancelCourt = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtOpensAt(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.opensAt = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedCourtClosesAt(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.closesAt = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+
+
     async modifyCourtData(e) {
         e.preventDefault();
         
@@ -160,8 +263,6 @@ class AdminCourtsPage extends Component {
             loading: false,
             courts: await getCourts(this.props)
         });
-        
-        
     }
 
     async deleteCourt(e) {
@@ -176,8 +277,24 @@ class AdminCourtsPage extends Component {
         await this.setState({
             loading:false,
             courts: await getCourts(this.props)
+        });   
+    }
+
+    async createCourt(e) {
+        e.preventDefault();
+        console.log(this.state.createdCourt);
+        await this.setState({
+            loading: true
         });
-        
+
+        await createNewCourt(this.props, this.state.createdCourt);
+
+        this.hideCreateModal();
+
+        await this.setState({
+            loading: false,
+            courts: await getCourts(this.props)
+        });
     }
 
     render() {
@@ -261,7 +378,7 @@ class AdminCourtsPage extends Component {
                 <BlueCard>
                     <h1>Pistas</h1>
                     <div className="row justify-content-center">
-                        <button className="col-sm-4 col-md-5 col-lg-4 col-xl-4 btn btn-primary">Crear pista</button>
+                        <button className="col-sm-4 col-md-5 col-lg-4 col-xl-4 btn btn-primary" onClick={this.showCreateModal}>Crear pista</button>
                     </div>
                 </BlueCard>
                 <div className="container">
@@ -279,7 +396,7 @@ class AdminCourtsPage extends Component {
                                 <Modal.Body>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Nombre de la pista *</label>
-                                            <input type="text" className="form-control" value={this.state.courtModifiedData.name} onChange={this.changeName} placeholder="Pista DAM" />
+                                            <input type="text" className="form-control" value={this.state.courtModifiedData.name} onChange={this.changeName} placeholder="Pista DAM" required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Descripción</label>
@@ -287,31 +404,31 @@ class AdminCourtsPage extends Component {
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Duración en minutos de la reserva</label>
-                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.bookReservationTime} onChange={this.changeBookReservationTime} placeholder="90" />
+                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.bookReservationTime} onChange={this.changeBookReservationTime} placeholder="90" required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Precio con luz</label>
-                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.priceWithLight} onChange={this.changePriceWithLight} placeholder="40" />
+                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.priceWithLight} onChange={this.changePriceWithLight} placeholder="40" required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Precio sin luz</label>
-                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.priceWithoutLight} onChange={this.changePriceWithoutLight} placeholder="35" />
+                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.priceWithoutLight} onChange={this.changePriceWithoutLight} placeholder="35" required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Con cuantos días de antelacion se puede reservar</label>
-                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.numberOfDaysToBookBefore} onChange={this.changeNumberOfDaysToBookBefore} placeholder="2" />
+                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.numberOfDaysToBookBefore} onChange={this.changeNumberOfDaysToBookBefore} placeholder="2" required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Hasta cuantas horas antes se puede cancelar (anular) la pista</label>
-                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.numberOfHoursToCancelCourt} onChange={this.changeNumberOfHoursToCancelCourt} placeholder="6" />
+                                            <input type="number" step="1" className="form-control" value={this.state.courtModifiedData.numberOfHoursToCancelCourt} onChange={this.changeNumberOfHoursToCancelCourt} placeholder="6" required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Hora de apertura de la pista</label>  
-                                            <input type="time" className="form-control" value={this.state.courtModifiedData.opensAt} onChange={this.changeOpensAt} />
+                                            <input type="time" className="form-control" value={this.state.courtModifiedData.opensAt} onChange={this.changeOpensAt} required/>
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Última hora a la que se puede empezar a jugar</label>  
-                                            <input type="time" className="form-control" value={this.state.courtModifiedData.closesAt} onChange={this.changeClosesAt}/>
+                                            <input type="time" className="form-control" value={this.state.courtModifiedData.closesAt} onChange={this.changeClosesAt} required/>
                                         </div>
                                 </Modal.Body>
                                 <Modal.Footer>
@@ -342,6 +459,62 @@ class AdminCourtsPage extends Component {
                                 Eliminar
                             </button>
                         </Modal.Footer>
+                    </Modal>
+                )}
+
+                {this.state.createdCourt !== null && (
+                    <Modal size="lg" centered show={this.state.showCreateModal} onHide={this.hideCreateModal}>
+                        <form onSubmit={this.createCourt}> 
+                            <Modal.Header closeButton>
+                                <Modal.Title>Modificar pista</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Nombre de la pista *</label>
+                                    <input type="text" className="form-control" onChange={this.changeCreatedCourtName} placeholder="Pista con nombre" required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Descripción</label>
+                                    <textarea  type="text" className="form-control" onChange={this.changeCreatedCourtDescription} placeholder="La pista es descubierta y tiene paredes de cristal..." />
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Duración en minutos de la reserva</label>
+                                    <input type="number" step="1" className="form-control" onChange={this.changeCreatedCourtBookReservationTime} placeholder="90" required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Precio con luz</label>
+                                    <input type="number" step="1" className="form-control" onChange={this.changeCreatedCourtPriceWithLight} placeholder="40" required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Precio sin luz</label>
+                                    <input type="number" step="1" className="form-control" onChange={this.changeCreatedCourtPriceWithoutLight} placeholder="35" required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Con cuantos días de antelacion se puede reservar</label>
+                                    <input type="number" step="1" className="form-control" onChange={this.changeCreatedCourtNumberOfDaysToBookBefore} placeholder="2" required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Hasta cuantas horas antes se puede cancelar (anular) la pista</label>
+                                    <input type="number" step="1" className="form-control" onChange={this.changeCreatedCourtNumberOfHoursToCancelCourt} placeholder="6" required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Hora de apertura de la pista</label>  
+                                    <input type="time" className="form-control" onChange={this.changeCreatedCourtOpensAt} required/>
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Última hora a la que se puede empezar a jugar</label>  
+                                    <input type="time" className="form-control" onChange={this.changeCreatedCourtClosesAt} required/>
+                                </div>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <button className="btn btn-light" onClick={this.hideCreateModal}>
+                                    Cancelar
+                                </button>
+                                <button className="btn btn-primary" type="submit">
+                                    Crear Pista
+                                </button>
+                            </Modal.Footer>
+                        </form>
                     </Modal>
                 )}
             </AdminLayout>

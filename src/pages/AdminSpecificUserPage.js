@@ -31,15 +31,19 @@ class AdminSpecificUserPage extends Component {
         this.hideConfirmationModal = this.hideConfirmationModal.bind(this);
         this.showDeleteAccountModal = this.showDeleteAccountModal.bind(this);
         this.hideDeleteAccountModal = this.hideDeleteAccountModal.bind(this);
+        this.showCancelModal = this.showCancelModal.bind(this);
+        this.hideCancelModal = this.hideCancelModal.bind(this);
         this.state =  {
             loading: true,
             showConfirmationModal: false,
             showDeleteAccountModal: false,
+            showCancelModal: false,
             disableEdit: true,
             user: null,
             bookings: [],
             selectedGenderIndex: 0,
             selectedBookingIndex: null,
+            selectedCancelBookingIndex: null
         }
     }
 
@@ -203,13 +207,12 @@ class AdminSpecificUserPage extends Component {
     }
 
     async cancelBooking(e) {
-        const bookingIndex = e.target.value;
         await this.setState({
             loading: true,
         });
 
-        await cancelBooking(this.props, this.state.bookings[bookingIndex].id);
-        
+        await cancelBooking(this.props, this.state.bookings[this.state.selectedCancelBookingIndex].id);
+        this.hideCancelModal();
         const data = await getUserData(this.props, this.props.match.params.userId);
         data[0].newPassword = "";
 
@@ -218,6 +221,8 @@ class AdminSpecificUserPage extends Component {
             user: data[0],
             bookings: data[1]
         });
+
+        document.getElementById("gender").selectedIndex = this.state.selectedGenderIndex;
     }
 
     async showConfirmationModal(e) {
@@ -272,6 +277,21 @@ class AdminSpecificUserPage extends Component {
     }
 
 
+    async showCancelModal(e) {
+        await this.setState({
+            showCancelModal: true,
+            selectedCancelBookingIndex: e.target.value
+        });
+    }
+
+    async hideCancelModal(e) {
+        await this.setState({
+            showCancelModal: false,
+            selectedCancelBookingIndex: null
+        });
+    }
+
+
     render() {
         if (this.state.loading) {
             return (
@@ -287,10 +307,10 @@ class AdminSpecificUserPage extends Component {
                 <tr key={i}>
                     <th scope="row">{this.state.bookings[i].day}</th>
                     <td>{startTime}-{finishTime}</td>
-                    <td>{this.state.bookings[i].amountToPay} €</td>
+                    <td>{this.state.bookings[i]["court.name"]}</td>
                     <td><input className="form-check-input" type="checkbox" value={i} checked={this.state.bookings[i].paid} onChange={this.handlePaid}/></td>
                     <td><button className='btn btn-success' value={i} onClick={this.showConfirmationModal}>Más detalles</button></td>
-                    <td><button className='btn btn-danger' value={i} onClick={this.cancelBooking}>Eliminar</button></td>
+                    <td><button className='btn btn-danger' value={i} onClick={this.showCancelModal}>Eliminar</button></td>
                 </tr>
             );
         }
@@ -370,7 +390,9 @@ class AdminSpecificUserPage extends Component {
                                     <button type="submit" disabled={this.state.disableEdit} className="btn btn-primary px-5 w-100">Actualizar datos</button>
                                 </div>
                             </form>
-                            <button disabled={this.state.disableEdit} onClick={this.showDeleteAccountModal} className="btn btn-danger mt-2 px-5 w-100">Eliminar cuenta</button>
+                            <div className="text-center">
+                                <button disabled={this.state.disableEdit} onClick={this.showDeleteAccountModal} className="btn btn-danger mt-2 px-5 w-100">Eliminar cuenta</button>
+                            </div>
                         </BlueCard>
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-7">
@@ -382,7 +404,7 @@ class AdminSpecificUserPage extends Component {
                                 <tr>
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Hora</th>
-                                <th scope="col">Importe</th>
+                                <th scope="col">Pista</th>
                                 <th scope="col">Pagado</th>
                                 <th scope="col">Ver más detalles</th>
                                 <th scope="col">Eliminar reserva</th>
@@ -397,7 +419,7 @@ class AdminSpecificUserPage extends Component {
                 {(this.state.selectedBookingIndex !== null && this.state.selectedBookingIndex !== undefined) && (
                     <Modal centered show={this.state.showConfirmationModal} onHide={this.hideConfirmationModal}>
                             <Modal.Header closeButton>
-                            <Modal.Title>Detalles de reserva</Modal.Title>
+                            <Modal.Title>Detalles de la reserva</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <ul>
@@ -405,11 +427,11 @@ class AdminSpecificUserPage extends Component {
                                     <li>
                                         Usuario:
                                         &nbsp;{/* white space */}                                        
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.name"]}
+                                        {this.state.user.name}
                                         &nbsp;{/* white space */}
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.firstSurname"]}
+                                        {this.state.user.firstSurname}
                                         &nbsp;{/* white space */}
-                                        {this.state.bookings[this.state.selectedBookingIndex]["user.secondSurname"]}                                    
+                                        {this.state.user.secondSurname}                                    
                                     </li>
                                     <li>Correo electrónico: {this.state.bookings[this.state.selectedBookingIndex]["user.email"]}</li>
                                     <li>Día: {this.state.bookings[this.state.selectedBookingIndex].day}</li>
@@ -455,7 +477,7 @@ class AdminSpecificUserPage extends Component {
                         <Modal.Title>Eliminar cuenta</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Estas seguro de que deseas eliminar permanentemente la cuenta de: {this.state.user.name} {this.state.user.firstSurname} {this.state.user.secondSurname}</p>
+                        <p>¿Estas seguro de que deseas eliminar permanentemente la cuenta de: {this.state.user.name} {this.state.user.firstSurname} {this.state.user.secondSurname}?</p>
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-secondary" onClick={this.hideDeleteAccountModal}>
@@ -466,7 +488,24 @@ class AdminSpecificUserPage extends Component {
                         </button>
                     </Modal.Footer>
                 </Modal>
-
+                {this.state.selectedCancelBookingIndex !== null && (
+                    <Modal show={this.state.showCancelModal} onHide={this.hideCancelModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Eliminar cuenta</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>¿Estas seguro de que deseas anular la reserva?</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-secondary" onClick={this.hideCancelModal}>
+                            Cancelar
+                        </button>
+                        <button className="btn btn-danger" onClick={this.cancelBooking}>
+                            Eliminar
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+                )}
             </AdminLayout>   
         );
     }
