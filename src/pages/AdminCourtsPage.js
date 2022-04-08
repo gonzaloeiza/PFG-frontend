@@ -19,6 +19,7 @@ class AdminCourtsPage extends Component {
         this.createCourt = this.createCourt.bind(this);
         this.changeName = this.changeName.bind(this);
         this.changeDescription = this.changeDescription.bind(this);
+        this.changeSmartCitizenId = this.changeSmartCitizenId.bind(this);
         this.changeBookReservationTime = this.changeBookReservationTime.bind(this);
         this.changePriceWithoutLight = this.changePriceWithoutLight.bind(this);
         this.changePriceWithLight = this.changePriceWithLight.bind(this);
@@ -28,6 +29,7 @@ class AdminCourtsPage extends Component {
         this.changeClosesAt = this.changeClosesAt.bind(this);
         this.changeCreatedCourtName = this.changeCreatedCourtName.bind(this);
         this.changeCreatedCourtDescription = this.changeCreatedCourtDescription.bind(this);
+        this.changeCreatedSmartCitizenId = this.changeCreatedSmartCitizenId.bind(this);
         this.changeCreatedCourtBookReservationTime = this.changeCreatedCourtBookReservationTime.bind(this);
         this.changeCreatedCourtPriceWithoutLight = this.changeCreatedCourtPriceWithoutLight.bind(this);
         this.changeCreatedCourtPriceWithLight = this.changeCreatedCourtPriceWithLight.bind(this);
@@ -117,6 +119,14 @@ class AdminCourtsPage extends Component {
         });
     }
 
+    async changeSmartCitizenId(e) {
+        var courtModifiedData = {...this.state.courtModifiedData};
+        courtModifiedData.smartCitizenId = e.target.value;
+        await this.setState({
+            courtModifiedData: courtModifiedData
+        });
+    }
+    
     async changeBookReservationTime(e) {
         var courtModifiedData = {...this.state.courtModifiedData};
         courtModifiedData.bookReservationTime = e.target.value;
@@ -185,6 +195,14 @@ class AdminCourtsPage extends Component {
     async changeCreatedCourtDescription(e) {
         var createdCourt = {...this.state.createdCourt};
         createdCourt.description = e.target.value;
+        await this.setState({
+            createdCourt: createdCourt
+        });
+    }
+
+    async changeCreatedSmartCitizenId(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.smartCitizenId = e.target.value;
         await this.setState({
             createdCourt: createdCourt
         });
@@ -282,7 +300,6 @@ class AdminCourtsPage extends Component {
 
     async createCourt(e) {
         e.preventDefault();
-        console.log(this.state.createdCourt);
         await this.setState({
             loading: true
         });
@@ -382,7 +399,7 @@ class AdminCourtsPage extends Component {
                     </div>
                 </BlueCard>
                 <div className="container">
-                    <div className="row justify-content-around">
+                    <div className="row justify-content-start">
                         {courtsTable}
                     </div>
                 </div>
@@ -401,6 +418,10 @@ class AdminCourtsPage extends Component {
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Descripción</label>
                                             <textarea  type="text" className="form-control" value={this.state.courtModifiedData.description} onChange={this.changeDescription} placeholder="La pista es descubierta y tiene paredes de cristal..." />
+                                        </div>
+                                        <div className="mx-1 mb-1">
+                                            <label className='my-1'>Id de smartCitizen</label>
+                                            <input  type="text" className="form-control" value={this.state.courtModifiedData.smartCitizenId} onChange={this.changeSmartCitizenId} placeholder="15261" />
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Duración en minutos de la reserva</label>
@@ -476,6 +497,10 @@ class AdminCourtsPage extends Component {
                                 <div className="mx-1 mb-1">
                                     <label className='my-1'>Descripción</label>
                                     <textarea  type="text" className="form-control" onChange={this.changeCreatedCourtDescription} placeholder="La pista es descubierta y tiene paredes de cristal..." />
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Id de smartCitizen</label>
+                                    <input  type="text" className="form-control" onChange={this.changeCreatedSmartCitizenId} placeholder="15261" />
                                 </div>
                                 <div className="mx-1 mb-1">
                                     <label className='my-1'>Duración en minutos de la reserva</label>
