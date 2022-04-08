@@ -377,12 +377,12 @@ class AdminCourtsPage extends Component {
             <AdminLayout isHeader={true} username={this.state.username}>
                 <BlueCard>
                     <h1>Pistas</h1>
-                    <div className="row justify-content-center">
+                    <div className="row justify-content-around">
                         <button className="col-sm-4 col-md-5 col-lg-4 col-xl-4 btn btn-primary" onClick={this.showCreateModal}>Crear pista</button>
                     </div>
                 </BlueCard>
                 <div className="container">
-                    <div className="row justify-content-start">
+                    <div className="row justify-content-around">
                         {courtsTable}
                     </div>
                 </div>

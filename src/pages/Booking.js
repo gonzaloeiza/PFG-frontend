@@ -138,7 +138,7 @@ class Booking extends Component {
             <Layout isHeader={true} username={this.state.username}>
                 <BlueCard>
                     <form onSubmit={this.handleSubmit}>
-                        <div className='row justify-content-center'>
+                        <div className='row justify-content-around'>
                             <div className='col-md-4 mb-1'>
                                 <input
                                     className="form-control"
@@ -156,8 +156,8 @@ class Booking extends Component {
                                 </select>
                             </div>
                         </div>
-                        <div className='row justify-content-center'>
-                            <div className='col-md-3 mt-2 d-flex justify-content-center'>
+                        <div className='row justify-content-around'>
+                            <div className='col-md-3 mt-2 d-flex justify-content-around'>
                                 <button type="submit" className="btn btn-primary">Buscar</button>
                             </div>
                         </div>   

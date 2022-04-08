@@ -317,11 +317,11 @@ class AdminSpecificUserPage extends Component {
 
         return (
             <AdminLayout isHeader={true}>
-                <div className="row">
-                    <div className='col-xs-12 col-sm-12 col-md-12 col-lg-5'>
+                <div className="row justify-content-around">
+                    <div className='col-xs-12 col-sm-12 col-md-12 col-lg-4'>
                         <BlueCard className="" withoutContainer={true}>
                             <div className="text-center">
-                                <h1 className="text-center mb-4 text-dark">{this.state.user.name} {this.state.user.firstSurname} {this.state.user.secondSurname}</h1>
+                                <h1 className="text-center mb-4 text-dark">{this.state.user.name} {this.state.user.firstSurname}</h1>
                             </div>
                             <div className="row justify-content-end mb-3 mx-0">
                                 <button className="col-5 btn btn-secondary" onClick={(e) => this.setState({disableEdit: !this.state.disableEdit})}>
@@ -382,7 +382,7 @@ class AdminSpecificUserPage extends Component {
                                 <div className="mb-3">
                                     <input type="text" className="form-control" disabled={this.state.disableEdit} id="province" value={this.state.user.province} onChange={this.changeProvince} placeholder="Provincia" />
                                 </div>
-                                <div className="row justify-content-center mx-0 mb-3">
+                                <div className="row justify-content-around mx-0 mb-3">
                                     <p className="col-12 mb-1">Solicitud de registro aprobada</p>
                                     <input  disabled={this.state.disableEdit} className="col-2 form-check-input" type="checkbox" checked={!this.state.user.pendingSignUp} onChange={this.changePendingSignUp} />
                                 </div>

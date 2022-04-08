@@ -11,6 +11,7 @@ import AdminBookingsPage from './AdminBookingsPage'
 import AdminUsersPage from './AdminUsersPage'
 import AdminSpecificUserPage from './AdminSpecificUserPage'
 import AdminCourtsPage from './AdminCourtsPage'
+import AdminSettingsPage from './AdminSettingsPage'
 import NoMatch from './404';
 // DEFUALT EXPORT 
 export { 
@@ -26,5 +27,6 @@ export {
     AdminUsersPage,
     AdminSpecificUserPage,
     AdminCourtsPage,
+    AdminSettingsPage,
     NoMatch
 };

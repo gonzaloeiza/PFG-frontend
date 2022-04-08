@@ -14,6 +14,7 @@ import {
   AdminUsersPage,
   AdminSpecificUserPage,
   AdminCourtsPage,
+  AdminSettingsPage,
   NoMatch
 } from './pages/'
 import PublicRoute from './hooks/PublicRoute'
@@ -47,6 +48,7 @@ function AppRouter() {
             <AdminPrivateRoute component={AdminUsersPage} path="/admin/users" exact  />
             <AdminPrivateRoute component={AdminSpecificUserPage} path="/admin/users/:userId" exact  />
             <AdminPrivateRoute component={AdminCourtsPage} path="/admin/courts" exact />
+            <AdminPrivateRoute component={AdminSettingsPage} path="/admin/settings" exact />
 
 
             <PublicRoute component={NoMatch} path="*" />

@@ -161,7 +161,7 @@ class AdminBookingsPage extends Component {
             <AdminLayout isHeader={true} username={this.state.username}>
                 <BlueCard>
                     <form onSubmit={this.handleSubmit}>
-                        <div className='row justify-content-center'>
+                        <div className='row justify-content-around'>
                             <div className='col-md-6 mb-1'>
                                 <input
                                     className="form-control"
@@ -185,7 +185,7 @@ class AdminBookingsPage extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="row justify-content-center">
+                        <div className="row justify-content-around">
                             <div className='col-md-6 mb-1'>
                                 <select className="custom-select form-select" id="courts" onChange={(e) => this.setState({selectedCourtName: e.target.value})}>
                                     <option key={-1} value={"Todas"}>Todas las pistas</option>
@@ -199,7 +199,7 @@ class AdminBookingsPage extends Component {
                                 </select>
                             </div>
                         </div>
-                        <div className="row justify-content-center">
+                        <div className="row justify-content-around">
                             <div className='col-md-6 mb-1'>
                                 <select className="custom-select form-select" id="paidBookings" onChange={(e) => this.setState({paidBookings: e.target.value})}>
                                     <option>Reservas pagadas y sin pagar</option>
@@ -208,8 +208,8 @@ class AdminBookingsPage extends Component {
                                 </select>
                             </div>
                         </div>
-                        <div className="row justify-content-center">
-                            <div className='col-md-3 mt-2 d-flex justify-content-center'>
+                        <div className="row justify-content-around">
+                            <div className='col-md-3 mt-2 d-flex justify-content-around'>
                                 <button type="submit" className="btn btn-primary">Buscar</button>
                             </div>
                         </div>

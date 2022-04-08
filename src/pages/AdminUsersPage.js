@@ -85,10 +85,10 @@ class AdminUsersPage extends Component {
             <AdminLayout isHeader={true}>
                 <BlueCard>
                     <form className="text-center" onSubmit={this.filterByFirstSurname}>
-                        <div className='row justify-content-center'>
+                        <div className='row justify-content-around'>
                             <h1>Usuarios</h1>
                         </div>
-                        <div className='row justify-content-center'>
+                        <div className='row justify-content-around'>
                             <div className='col-md-8 mb-1'>
                                 <input
                                     className="form-control"
