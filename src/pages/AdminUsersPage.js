@@ -34,7 +34,12 @@ class AdminUsersPage extends Component {
         const filter = this.state.nameFiler.trim().toLowerCase();
         if (filter.length > 0) {
             const a = this.state.tableUsers.filter(user => {
-                if (user.name.trim().toLowerCase().includes(filter) || user.firstSurname.trim().toLowerCase().includes(filter) || user.secondSurname.trim().toLowerCase().includes(filter)) {
+                if (user.name.trim().toLowerCase().includes(filter) || 
+                    user.firstSurname.trim().toLowerCase().includes(filter) || 
+                    user.secondSurname.trim().toLowerCase().includes(filter) || 
+                    user.email.trim().toLowerCase().includes(filter) ||
+                    user.phoneNumber.trim().toLowerCase().includes(filter)            
+                ) {
                     return user;
                 }
                 return null;
@@ -94,7 +99,7 @@ class AdminUsersPage extends Component {
                                     className="form-control"
                                     type="text"
                                     id="nameFilter" 
-                                    placeholder="Filtrar por nombre o apellidos"
+                                    placeholder="Filtrar por nombre, apellidos, email o numero de telefono"
                                     onChange={(e) => this.setState({nameFiler: e.target.value})}
                                 />
                             </div>
