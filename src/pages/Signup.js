@@ -54,7 +54,6 @@ class Signup extends Component {
             postalCode: inputs.postalCode.value,
             province: inputs.province.value
         }, () => {
-            console.log(this.state);
             signUp(this.props, this.state);
         })
     };

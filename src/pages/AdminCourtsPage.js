@@ -1,13 +1,15 @@
 import React, { Component }  from 'react';
 import { AdminLayout, BlueCard, Loading } from '../component';
 import { getCourts } from '../services/admin.services/bookings.service'
-import { updateCourtData, deleteCourt, createNewCourt } from '../services/admin.services/courts.services'
+import { updateCourtData, deleteCourt, createNewCourt, uploadPicture } from '../services/admin.services/courts.services'
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
+import { backendURL } from '../config';
 
 class AdminCourtsPage extends Component {
     constructor(props) {
         super(props);
+        this.filterByCourtName = this.filterByCourtName.bind(this);
         this.showModificationModal = this.showModificationModal.bind(this);
         this.hideModificationModal = this.hideModificationModal.bind(this);
         this.showDeleteModal = this.showDeleteModal.bind(this);
@@ -19,6 +21,7 @@ class AdminCourtsPage extends Component {
         this.createCourt = this.createCourt.bind(this);
         this.changeName = this.changeName.bind(this);
         this.changeDescription = this.changeDescription.bind(this);
+        this.changePicture = this.changePicture.bind(this);
         this.changeSmartCitizenId = this.changeSmartCitizenId.bind(this);
         this.changeBookReservationTime = this.changeBookReservationTime.bind(this);
         this.changePriceWithoutLight = this.changePriceWithoutLight.bind(this);
@@ -29,6 +32,7 @@ class AdminCourtsPage extends Component {
         this.changeClosesAt = this.changeClosesAt.bind(this);
         this.changeCreatedCourtName = this.changeCreatedCourtName.bind(this);
         this.changeCreatedCourtDescription = this.changeCreatedCourtDescription.bind(this);
+        this.changeCreatedPicture = this.changeCreatedPicture.bind(this);
         this.changeCreatedSmartCitizenId = this.changeCreatedSmartCitizenId.bind(this);
         this.changeCreatedCourtBookReservationTime = this.changeCreatedCourtBookReservationTime.bind(this);
         this.changeCreatedCourtPriceWithoutLight = this.changeCreatedCourtPriceWithoutLight.bind(this);
@@ -42,27 +46,62 @@ class AdminCourtsPage extends Component {
             showModificationModal: false,
             showDeleteModal: false,
             showCreateModal: false,
+            courtFilter: "",
             courts: [],
             selectedCourtIndexToModify: null,
             selectedCourtIndexToDelete: null,
             courtModifiedData: null,
             createdCourt: null,
+            courtsToShow: [],
+            pictureChanged: false
         }
     }
 
     async componentDidMount() {
+        const courts = await getCourts(this.props);
         await this.setState({
             loading: false,
-            courts: await getCourts(this.props)
+            courts: courts,
+            courtsToShow: courts
         });
     }
 
+
+    async filterByCourtName() {
+        await this.setState({
+            loading: true,
+            courtsToShow: this.state.courts
+        });
+        
+        const filter = this.state.courtFilter.trim().toLowerCase();
+        if (filter.length > 0) {
+            const a = this.state.courtsToShow.filter(court => {
+                if (court.name.trim().toLowerCase().includes(filter)) {
+                    return court;
+                }
+                return null;
+            });
+
+            await this.setState({
+                loading: false,
+                courtsToShow: a
+            });
+
+        } else {
+            await this.setState({
+                loading: false,
+                courtsToShow: this.state.courts
+            })
+        }
+
+        document.getElementById("courtFilter").value = this.state.courtFilter;
+    }
 
     async showModificationModal(e) {
         await this.setState({
             showModificationModal: true,
             selectedCourtIndexToModify: e.target.value,
-            courtModifiedData: this.state.courts[e.target.value]
+            courtModifiedData: this.state.courtsToShow[e.target.value]
         });
     }
 
@@ -117,6 +156,16 @@ class AdminCourtsPage extends Component {
         await this.setState({
             courtModifiedData: courtModifiedData
         });
+    }
+
+    async changePicture(e) {
+        var courtModifiedData = {...this.state.courtModifiedData};
+        courtModifiedData.picture = e.target.files[0];
+        await this.setState({
+            courtModifiedData: courtModifiedData,
+            pictureChanged: true
+        });
+
     }
 
     async changeSmartCitizenId(e) {
@@ -200,6 +249,15 @@ class AdminCourtsPage extends Component {
         });
     }
 
+    async changeCreatedPicture(e) {
+        var createdCourt = {...this.state.createdCourt};
+        createdCourt.picture =e.target.files[0];
+        await this.setState({
+            createdCourt: createdCourt,
+            pictureChanged: true
+        });
+    }
+
     async changeCreatedSmartCitizenId(e) {
         var createdCourt = {...this.state.createdCourt};
         createdCourt.smartCitizenId = e.target.value;
@@ -264,8 +322,6 @@ class AdminCourtsPage extends Component {
         });
     }
 
-
-
     async modifyCourtData(e) {
         e.preventDefault();
         
@@ -273,14 +329,27 @@ class AdminCourtsPage extends Component {
             loading: true
         });
 
-        await updateCourtData(this.props, this.state.courtModifiedData);
+        var courtModifiedData = {...this.state.courtModifiedData};
+        delete courtModifiedData["picture"];
+              
+        await updateCourtData(this.props, courtModifiedData);
+        const renamedPicture = new File([this.state.courtModifiedData.picture], courtModifiedData.name + ".png");
+        
+        if (this.state.pictureChanged) {
+            await uploadPicture(this.props, this.state.courtModifiedData.name, renamedPicture);
+            window.location.reload(false);
+        }
         
         this.hideModificationModal();
 
         this.setState({
             loading: false,
-            courts: await getCourts(this.props)
+            courts: await getCourts(this.props),
+            pictureChanged: false
         });
+
+        document.getElementById("courtFilter").value = this.state.courtFilter;
+        this.filterByCourtName();
     }
 
     async deleteCourt(e) {
@@ -288,14 +357,17 @@ class AdminCourtsPage extends Component {
             loading: true
         });
 
-        await deleteCourt(this.props, this.state.courts[this.state.selectedCourtIndexToDelete].id);
+        await deleteCourt(this.props, this.state.courtsToShow[this.state.selectedCourtIndexToDelete].id);
         
         this.hideDeleteModal();
 
         await this.setState({
             loading:false,
             courts: await getCourts(this.props)
-        });   
+        });
+        
+        document.getElementById("courtFilter").value = this.state.courtFilter;
+        this.filterByCourtName();
     }
 
     async createCourt(e) {
@@ -304,14 +376,25 @@ class AdminCourtsPage extends Component {
             loading: true
         });
 
-        await createNewCourt(this.props, this.state.createdCourt);
+        var createdCourtData = {...this.state.createdCourt};
+        delete createdCourtData["picture"];
+        const renamedPicture = new File([this.state.createdCourt.picture], createdCourtData.name + ".png");
+
+        await createNewCourt(this.props, createdCourtData);
+        if (this.state.pictureChanged) {           
+            await uploadPicture(this.props, this.state.createdCourt.name, renamedPicture);
+        }
 
         this.hideCreateModal();
 
         await this.setState({
             loading: false,
-            courts: await getCourts(this.props)
+            courts: await getCourts(this.props),
+            pictureChanged: false
         });
+
+        document.getElementById("courtFilter").value = this.state.courtFilter;
+        this.filterByCourtName();
     }
 
     render() {
@@ -323,64 +406,78 @@ class AdminCourtsPage extends Component {
 
 
         var courtsTable = []
-        for (var i = 0; i < this.state.courts.length; i++) {
-            const opensAt = moment(this.state.courts[i].opensAt, "HH:mm:SS");
-            const closesAt = moment(this.state.courts[i].closesAt, "HH:mm:SS");
+        for (var i = 0; i < this.state.courtsToShow.length; i++) {
+            const opensAt = moment(this.state.courtsToShow[i].opensAt, "HH:mm:SS");
+            const closesAt = moment(this.state.courtsToShow[i].closesAt, "HH:mm:SS");
             courtsTable.push(
-                <div key={i} className="mb-4 col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                    <div className="card bg-light border-dark">
-                        <div className="card-header bg-dark text-center">
-                            <div className="card-text row">
-                                <h4 className="col fw-bold text-white">{this.state.courts[i].name}</h4>
-                            </div>
+                <div  key={i} className="card mb-3 px-0">
+                    <div className="row g-0">
+                        <div className="col-md-4 px-2 d-flex flex-wrap align-items-center">
+                            {this.state.courtsToShow[i].picture !== null && (
+                                <img src={`${backendURL}/images/courts/${this.state.courtsToShow[i].picture}`} className="img-fluid rounded-start" alt="Imagen de la pista" />
+                            )}
                         </div>
-                        <div className="card-body cardbody">
-                            <ul>
-                                <li>
-                                    <div className="row align-items-end">
-                                        <p className="col-8 mb-1 fw-bold">Hora de apertura:</p>
-                                        <p className="col-4 mb-1 text-end fw-bold">{opensAt.format("HH:mm")}</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="row align-items-end">
-                                        <p className="col-8 mb-1 fw-bold">Hora de cierre:</p>
-                                        <p className="col-4 mb-1 text-end fw-bold">{closesAt.format("HH:mm")}</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="row align-items-end">
-                                        <p className="col-8 mb-1 fw-bold">Precio con luz:</p>
-                                        <p className="col-4 mb-1 text-end fw-bold">{this.state.courts[i].priceWithLight} €</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="row align-items-end">
-                                        <p className="col-8 mb-1 fw-bold">Precio sin luz:</p>
-                                        <p className="col-4 mb-1 text-end fw-bold">{this.state.courts[i].priceWithoutLight} €</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="row align-items-end">
-                                        <p className="col-8 mb-1 fw-bold">Duración de reserva:</p>
-                                        <p className="col-4 mb-1 text-end fw-bold">{this.state.courts[i].bookReservationTime} mins</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="row align-items-end">
-                                        <p className="col-8 mb-1 fw-bold">Hasta cuantas horas antes se puede cancelar:</p>
-                                        <p className="col-4 mb-1 text-end fw-bold">{this.state.courts[i].numberOfHoursToCancelCourt} horas</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="card-footer card-courts">
-                            <div className="row">
-                                <div className="col-xs-12 col-sm-6 my-2 text-center">
-                                    <button value={i} className="btn btn-danger" onClick={(e) => this.showDeleteModal(e)}>Eliminar</button>
+                        <div className="col-md-8 d-flex align-items-start flex-column">
+                            <div className="card-body w-100 mb-1">
+                                <h5 className="card-title">{this.state.courtsToShow[i].name}</h5>
+                                <div className="mb-1 d-flex">
+                                    <p className="card-text fw-bold">Descripción:&nbsp;</p>
+                                    <p className="card-text">{this.state.courtsToShow[i].description}</p>
                                 </div>
-                                <div className="col-xs-12 col-sm-6 my-2 text-center">
-                                    <button value={i} className="btn btn-primary" onClick={(e) => this.showModificationModal(e)}>Modificar</button>
+                                <p className="card-text fw-bold">Caracteristicas: </p>
+                                <ul>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Hora de apertura:</p>
+                                            <p className="col-4 mb-1 text-end">{opensAt.format("HH:mm")}</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Hora de cierre:</p>
+                                            <p className="col-4 mb-1 text-end">{closesAt.format("HH:mm")}</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Precio con luz:</p>
+                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].priceWithLight} €</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Precio sin luz:</p>
+                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].priceWithoutLight} €</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Duración de reserva:</p>
+                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].bookReservationTime} mins</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Con cuantos días de antelacion se puede reservar:</p>
+                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].numberOfDaysToBookBefore} horas</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="row align-items-end">
+                                            <p className="col-8 mb-1">Hasta cuantas horas antes se puede cancelar:</p>
+                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].numberOfHoursToCancelCourt} horas</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="card-footer w-100">
+                                <div className="row justify-content-around">
+                                    <div className="col text-center">
+                                        <button value={i} className="btn btn-danger" onClick={(e) => this.showDeleteModal(e)}>Eliminar</button>
+                                    </div>
+                                    <div className="col text-center">
+                                        <button value={i} className="btn btn-primary" onClick={(e) => this.showModificationModal(e)}>Modificar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -394,8 +491,26 @@ class AdminCourtsPage extends Component {
             <AdminLayout isHeader={true} username={this.state.username}>
                 <BlueCard>
                     <h1>Pistas</h1>
-                    <div className="row justify-content-around">
-                        <button className="col-sm-4 col-md-5 col-lg-4 col-xl-4 btn btn-primary" onClick={this.showCreateModal}>Crear pista</button>
+                    <div className="text-center">
+                        <div className='row justify-content-around'>
+                            <div className='col-md-8 mb-1'>
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    id="courtFilter" 
+                                    placeholder="Filtrar por nombre de pista"
+                                    onChange={(e) => this.setState({courtFilter: e.target.value})}
+                                />
+                            </div>
+                            <div className='col-md-4 mb-1'>
+                                <button onClick={this.filterByCourtName} className="btn btn-primary" >Filtrar busqueda</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row justify-content-end">
+                        <div className="col-md-4 mt-2">
+                            <button className="col btn btn-warning" onClick={this.showCreateModal}>Crear pista</button>
+                        </div>
                     </div>
                 </BlueCard>
                 <div className="container">
@@ -418,6 +533,10 @@ class AdminCourtsPage extends Component {
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Descripción</label>
                                             <textarea  type="text" className="form-control" value={this.state.courtModifiedData.description} onChange={this.changeDescription} placeholder="La pista es descubierta y tiene paredes de cristal..." />
+                                        </div>
+                                        <div className="mx-1 mb-1">
+                                            <label className='my-1'>Foto</label>
+                                            <input type="file" accept="image/*" onChange={this.changePicture} className="form-control" />
                                         </div>
                                         <div className="mx-1 mb-1">
                                             <label className='my-1'>Id de smartCitizen</label>
@@ -453,10 +572,10 @@ class AdminCourtsPage extends Component {
                                         </div>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <button className="btn btn-light" onClick={this.hideModificationModal}>
+                                    <button type="button" className="btn btn-light" onClick={this.hideModificationModal}>
                                         Cancelar
                                     </button>
-                                    <button className="btn btn-primary" type="submit">
+                                    <button type="submit" className="btn btn-primary">
                                         Modificar
                                     </button>
                                 </Modal.Footer>
@@ -470,7 +589,7 @@ class AdminCourtsPage extends Component {
                             <Modal.Title>Eliminar pista</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <p>¿Seguro que deseas eliminar la pista: {this.state.courts[this.state.selectedCourtIndexToDelete].name}?</p>
+                            <p>¿Seguro que deseas eliminar la pista: {this.state.courtsToShow[this.state.selectedCourtIndexToDelete].name}?</p>
                         </Modal.Body>
                         <Modal.Footer>
                             <button className="btn btn-light" onClick={this.hideDeleteModal}>
@@ -497,6 +616,10 @@ class AdminCourtsPage extends Component {
                                 <div className="mx-1 mb-1">
                                     <label className='my-1'>Descripción</label>
                                     <textarea  type="text" className="form-control" onChange={this.changeCreatedCourtDescription} placeholder="La pista es descubierta y tiene paredes de cristal..." />
+                                </div>
+                                <div className="mx-1 mb-1">
+                                    <label className='my-1'>Foto</label>
+                                    <input type="file" accept="image/*" onChange={this.changeCreatedPicture} className="form-control" />
                                 </div>
                                 <div className="mx-1 mb-1">
                                     <label className='my-1'>Id de smartCitizen</label>
@@ -532,7 +655,7 @@ class AdminCourtsPage extends Component {
                                 </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <button className="btn btn-light" onClick={this.hideCreateModal}>
+                                <button type="button" className="btn btn-light" onClick={this.hideCreateModal}>
                                     Cancelar
                                 </button>
                                 <button className="btn btn-primary" type="submit">

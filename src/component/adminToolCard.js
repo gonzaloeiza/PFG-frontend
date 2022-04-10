@@ -4,8 +4,8 @@ import React from 'react'
 const AdminToolCard = (props) => {
 
     return (
-        <div className="card card-admin-tools" style={{"maxWidth": "60rem", "height": "100%"}}>
-            <div className="row no-gutters">
+        <div className="card card-admin-tools h-100">
+           <div className="row no-gutters">
                 <div className="col-md-4">
                     <div className="text-white d-flex">
                         <div className="card-body">

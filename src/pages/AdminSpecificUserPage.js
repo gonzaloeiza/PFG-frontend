@@ -257,7 +257,7 @@ class AdminSpecificUserPage extends Component {
         await this.setState({
             loading: true
         })
-        console.log(this.state.user.newPassword);
+
         await updateUserData(this.props, this.state.user);
 
         const data = await getUserData(this.props, this.props.match.params.userId);
@@ -268,7 +268,7 @@ class AdminSpecificUserPage extends Component {
             user: data[0],
             bookings: data[1]
         });
-        console.log(this.state.user.newPassword);
+
         document.getElementById("gender").selectedIndex = this.state.selectedGenderIndex;        
     }
 
