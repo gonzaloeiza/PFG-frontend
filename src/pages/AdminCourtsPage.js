@@ -16,6 +16,8 @@ class AdminCourtsPage extends Component {
         this.hideDeleteModal = this.hideDeleteModal.bind(this);
         this.showCreateModal = this.showCreateModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
+        this.showSensorsModal = this.showSensorsModal.bind(this);
+        this.hideSensorsModal = this.hideSensorsModal.bind(this);
         this.modifyCourtData = this.modifyCourtData.bind(this);
         this.deleteCourt = this.deleteCourt.bind(this);
         this.createCourt = this.createCourt.bind(this);
@@ -41,15 +43,18 @@ class AdminCourtsPage extends Component {
         this.changeCreatedCourtNumberOfHoursToCancelCourt = this.changeCreatedCourtNumberOfHoursToCancelCourt.bind(this);
         this.changeCreatedCourtOpensAt = this.changeCreatedCourtOpensAt.bind(this);
         this.changeCreatedCourtClosesAt = this.changeCreatedCourtClosesAt.bind(this);
+        this.redirectToSmartCitizen = this.redirectToSmartCitizen.bind(this);
         this.state =  {
             loading: true,
             showModificationModal: false,
             showDeleteModal: false,
             showCreateModal: false,
+            showSensorsModal: false,
             courtFilter: "",
             courts: [],
             selectedCourtIndexToModify: null,
             selectedCourtIndexToDelete: null,
+            selectedCourtIndexForSensor: null,
             courtModifiedData: null,
             createdCourt: null,
             courtsToShow: [],
@@ -59,6 +64,7 @@ class AdminCourtsPage extends Component {
 
     async componentDidMount() {
         const courts = await getCourts(this.props);
+        console.log(courts);
         await this.setState({
             loading: false,
             courts: courts,
@@ -142,6 +148,20 @@ class AdminCourtsPage extends Component {
         });
     }
 
+    async showSensorsModal(e) {
+        await this.setState({
+            showSensorsModal: true,
+            selectedCourtIndexForSensor: e.target.value
+        });
+    }
+
+    async hideSensorsModal(e) {
+        await this.setState({
+            showSensorsModal: true,
+            selectedCourtIndexForSensor: null
+        });
+    }
+    
     async changeName(e) {
         var courtModifiedData = {...this.state.courtModifiedData};
         courtModifiedData.name = e.target.value;
@@ -397,6 +417,10 @@ class AdminCourtsPage extends Component {
         this.filterByCourtName();
     }
 
+        async redirectToSmartCitizen() {
+            window.location.replace(this.state.courts[this.state.selectedCourtIndexForSensor].smartCitizenURL);
+        }
+
     render() {
         if (this.state.loading) {
             return (
@@ -453,7 +477,7 @@ class AdminCourtsPage extends Component {
                                     <li>
                                         <div className="row align-items-end">
                                             <p className="col-8 mb-1">Duración de reserva:</p>
-                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].bookReservationTime} mins</p>
+                                            <p className="col-4 mb-1 text-end">{this.state.courtsToShow[i].bookReservationTime} minutos</p>
                                         </div>
                                     </li>
                                     <li>
@@ -473,10 +497,13 @@ class AdminCourtsPage extends Component {
                             <div className="card-footer w-100">
                                 <div className="row justify-content-around">
                                     <div className="col text-center">
-                                        <button value={i} className="btn btn-danger" onClick={(e) => this.showDeleteModal(e)}>Eliminar</button>
+                                        <button value={i} className="btn btn-danger" onClick={this.showDeleteModal}>Eliminar</button>
                                     </div>
-                                    <div className="col text-center">
-                                        <button value={i} className="btn btn-primary" onClick={(e) => this.showModificationModal(e)}>Modificar</button>
+                                    <div className="col text-end">
+                                        <button value={i} className="btn btn-primary" onClick={this.showModificationModal}>Modificar</button>
+                                    </div>
+                                    <div className="col text-end">
+                                    <button value={i} className="btn btn-secondary bi bi-cloud-sun-fill" onClick={this.showSensorsModal}></button>
                                     </div>
                                 </div>
                             </div>
@@ -484,6 +511,16 @@ class AdminCourtsPage extends Component {
                     </div>
                 </div>
             );
+        }
+
+
+        if (this.state.selectedCourtIndexForSensor !== null) {
+            var sensors = [];
+            this.state.courtsToShow[this.state.selectedCourtIndexForSensor].sensors.forEach((sensor, index) => {
+                sensors.push(
+                    <li key={index}>{sensor.name}: {sensor.value} {sensor.unit}</li>
+                );
+            });
         }
 
 
@@ -663,6 +700,22 @@ class AdminCourtsPage extends Component {
                                 </button>
                             </Modal.Footer>
                         </form>
+                    </Modal>
+                )}
+                {this.state.selectedCourtIndexForSensor !== null && (
+                    <Modal size="lg" centered show={this.state.showSensorsModal} onHide={this.hideSensorsModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Sensores del dispositivo SmartCitizen: {this.state.courts[this.state.selectedCourtIndexForSensor].name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <ul>
+                                {sensors}
+                            </ul>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <button className="btn btn-light" onClick={this.hideSensorsModal}>Cancelar</button>
+                            <button className="btn btn-primary" onClick={this.redirectToSmartCitizen}>Ir a Smartcitizen.me</button>
+                        </Modal.Footer>
                     </Modal>
                 )}
             </AdminLayout>
