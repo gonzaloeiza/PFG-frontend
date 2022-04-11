@@ -5,6 +5,7 @@ import { updateCourtData, deleteCourt, createNewCourt, uploadPicture } from '../
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import { backendURL } from '../config';
+import { knownSensors } from '../config'
 
 class AdminCourtsPage extends Component {
     constructor(props) {
@@ -418,7 +419,7 @@ class AdminCourtsPage extends Component {
     }
 
         async redirectToSmartCitizen() {
-            window.location.replace(this.state.courts[this.state.selectedCourtIndexForSensor].smartCitizenURL);
+            window.open(this.state.courts[this.state.selectedCourtIndexForSensor].smartCitizenURL, "_blank");
         }
 
     render() {
@@ -496,10 +497,10 @@ class AdminCourtsPage extends Component {
                             </div>
                             <div className="card-footer w-100">
                                 <div className="row justify-content-around">
-                                    <div className="col text-center">
+                                    <div className="col text-start">
                                         <button value={i} className="btn btn-danger" onClick={this.showDeleteModal}>Eliminar</button>
                                     </div>
-                                    <div className="col text-end">
+                                    <div className="col text-center">
                                         <button value={i} className="btn btn-primary" onClick={this.showModificationModal}>Modificar</button>
                                     </div>
                                     <div className="col text-end">
@@ -513,16 +514,24 @@ class AdminCourtsPage extends Component {
             );
         }
 
-
+    
+        var sensorsTable = [];
         if (this.state.selectedCourtIndexForSensor !== null) {
-            var sensors = [];
             this.state.courtsToShow[this.state.selectedCourtIndexForSensor].sensors.forEach((sensor, index) => {
-                sensors.push(
-                    <li key={index}>{sensor.name}: {sensor.value} {sensor.unit}</li>
+                const sensorName = sensor.name.split("-")[1].trim();
+                sensorsTable.push(
+                    <div key={index} className="col-xs-12 col-sm-12 col-md-6 col-lg-3 mb-3">
+                        <div className="card h-100 text-center bg-light mx-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title={sensor.description}>
+                            <p className="fs-6 fw-bold">{sensorName}</p>
+                            <div className="ms-3">
+                                {knownSensors.get(sensorName)}
+                            </div>
+                            <p className="fs-6">{sensor.value} {sensor.unit}</p>
+                        </div>
+                    </div>
                 );
             });
         }
-
 
         return (
             <AdminLayout isHeader={true} username={this.state.username}>
@@ -703,14 +712,14 @@ class AdminCourtsPage extends Component {
                     </Modal>
                 )}
                 {this.state.selectedCourtIndexForSensor !== null && (
-                    <Modal size="lg" centered show={this.state.showSensorsModal} onHide={this.hideSensorsModal}>
+                    <Modal size="xl" centered show={this.state.showSensorsModal} onHide={this.hideSensorsModal}>
                         <Modal.Header closeButton>
                             <Modal.Title>Sensores del dispositivo SmartCitizen: {this.state.courts[this.state.selectedCourtIndexForSensor].name}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <ul>
-                                {sensors}
-                            </ul>
+                            <div className="row justify-content-start">
+                                {sensorsTable}
+                            </div>
                         </Modal.Body>
                         <Modal.Footer>
                             <button className="btn btn-light" onClick={this.hideSensorsModal}>Cancelar</button>
