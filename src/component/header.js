@@ -17,6 +17,7 @@ const Header = props => {
                 {(props.username === null || props.username === undefined) || (  
                     <Nav className=''>
                         <Nav.Link href="/">Novedades</Nav.Link>                        
+                        <Nav.Link href="/courts">Pistas</Nav.Link>
                         <Nav.Link href="/booking">Reservas</Nav.Link>
                         <Nav.Link href="/ranking">Rankings</Nav.Link>
                     </Nav>
@@ -24,17 +25,21 @@ const Header = props => {
                     <Nav>
                         {props.username === null || props.username === undefined ? (
                             <>
-                            <Nav.Link href="/login">Acceso a usuarios</Nav.Link>
-                            <Nav.Link href="/signup">Registrarse</Nav.Link>
+                                <Nav.Link href="/login">Acceso a usuarios</Nav.Link>
+                                <Nav.Link href="/signup">Registrarse</Nav.Link>
+                                <NavDropdown title="Otros" align="end">
+                                    <NavDropdown.Item href="/">Novedades</NavDropdown.Item>
+                                    <NavDropdown.Item href="/courts">Pistas</NavDropdown.Item>
+                                </ NavDropdown>
                             </>
                         ) : (
                             <>
                                 <NavDropdown title={props.username} align="end">
-                                <NavDropdown.Item href="#action/3.2">Perfil</NavDropdown.Item>
-                                <NavDropdown.Item href="/mybookings">Mis reservas</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ajustes</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={handleLogout} href="/">Cerrar sesión</NavDropdown.Item>
+                                    <NavDropdown.Item href="#action/3.2">Perfil</NavDropdown.Item>
+                                    <NavDropdown.Item href="/mybookings">Mis reservas</NavDropdown.Item>
+                                    <NavDropdown.Item href="#action/3.2">Ajustes</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={handleLogout} href="/">Cerrar sesión</NavDropdown.Item>
                                 </ NavDropdown>
                             </>
                         )}

@@ -3,7 +3,7 @@ import { message } from "antd";
 import { backendURL } from '../../config';
 
 export async function getCourts(props) {
-    const response = await fetch(`${backendURL}/api/admin/courts/`, {
+    const response = await fetch(`${backendURL}/api/admin/bookings/courts`, {
         method: "GET",
         headers: {
             "x-access-token": localStorage.getItem("adminAuth")

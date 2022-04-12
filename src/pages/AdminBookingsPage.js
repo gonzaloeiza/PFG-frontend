@@ -158,7 +158,7 @@ class AdminBookingsPage extends Component {
         }
 
         return (
-            <AdminLayout isHeader={true} username={this.state.username}>
+            <AdminLayout isHeader={true}>
                 <BlueCard>
                     <form onSubmit={this.handleSubmit}>
                         <div className='row justify-content-around'>

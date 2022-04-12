@@ -4,6 +4,7 @@ import Login from './Login';
 import Signup from './Signup'
 import Booking from './Booking'
 import MyBookings from './MyBookings'
+import CourtsPage from './CourtsPage'
 import AdminLogin from './AdminLogin'
 import AdminPage from './AdminPage'
 import AdminUsersPendingPage from './AdminUsersPendingPage'
@@ -20,6 +21,7 @@ export {
     Signup,
     Booking,
     MyBookings,
+    CourtsPage,
     AdminLogin,
     AdminPage,
     AdminUsersPendingPage,

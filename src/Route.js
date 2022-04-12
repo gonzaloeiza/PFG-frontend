@@ -7,6 +7,7 @@ import {
   Signup,
   Booking,
   MyBookings,
+  CourtsPage,
   AdminLogin,
   AdminPage,
   AdminUsersPendingPage,
@@ -35,7 +36,7 @@ function AppRouter() {
             <PublicRoute restricted={true} component={Login} path="/login" exact />
             <PublicRoute restricted={true} component={Signup} path="/signup" exact />
             <PublicRoute component={LandingPage} path="/" exact />            
-
+            <PublicRoute component={CourtsPage} path="/courts" exact />
             <PrivateRoute component={Booking} path="/booking" exact />
             <PrivateRoute component={MyBookings} path="/mybookings" exact />
   

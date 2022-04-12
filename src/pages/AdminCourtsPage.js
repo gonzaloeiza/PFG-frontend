@@ -1,7 +1,6 @@
 import React, { Component }  from 'react';
 import { AdminLayout, BlueCard, Loading } from '../component';
-import { getCourts } from '../services/admin.services/bookings.service'
-import { updateCourtData, deleteCourt, createNewCourt, uploadPicture } from '../services/admin.services/courts.services'
+import { getCourtsData, updateCourtData, deleteCourt, createNewCourt, uploadPicture } from '../services/admin.services/courts.services'
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import { backendURL } from '../config';
@@ -64,8 +63,8 @@ class AdminCourtsPage extends Component {
     }
 
     async componentDidMount() {
-        const courts = await getCourts(this.props);
-        console.log(courts);
+        const courts = await getCourtsData(this.props);
+
         await this.setState({
             loading: false,
             courts: courts,
@@ -365,7 +364,7 @@ class AdminCourtsPage extends Component {
 
         this.setState({
             loading: false,
-            courts: await getCourts(this.props),
+            courts: await getCourtsData(this.props),
             pictureChanged: false
         });
 
@@ -384,7 +383,7 @@ class AdminCourtsPage extends Component {
 
         await this.setState({
             loading:false,
-            courts: await getCourts(this.props)
+            courts: await getCourtsData(this.props)
         });
         
         document.getElementById("courtFilter").value = this.state.courtFilter;
@@ -410,7 +409,7 @@ class AdminCourtsPage extends Component {
 
         await this.setState({
             loading: false,
-            courts: await getCourts(this.props),
+            courts: await getCourtsData(this.props),
             pictureChanged: false
         });
 
@@ -504,7 +503,9 @@ class AdminCourtsPage extends Component {
                                         <button value={i} className="btn btn-primary" onClick={this.showModificationModal}>Modificar</button>
                                     </div>
                                     <div className="col text-end">
-                                    <button value={i} className="btn btn-secondary bi bi-cloud-sun-fill" onClick={this.showSensorsModal}></button>
+                                    {this.state.courtsToShow[i].sensors !== null && (
+                                        <button value={i} className="btn btn-secondary bi bi-cloud-sun-fill" onClick={this.showSensorsModal}></button>
+                                    )}
                                     </div>
                                 </div>
                             </div>
@@ -516,7 +517,7 @@ class AdminCourtsPage extends Component {
 
     
         var sensorsTable = [];
-        if (this.state.selectedCourtIndexForSensor !== null) {
+        if (this.state.selectedCourtIndexForSensor !== null && this.state.courtsToShow[this.state.selectedCourtIndexForSensor].sensors !== null) {
             this.state.courtsToShow[this.state.selectedCourtIndexForSensor].sensors.forEach((sensor, index) => {
                 const sensorName = sensor.name.split("-")[1].trim();
                 sensorsTable.push(
@@ -534,7 +535,7 @@ class AdminCourtsPage extends Component {
         }
 
         return (
-            <AdminLayout isHeader={true} username={this.state.username}>
+            <AdminLayout isHeader={true}>
                 <BlueCard>
                     <h1>Pistas</h1>
                     <div className="text-center">
@@ -714,7 +715,7 @@ class AdminCourtsPage extends Component {
                 {this.state.selectedCourtIndexForSensor !== null && (
                     <Modal size="xl" centered show={this.state.showSensorsModal} onHide={this.hideSensorsModal}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Sensores del dispositivo SmartCitizen: {this.state.courts[this.state.selectedCourtIndexForSensor].name}</Modal.Title>
+                            <Modal.Title>Sensores del dispositivo SmartCitizen: {this.state.courtsToShow[this.state.selectedCourtIndexForSensor].name}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <div className="row justify-content-start">
