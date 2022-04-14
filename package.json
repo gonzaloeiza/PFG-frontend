@@ -1,5 +1,5 @@
 {
-  "name": "react-private-public-routes",
+  "name": "PFG-FRONTEND",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -44,11 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "description": "The project creatred for `publicRoute` & `prvateRoute`  to authenticate, Private routes priotect with auth token PPublic routes are access without any authentication.",
+  "description": "",
   "main": "index.js",
-  "keywords": [
-    "react-private-public-routes Biolerplates"
-  ],
-  "author": "Sreenath_ks_panikker",
-  "license": "ISC"
+  "author": "GONZALO EIZAGUIRRE BERASATEGUI",
 }
