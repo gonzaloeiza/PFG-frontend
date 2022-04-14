@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from "react";
-import { UserContext } from "./hooks/UserContext";
+import React from "react";
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { 
   LandingPage,
@@ -24,14 +23,10 @@ import AdminPublicRoute from './hooks/AdminPublicRoute'
 import AdminPrivateRoute from './hooks/AdminPrivateRoute'
 
 function AppRouter() {
-  const [user, setUser] = useState(null);
-
-  const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
   return (
     <div>
       <BrowserRouter>
-        <UserContext.Provider value={value}>
           <Switch>
             <PublicRoute restricted={true} component={Login} path="/login" exact />
             <PublicRoute restricted={true} component={Signup} path="/signup" exact />
@@ -54,7 +49,6 @@ function AppRouter() {
 
             <PublicRoute component={NoMatch} path="*" />
           </Switch>
-        </UserContext.Provider>
       </BrowserRouter>
     </div>
   );
