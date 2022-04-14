@@ -22,6 +22,7 @@ A list of technologies used within the project:
 <a name="instalation"></a>
 ### Instalation
 ***
+This project was bootstrapped with Create React App.
 
 Before starting the frontend application you should already have installed and have running the backend application, for further instructions please check the Readme.md file from [it's repository](https://github.com/gonzaloeiza/PFG-backend).
 
