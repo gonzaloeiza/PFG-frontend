@@ -16,7 +16,7 @@ const Header = props => {
                 <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
                 {(props.username === null || props.username === undefined) || (  
                     <Nav className=''>
-                        <Nav.Link href="/">Novedades</Nav.Link>                        
+                        <Nav.Link href="/">Página de inicio</Nav.Link>                        
                         <Nav.Link href="/courts">Pistas</Nav.Link>
                         <Nav.Link href="/booking">Reservas</Nav.Link>
                         <Nav.Link href="/ranking">Rankings</Nav.Link>
@@ -28,7 +28,7 @@ const Header = props => {
                                 <Nav.Link href="/login">Acceso a usuarios</Nav.Link>
                                 <Nav.Link href="/signup">Registrarse</Nav.Link>
                                 <NavDropdown title="Otros" align="end">
-                                    <NavDropdown.Item href="/">Novedades</NavDropdown.Item>
+                                    <NavDropdown.Item href="/">Página de inicio</NavDropdown.Item>
                                     <NavDropdown.Item href="/courts">Pistas</NavDropdown.Item>
                                 </ NavDropdown>
                             </>

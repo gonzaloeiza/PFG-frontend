@@ -41,7 +41,7 @@ const Footer = props => {
 
                         <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4 text-center">
                             <h6 className="text-uppercase fw-bold mb-4">
-                                Redes Sociales
+                                Términos y políticas
                             </h6>
                             <p>
                                 <a href="#!" className="text-reset">Términos y condiciones</a>
@@ -99,7 +99,7 @@ const Footer = props => {
             </section>
             <div className="text-center p-4" style={{"backgroundColor": "rgba(0, 0, 0, 0.05)"}}>
                 © 2022 Copyright: 
-                <a className="text-reset fw-bold" href="https://mdbootstrap.com/">Play padel</a>
+                <a className="text-reset fw-bold" href="https://github.com/gonzaloeiza">Play padel</a>
             </div>
         </footer>
     );
