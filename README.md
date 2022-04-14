@@ -47,9 +47,13 @@ npm run build
 ```
 
 You cant test that the application runs correctly by accessing to: http://localhost:3000.
+You should be able to test things by logging in as a user with the following credentials:
+* email: eizaguirregonzalo@gmail.com
+* password: 12345678
+
 If you want to access the administration panel head to: http://localhost:3000/admin the default credentials for the administrator panel should be:
-* admin@gmail.com
-* 12345678
+* email: admin@gmail.com
+* password: 12345678
 
 In case those credentials don't work, check the [BACKEND REPOSITORY](https://github.com/gonzaloeiza/PFG-backend) installation and see them there.
 
