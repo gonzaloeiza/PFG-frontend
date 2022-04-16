@@ -15,8 +15,7 @@ const Header = props => {
                 <Navbar.Toggle  />
                 <Navbar.Collapse id="responsive-navbar-nav" className='justify-content-end'>
                 {(props.username === null || props.username === undefined) || (  
-                    <Nav className=''>
-                        <Nav.Link href="/">Página de inicio</Nav.Link>                        
+                    <Nav className=''>                      
                         <Nav.Link href="/courts">Pistas</Nav.Link>
                         <Nav.Link href="/booking">Reservas</Nav.Link>
                         <Nav.Link href="/ranking">Rankings</Nav.Link>
@@ -35,9 +34,9 @@ const Header = props => {
                         ) : (
                             <>
                                 <NavDropdown title={props.username} align="end">
-                                    <NavDropdown.Item href="#action/3.2">Perfil</NavDropdown.Item>
+                                    <NavDropdown.Item href="/">Página de inicio</NavDropdown.Item>
                                     <NavDropdown.Item href="/mybookings">Mis reservas</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action/3.2">Ajustes</NavDropdown.Item>
+                                    <NavDropdown.Item href="/settings">Ajustes</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item onClick={handleLogout} href="/">Cerrar sesión</NavDropdown.Item>
                                 </ NavDropdown>

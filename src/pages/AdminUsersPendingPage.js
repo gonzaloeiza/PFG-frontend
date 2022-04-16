@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { AdminLayout, Loading, BlueCard } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getPendingUsers, acceptRequest, rejectRequest } from '../services/admin.services/users.service'
+import { getPendingUsers, acceptRequest, rejectRequest } from '../services/admin.services/users.services'
 import moment from 'moment';
 
 class AdminUsersPendingPage extends Component {

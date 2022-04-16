@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { BlueCard, Layout } from '../component';
 import { message } from 'antd';
-import { signUp } from '../services/auth.service'
+import { signUp } from '../services/auth.services'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 

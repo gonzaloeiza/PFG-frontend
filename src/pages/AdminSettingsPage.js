@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { AdminLayout, BlueCard, Loading } from '../component';
-import { updateAdminPassword } from '../services/admin.services/auth.service'
+import { updateAdminPassword } from '../services/admin.services/auth.services'
 
 
 class AdminSettingsPage extends Component {

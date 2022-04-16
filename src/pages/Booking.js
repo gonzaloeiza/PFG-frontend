@@ -1,8 +1,8 @@
 import React, { Component }  from 'react';
 import { Layout, Loading, BlueCard } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getUsername } from '../services/user.service'
-import { getCourts, getDisponibility, book } from '../services/booking.service'
+import { getUsername } from '../services/user.services'
+import { getCourts, getDisponibility, book } from '../services/booking.services'
 import { message } from 'antd';
 import moment from 'moment';
 

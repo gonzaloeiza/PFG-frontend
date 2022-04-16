@@ -1,8 +1,8 @@
 import React, { Component }  from 'react';
 import { BlueCard, Layout, Loading } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getUsername } from '../services/user.service'
-import { getBookings, cancelBooking } from '../services/booking.service'
+import { getUsername } from '../services/user.services'
+import { getBookings, cancelBooking } from '../services/booking.services'
 import moment from 'moment';
 import '../assets/css/main.css'
 

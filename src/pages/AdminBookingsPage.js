@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { AdminLayout, BlueCard, Loading } from '../component';
 import { Modal } from 'react-bootstrap';
-import { getCourts, getBookings, handlePaid, cancelBooking } from '../services/admin.services/bookings.service'
+import { getCourts, getBookings, handlePaid, cancelBooking } from '../services/admin.services/bookings.services'
 import moment from 'moment';
 
 class AdminBookingsPage extends Component {

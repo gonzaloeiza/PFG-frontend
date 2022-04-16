@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { Layout, BlueCard, Loading } from '../component';
-import { getCourtsData } from '../services/courts.service'
-import { getUsername } from '../services/user.service'
+import { getCourtsData } from '../services/courts.services'
+import { getUsername } from '../services/user.services'
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import { backendURL } from '../config';
