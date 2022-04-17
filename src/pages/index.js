@@ -6,6 +6,8 @@ import Booking from './Booking'
 import MyBookings from './MyBookings'
 import CourtsPage from './CourtsPage'
 import SettingsPage from './SettingsPage'
+import RankingsPage from './RankingsPage';
+import specificRankingPage from './specificRankingPage';
 import AdminLogin from './AdminLogin'
 import AdminPage from './AdminPage'
 import AdminUsersPendingPage from './AdminUsersPendingPage'
@@ -14,7 +16,10 @@ import AdminUsersPage from './AdminUsersPage'
 import AdminSpecificUserPage from './AdminSpecificUserPage'
 import AdminCourtsPage from './AdminCourtsPage'
 import AdminSettingsPage from './AdminSettingsPage'
+import AdminRankingsPage from './AdminRankingsPage'
+import AdminSpecificRankingPage from './AdminSpecificRankingPage';
 import NoMatch from './404';
+
 // DEFUALT EXPORT 
 export { 
     LandingPage,
@@ -24,6 +29,8 @@ export {
     MyBookings,
     CourtsPage,
     SettingsPage,
+    RankingsPage,
+    specificRankingPage,
     AdminLogin,
     AdminPage,
     AdminUsersPendingPage,
@@ -32,5 +39,7 @@ export {
     AdminSpecificUserPage,
     AdminCourtsPage,
     AdminSettingsPage,
+    AdminRankingsPage,
+    AdminSpecificRankingPage,
     NoMatch
 };

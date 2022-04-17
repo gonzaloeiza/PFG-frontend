@@ -64,6 +64,15 @@ class AdminPage extends Component {
                                 href="/admin/settings"
                             />
                         </div>
+                        <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                            <AdminToolCard 
+                                tittle="Rankings"
+                                icon="bi bi-list-ol"
+                                body="Aquí podrás acceder a todo lo relacionado con los rankings"
+                                color="#AF965C"
+                                href="/admin/rankings"
+                            />
+                        </div>
                     </div>
                 </div>
             </AdminLayout>   

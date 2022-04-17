@@ -8,6 +8,8 @@ import {
   MyBookings,
   CourtsPage,
   SettingsPage,
+  RankingsPage,
+  specificRankingPage,
   AdminLogin,
   AdminPage,
   AdminUsersPendingPage,
@@ -16,6 +18,8 @@ import {
   AdminSpecificUserPage,
   AdminCourtsPage,
   AdminSettingsPage,
+  AdminRankingsPage,
+  AdminSpecificRankingPage,
   NoMatch
 } from './pages/'
 import PublicRoute from './hooks/PublicRoute'
@@ -36,6 +40,8 @@ function AppRouter() {
             <PrivateRoute component={Booking} path="/booking" exact />
             <PrivateRoute component={MyBookings} path="/mybookings" exact />
             <PrivateRoute component={SettingsPage} path="/settings" exact />
+            <PrivateRoute component={RankingsPage} path="/rankings" exact />
+            <PrivateRoute component={specificRankingPage} path="/rankings/:rankingId" exact />
 
             <AdminPublicRoute restricted={true} component={AdminLogin} path="/admin/login" exact/>
   
@@ -46,7 +52,8 @@ function AppRouter() {
             <AdminPrivateRoute component={AdminSpecificUserPage} path="/admin/users/:userId" exact  />
             <AdminPrivateRoute component={AdminCourtsPage} path="/admin/courts" exact />
             <AdminPrivateRoute component={AdminSettingsPage} path="/admin/settings" exact />
-
+            <AdminPrivateRoute component={AdminRankingsPage} path="/admin/rankings" exact />
+            <AdminPrivateRoute component={AdminSpecificRankingPage} path="/admin/rankings/:rankingId" exact />
 
             <PublicRoute component={NoMatch} path="*" />
           </Switch>

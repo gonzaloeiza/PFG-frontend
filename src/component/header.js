@@ -18,7 +18,7 @@ const Header = props => {
                     <Nav className=''>                      
                         <Nav.Link href="/courts">Pistas</Nav.Link>
                         <Nav.Link href="/booking">Reservas</Nav.Link>
-                        <Nav.Link href="/ranking">Rankings</Nav.Link>
+                        <Nav.Link href="/rankings">Rankings</Nav.Link>
                     </Nav>
                 )}
                     <Nav>
