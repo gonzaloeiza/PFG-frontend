@@ -9,7 +9,7 @@ import SettingsPage from './SettingsPage'
 import RankingsPage from './RankingsPage';
 import specificRankingPage from './specificRankingPage';
 import AdminLogin from './AdminLogin'
-import AdminPage from './AdmiinPage'
+import AdminPage from './AdminPage'
 import AdminUsersPendingPage from './AdminUsersPendingPage'
 import AdminBookingsPage from './AdminBookingsPage'
 import AdminUsersPage from './AdminUsersPage'
