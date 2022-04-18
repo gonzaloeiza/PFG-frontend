@@ -48,9 +48,6 @@ class AdminRankingsPage extends Component {
         await this.setState({
             loading: true
         });
-
-        console.log(this.state.newRankingName);
-        console.log(this.state.newRankingDescription);
         
         this.hideCreateRankingModal();
         await createNewRanking(this.props, this.state.newRankingName, this.state.newRankingDescription);

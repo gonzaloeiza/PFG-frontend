@@ -36,7 +36,6 @@ class LandingPage extends Component {
         });
 
         sendForm(this.state.formName, this.state.formSurname, this.state.formEmail, this.state.formMessage);
-        console.log(this.state);
 
         await this.setState({
             loading: false,

@@ -214,13 +214,13 @@ class AdminSpecificRankingPage extends Component {
                             {this.state.ranking.matches[counter]["partnerTwo.playerTwo.name"]}&#160;
                             {this.state.ranking.matches[counter]["partnerTwo.playerTwo.firstSurname"]}&#160;
                         </td>
-                        {this.state.ranking.matches[i].partnerOneWins === null && (
+                        {this.state.ranking.matches[counter].partnerOneWins === null && (
                             <td className="text-danger">Sin jugar</td>
                         )}
-                        {this.state.ranking.matches[i].partnerOneWins === 1 && (
+                        {this.state.ranking.matches[counter].partnerOneWins === 1 && (
                             <td className="text-success">Ha ganado la pareja 1</td>
                         )}
-                        {this.state.ranking.matches[i].partnerOneWins === 1 && (
+                        {this.state.ranking.matches[counter].partnerOneWins === 0 && (
                             <td className="text-success">Ha ganado la pareja 2</td>
                         )}
                     </tr>
@@ -359,7 +359,7 @@ class AdminSpecificRankingPage extends Component {
                     <div className='row justify-content-around'>
                         <div className='col-xs-12 col-sm-12 col-md-12 col-lg-8'>
                             <BlueCard className="" withoutContainer={true}>
-                                <h1>Partidos a jugar</h1>
+                                <h1>Partidos a jugar (Jornada {this.state.ranking.journeyNumber})</h1>
                                 {classificationTable}
                             </BlueCard>
                         </div>
