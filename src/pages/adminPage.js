@@ -6,6 +6,7 @@ class AdminPage extends Component {
         super(props);
         this.state = {
             
+            
         }
     }
 
