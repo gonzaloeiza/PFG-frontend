@@ -1,4 +1,4 @@
-# PFG-backend
+# PFG-FRONTEND
 ![npm](https://img.shields.io/badge/npm-v8.5.4-green)
 
 ## Table of Contents
