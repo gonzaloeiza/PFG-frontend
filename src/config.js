@@ -1,6 +1,6 @@
 import { co2_icon, humidity_icon, particle_icon, pressure_icon, sound_icon, temperature_icon } from "./assets/images/icons"
 
-const backendURL = "http://192.168.1.6:5000";
+const backendURL = "http://192.168.1.68:5000";
 
 const knownSensors =  new Map();
 knownSensors.set("eCO2", co2_icon);
