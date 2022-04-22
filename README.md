@@ -26,7 +26,7 @@ This project was bootstrapped with Create React App.
 
 Before starting the frontend application you should already have installed and have running the backend application, for further instructions please check the Readme.md file from [it's repository](https://github.com/gonzaloeiza/PFG-backend).
 
-Then you should edit the /src/config.js and set the backend url to the corresponding url (default http://localhost:5000) where you the backend application is running. Once done, we can start with the frontend installation.
+Then you should edit the /src/config.js and set the backend url to the corresponding url (default http://localhost:5000) where the backend application is running. Once done, we can start with the frontend installation.
 
 The first step to begin with the frontend instalation is to install the necessary dependencies that are used:
 
