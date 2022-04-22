@@ -2,6 +2,8 @@
 
 ![npm](https://img.shields.io/badge/npm-v8.5.4-green)
 
+![landing_page_screenshot](landing_page_screenshot.png)
+
 ## Table of Contents
 
 1. [Technologies](#technologies)
