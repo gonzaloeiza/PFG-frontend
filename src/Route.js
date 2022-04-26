@@ -20,6 +20,7 @@ import {
   AdminSettingsPage,
   AdminRankingsPage,
   AdminSpecificRankingPage,
+  AdminContactMessagePage,
   NoMatch
 } from './pages/'
 import PublicRoute from './hooks/PublicRoute'
@@ -54,6 +55,7 @@ function AppRouter() {
             <AdminPrivateRoute component={AdminSettingsPage} path="/admin/settings" exact />
             <AdminPrivateRoute component={AdminRankingsPage} path="/admin/rankings" exact />
             <AdminPrivateRoute component={AdminSpecificRankingPage} path="/admin/rankings/:rankingId" exact />
+            <AdminPrivateRoute component={AdminContactMessagePage} path="/admin/contactMessages" exact />
 
             <PublicRoute component={NoMatch} path="*" />
           </Switch>

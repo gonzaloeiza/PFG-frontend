@@ -17,15 +17,18 @@ const AdminHeader = props => {
                     {isAdminLogin() && (
                         <>
                             <Nav className=''>              
-                                <Nav.Link href="/admin/pendingUsers">Solicitudes de registro</Nav.Link>
                                 <Nav.Link href="/admin/users">Usuarios</Nav.Link>
+                                <Nav.Link href="/admin/courts">Pistas</Nav.Link>                             
                                 <Nav.Link href="/admin/bookings">Reservas</Nav.Link>
-                                <Nav.Link href="/admin/courts">Pistas</Nav.Link>                                
+                                <Nav.Link href="/admin/rankings">Rankings</Nav.Link>
                                 </Nav>
                             <Nav>
                             <NavDropdown title="Admin" align="end">
+                                <NavDropdown.Item href="/admin/pendingUsers">Solicitudes de registro</NavDropdown.Item>                                
+                                <NavDropdown.Item href="/admin/contactMessages">Formularios de contacto</NavDropdown.Item>
                                 <NavDropdown.Item href="/admin/settings">Ajustes</NavDropdown.Item>
                                 <NavDropdown.Divider />
+                                <NavDropdown.Item href="/admin/">Panel administración</NavDropdown.Item>
                                 <NavDropdown.Item onClick={handleLogout} href="/admin/login">Cerrar sesión</NavDropdown.Item>
                             </ NavDropdown>
                             </Nav>
