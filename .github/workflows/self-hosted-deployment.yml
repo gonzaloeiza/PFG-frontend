@@ -23,7 +23,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: cp /home/gonzalo/pfg/pfg-frontend/static/config.js /home/gonzalo/pfg/pfg-frontend/actions-runner/_work/PFG-frontend/PFG-frontend/src/config.js
-    - run: npm ci
-    - run: npm run build
+    - run: yarn install
+    - run: yarn run build --if-present
     - run: cd /home/gonzalo/pfg/pfg-frontend/actions-runner/_work/PFG-frontend/PFG-frontend/build
-    - run: pm2 pfg-frontend restart
+    - run: pm2 restart pfg-frontend
