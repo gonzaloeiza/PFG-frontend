@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, NavDropdown, Nav, Container } from 'react-bootstrap'
-import { adminLogout, isAdminLogin } from '../middleware/adminAuth';
+import { adminLogout, isAdminLogin } from '../middlewares/adminAuth';
 
 const AdminHeader = props => {
 

@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { getRankings, createNewRanking } from '../services/admin.services/rankings.services';
-import { AdminLayout, BlueCard, Loading } from '../component';
+import { AdminLayout, BlueCard, Loading } from '../components';
 import { Modal } from 'react-bootstrap';
 
 class AdminRankingsPage extends Component {

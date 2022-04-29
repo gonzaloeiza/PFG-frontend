@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout, Loading, BlueCard } from '../component';
+import { AdminLayout, Loading, BlueCard } from '../components';
 import { getAllUsers } from '../services/admin.services/users.services'
 
 class AdminUsersPage extends Component {

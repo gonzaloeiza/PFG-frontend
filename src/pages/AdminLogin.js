@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
-import { adminLogin } from '../middleware/adminAuth';
-import { AdminLayout, BlueCard } from '../component';
+import { adminLogin } from '../middlewares/adminAuth';
+import { AdminLayout, BlueCard } from '../components';
 
 class AdminLogin extends Component {
     constructor(props) {     

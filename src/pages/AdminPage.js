@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout, BlueCard, AdminToolCard } from '../component';
+import { AdminLayout, BlueCard, AdminToolCard } from '../components';
 
 class AdminPage extends Component {
     constructor(props) {     

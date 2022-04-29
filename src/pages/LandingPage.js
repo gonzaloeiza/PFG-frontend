@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { Carousel } from 'react-bootstrap';
-import { BlueCard, Layout, Loading } from '../component';
+import { BlueCard, Layout, Loading } from '../components';
 import { getUsername, sendForm } from '../services/user.services'
 import { getCourtsData } from '../services/courts.services'
 import { backendURL } from '../config';

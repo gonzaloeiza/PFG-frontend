@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { BlueCard, Layout } from '../component';
+import { BlueCard, Layout } from '../components';
 import { message } from 'antd';
 import { signUp } from '../services/auth.services'
 import PhoneInput from 'react-phone-input-2'

@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { Modal } from 'react-bootstrap';
-import { AdminLayout, BlueCard, Loading } from '../component';
+import { AdminLayout, BlueCard, Loading } from '../components';
 import { addPartnerToRanking, deleteRanking, getRankingData, startRanking } from '../services/admin.services/rankings.services';
 import moment from "moment";
 import { getAllUsers } from '../services/admin.services/users.services';

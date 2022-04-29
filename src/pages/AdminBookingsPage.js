@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout, BlueCard, Loading } from '../component';
+import { AdminLayout, BlueCard, Loading } from '../components';
 import { Modal } from 'react-bootstrap';
 import { getCourts, getBookings, handlePaid, cancelBooking } from '../services/admin.services/bookings.services'
 import moment from 'moment';

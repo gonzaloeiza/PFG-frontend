@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { logout } from "../middleware/auth";
+import { logout } from "../middlewares/auth";
 import { backendURL } from '../config';
 
 export function getUsername () {

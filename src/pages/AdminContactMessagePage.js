@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { getContactForm, deleteContactFormMessage } from '../services/admin.services/contact.services';
-import { AdminLayout, BlueCard } from '../component';
+import { AdminLayout, BlueCard } from '../components';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 

@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { Layout, BlueCard, Loading } from '../component';
+import { Layout, BlueCard, Loading } from '../components';
 import { getMyRankings } from '../services/rankings.services';
 import { getUsername } from '../services/user.services';
 

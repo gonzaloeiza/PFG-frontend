@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { Layout, Loading, BlueCard } from '../component';
+import { Layout, Loading, BlueCard } from '../components';
 import { Modal } from 'react-bootstrap';
 import { getUsername } from '../services/user.services'
 import { getCourts, getDisponibility, book } from '../services/booking.services'

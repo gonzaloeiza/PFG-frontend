@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
-import { logout } from '../middleware/auth';
+import { logout } from '../middlewares/auth';
 
 const Header = props => {
 

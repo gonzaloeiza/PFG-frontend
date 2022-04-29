@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from '../component';
+import { Layout } from '../components';
 
 const NoMatch = () => (
     <Layout className="app-404" isHeader={false}>

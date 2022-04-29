@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from 'react-bootstrap';
-import { Layout, BlueCard } from "../component";
+import { Layout, BlueCard } from "../components";
 import PhoneInput from 'react-phone-input-2';
 import { getUsername, getUserData, updateUserProfile, deleteAccount } from "../services/user.services";
 import { message } from "antd";

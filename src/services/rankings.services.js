@@ -1,4 +1,4 @@
-import { logout } from "../middleware/auth";
+import { logout } from "../middlewares/auth";
 import { message } from "antd";
 import { backendURL } from '../config';
 

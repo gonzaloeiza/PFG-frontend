@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { AdminLayout, BlueCard, Loading } from '../component';
+import { AdminLayout, BlueCard, Loading } from '../components';
 import { updateAdminPassword } from '../services/admin.services/auth.services'
 
 

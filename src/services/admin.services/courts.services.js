@@ -1,4 +1,4 @@
-import { adminLogout } from "../../middleware/adminAuth";
+import { adminLogout } from "../../middlewares/adminAuth";
 import { message } from "antd";
 import { backendURL } from '../../config';
 
