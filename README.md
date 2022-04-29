@@ -1,6 +1,7 @@
 # PFG-FRONTEND
 
 ![npm](https://img.shields.io/badge/npm-v8.5.4-green)
+[![deployment pfg-frontend](https://github.com/gonzaloeiza/PFG-frontend/actions/workflows/self-hosted-deployment.yml/badge.svg)](https://github.com/gonzaloeiza/PFG-frontend/actions/workflows/self-hosted-deployment.yml)
 
 ![landing_page_screenshot](landing_page_screenshot.png)
 
