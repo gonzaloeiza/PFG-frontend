@@ -22,7 +22,7 @@ import {
   AdminSpecificRankingPage,
   AdminContactMessagePage,
   NoMatch
-} from './pages/'
+} from './pages'
 import PublicRoute from './hooks/PublicRoute'
 import PrivateRoute from './hooks/PrivateRoute'
 import AdminPublicRoute from './hooks/AdminPublicRoute'
@@ -38,11 +38,13 @@ function AppRouter() {
             <PublicRoute restricted={true} component={Signup} path="/signup" exact />
             <PublicRoute component={LandingPage} path="/" exact />            
             <PublicRoute component={CourtsPage} path="/courts" exact />
+
             <PrivateRoute component={Booking} path="/booking" exact />
             <PrivateRoute component={MyBookings} path="/mybookings" exact />
             <PrivateRoute component={SettingsPage} path="/settings" exact />
             <PrivateRoute component={RankingsPage} path="/rankings" exact />
             <PrivateRoute component={specificRankingPage} path="/rankings/:rankingId" exact />
+
 
             <AdminPublicRoute restricted={true} component={AdminLogin} path="/admin/login" exact/>
   
