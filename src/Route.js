@@ -34,6 +34,7 @@ function AppRouter() {
     <div>
       <BrowserRouter>
           <Switch>
+
             <PublicRoute restricted={true} component={Login} path="/login" exact />
             <PublicRoute restricted={true} component={Signup} path="/signup" exact />
             <PublicRoute component={LandingPage} path="/" exact />            
@@ -60,6 +61,7 @@ function AppRouter() {
             <AdminPrivateRoute component={AdminContactMessagePage} path="/admin/contactMessages" exact />
 
             <PublicRoute component={NoMatch} path="*" />
+          
           </Switch>
       </BrowserRouter>
     </div>
