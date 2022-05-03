@@ -1,21 +1,35 @@
+import { message } from 'antd';
 import React, { Component }  from 'react';
 import { BlueCard, Layout } from '../components';
+import { restorePassword } from '../services/user.services';
 
 class RestorePasswordPage extends Component {
     constructor(props) {     
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            email: "",
-            dni: "",
+            loading: true,
+            tokenId: "",
+            password: "",
+            confirmPassword: "",
         }
+    }
+
+    async componentDidMount() {
+        await this.setState({
+            loading: false,
+            tokenId: this.props.match.params.tokenId
+        });
     }
 
     async handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
+        if (this.state.password === this.state.confirmPassword) {
+            await restorePassword(this.props, this.state.tokenId, this.state.password);
+        } else {
+            message.error("Las contraseñas no coinciden");
+        }
 
-        
     }
 
     render() {
@@ -27,10 +41,10 @@ class RestorePasswordPage extends Component {
                             <h1 className="text-center mb-4 text-dark">Restablecer contraseña</h1>
                         </div>
                         <div className="mb-3">
-                            <input type="email" className="form-control"value={this.state.email} onChange={(e) => this.setState({email: e.target.value})} placeholder="Correo electrónico" required/>
+                            <input type="password" className="form-control" value={this.state.password} onChange={(e) => {this.setState({password: e.target.value})}} placeholder="Contraseña" required/>
                         </div>
                         <div className="mb-3">
-                            <input type="text" className="form-control" value={this.state.dni} onChange={(e) => this.setState({dni: e.target.value})} placeholder="DNI" required/>
+                            <input type="password" className="form-control" value={this.state.confirmPassword} onChange={(e) => {this.setState({confirmPassword: e.target.value})}} placeholder="Repetir contraseña" required/>
                         </div>
                         <div className="text-center">
                             <button type="submit" className="btn btn-primary px-5 mb-5 w-100">Restablecer contraseña</button>
