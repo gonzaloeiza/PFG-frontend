@@ -3,6 +3,7 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import { 
   LandingPage,
   Login,
+  RestorePasswordPage,
   Signup,
   Booking,
   MyBookings,
@@ -37,6 +38,7 @@ function AppRouter() {
 
             <PublicRoute restricted={true} component={Login} path="/login" exact />
             <PublicRoute restricted={true} component={Signup} path="/signup" exact />
+            <PublicRoute restricted={true} component={RestorePasswordPage} path="/restorePassword" exact />
             <PublicRoute component={LandingPage} path="/" exact />            
             <PublicRoute component={CourtsPage} path="/courts" exact />
 

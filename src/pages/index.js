@@ -1,6 +1,7 @@
 // DEFUALT IMPORT 
 import LandingPage from './LandingPage';
 import Login from './Login';
+import RestorePasswordPage from './RestorePasswordPage';
 import Signup from './Signup';
 import Booking from './Booking';
 import MyBookings from './MyBookings';
@@ -25,6 +26,7 @@ import NoMatch from './404';
 export { 
     LandingPage,
     Login,
+    RestorePasswordPage,
     Signup,
     Booking,
     MyBookings,
