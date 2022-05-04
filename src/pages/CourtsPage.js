@@ -94,6 +94,23 @@ class CourtsPage extends Component {
             );
         }
 
+        if (this.state.selectedCourtIndexForSensor !== null) {
+            var lastReadingAt = moment(this.state.courts[this.state.selectedCourtIndexForSensor].last_reading_at);
+            
+            var modalTimeAgo = `Día ${lastReadingAt.format("YYYY-MM-DD")} a las ${lastReadingAt.format("HH:mm")}`;
+            const now = moment();
+            if (lastReadingAt.clone().add(1, "hours") >= now) {
+                var passedMinutes = now.minutes() - lastReadingAt.minutes(); 
+                if ( passedMinutes === 1) {
+                    modalTimeAgo = "Hace 1 minuto";
+                } else {
+                    modalTimeAgo = `Hace ${passedMinutes} minutos`;
+                }
+            } else if (lastReadingAt.clone().add(1, "days") >= now) {
+                modalTimeAgo = `Hoy a las ${lastReadingAt.hour()}:${lastReadingAt.minutes()}`;
+            }
+        }
+
 
         var courtsTable = []
         for (var i = 0; i < this.state.courtsToShow.length; i++) {
@@ -232,6 +249,7 @@ class CourtsPage extends Component {
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
+                            <p className="col"><strong>Última recopilación de datos:&nbsp;</strong>{modalTimeAgo}</p>
                             <button className="btn btn-light" onClick={this.hideSensorsModal}>Cancelar</button>
                             <button className="btn btn-primary" onClick={this.redirectToSmartCitizen}>Ir a Smartcitizen.me</button>
                         </Modal.Footer>

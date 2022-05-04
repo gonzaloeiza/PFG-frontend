@@ -1,4 +1,4 @@
-import { co2_icon, humidity_icon, particle_icon, pressure_icon, sound_icon, temperature_icon } from "./assets/images/icons"
+import { co2_icon, humidity_icon, particle_icon, pressure_icon, sound_icon, temperature_icon, light_icon } from "./assets/images/icons"
 
 const backendURL = "http://localhost:5000";
 
@@ -11,6 +11,6 @@ knownSensors.set("PM10", particle_icon);
 knownSensors.set("PM2.5", particle_icon);
 knownSensors.set("Humidity", humidity_icon);
 knownSensors.set("Temperature", temperature_icon);
-
+knownSensors.set("Light", light_icon);
 
 export { backendURL, knownSensors }
