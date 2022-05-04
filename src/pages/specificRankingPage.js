@@ -127,7 +127,7 @@ class specificRankingPage extends Component {
                     <p>Creado: {moment(this.state.ranking[0]["group.ranking.createdAt"]).format("YYYY-MM-DD HH:mm")}</p>
                 </BlueCard>
                 <BlueCard className="col-12">
-                    <h1>Partidos a jugar (Jornada {this.state.ranking[0]["group.ranking.journeyNumber"]})</h1>
+                    <h1>Partidos a jugar (Jornada {this.state.ranking[0]["group.ranking.journeyNumber"]}): Grupo {this.state.ranking[0]["group.number"]}</h1>
                     <div className="container table-responsive mt-4">
                         <table className="table table-striped">
                             <thead className="table-dark">
