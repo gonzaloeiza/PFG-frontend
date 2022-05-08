@@ -235,7 +235,7 @@ class Booking extends Component {
                                 />
                             </div>
                             <div className='col-md-4 mb-1'>
-                                <select className="custom-select form-select" id="court" onChange={(e) => this.setState({selectedCourt: e.target.value})}>
+                                <select className="custom-select form-select" id="court" onChange={(e) => this.setState({selectedCourt: e.target.value, selectedCourtSensorsIndex: document.getElementById("court").selectedIndex - 1})}>
                                     <option hidden>Pistas</option>
                                     {courtsOption}
                                 </select>
@@ -247,7 +247,11 @@ class Booking extends Component {
                             </div>
                             <div className='text-end'>
                                 {this.state.selectedCourt !== null && (
-                                    <button type="button" className="mx-2 mt-2 btn btn-secondary bi bi-cloud-sun-fill" onClick={this.showSensorsModal}></button>
+                                    <>
+                                    {this.state.courts[this.state.selectedCourtSensorsIndex].last_reading_at !== null && (
+                                        <button type="button" className="mx-2 mt-2 btn btn-secondary bi bi-cloud-sun-fill" onClick={this.showSensorsModal}></button>
+                                    )}
+                                    </>
                                 )}
                                 <button type="button" className="mx-2 mt-2 btn btn-secondary bi bi-info-lg" onClick={this.showInformationModal}></button>
                             </div>
@@ -325,7 +329,7 @@ class Booking extends Component {
                         <Modal.Title>Informacíon sobre el color de las reservas</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>En las distintas horas disponibles, se puede apreciar que algunas tienen colores distintos que otras. Cada color significa lo siguiente:</p>
+                        <p>Basandonos en los datos de temperatura y humedad de los útilmos 5 días se hace una estimación de las mejores horas para jugar que se clasifican de la siguiente manera: </p>
                         <ul>
                             <li className='text-success'>Verde: Las condiciones para jugar en la pista son perfectas</li>
                             <li className='text-warning'>Naranja: Las condiciones para jugar en la pista son casi perfectas</li>
