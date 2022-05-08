@@ -1,11 +1,11 @@
 import React, { Component }  from 'react';
 import { Layout, BlueCard, Loading } from '../components';
 import { getCourtsData } from '../services/courts.services'
-import { getUsername } from '../services/user.services'
+import { getUsername } from '../services/user.services';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import { backendURL } from '../config';
-import { knownSensors } from '../config'
+import { knownSensors } from '../config';
 
 class CourtsPage extends Component {
     constructor(props) {
@@ -84,7 +84,7 @@ class CourtsPage extends Component {
 
 
     async redirectToSmartCitizen() {
-        window.open(this.state.courts[this.state.selectedCourtIndexForSensor].smartCitizenURL, "_blank");
+        window.open(this.state.courtsToShow[this.state.selectedCourtIndexForSensor].smartCitizenURL, "_blank");
     }
 
     render() {
@@ -95,7 +95,7 @@ class CourtsPage extends Component {
         }
 
         if (this.state.selectedCourtIndexForSensor !== null) {
-            var lastReadingAt = moment(this.state.courts[this.state.selectedCourtIndexForSensor].last_reading_at);
+            var lastReadingAt = moment(this.state.courtsToShow[this.state.selectedCourtIndexForSensor].last_reading_at);
             
             var modalTimeAgo = `Día ${lastReadingAt.format("YYYY-MM-DD")} a las ${lastReadingAt.format("HH:mm")}`;
             const now = moment();
