@@ -5,6 +5,8 @@
 
 ![landing_page_screenshot](landing_page_screenshot.png)
 
+You can access a DEMO by going to: https://padelplay.eizaguirre.net
+
 ## Table of Contents
 
 1. [Technologies](#technologies)
@@ -71,3 +73,5 @@ If you want to access the administration panel head to: http://localhost:3000/ad
 - password: 12345678
 
 In case those credentials don't work, check the [BACKEND REPOSITORY](https://github.com/gonzaloeiza/PFG-backend) installation and see them there.
+
+
