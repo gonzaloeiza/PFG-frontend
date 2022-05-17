@@ -19,6 +19,7 @@ class Booking extends Component {
         this.hideSensorsModal = this.hideSensorsModal.bind(this);
         this.showInformationModal = this.showInformationModal.bind(this);
         this.hideInformationModal = this.hideInformationModal.bind(this);
+        this.redirectToSmartCitizen = this.redirectToSmartCitizen.bind(this);
         this.state =  {
             loading: true,
             showConfirmationModal: false,
@@ -115,6 +116,10 @@ class Booking extends Component {
             courts: courts,
             loading: false
         });
+    }
+
+    async redirectToSmartCitizen() {
+        window.open(this.state.courts[this.state.selectedCourtSensorsIndex].smartCitizenURL, "_blank");
     }
 
     render() {
