@@ -72,9 +72,6 @@ class RankingsPage extends Component {
     }
 
     async sendRankingRegistration() {
-        console.log(this.state.selectedRankingIndex);
-        console.log(this.state.userData.name);
-        console.log(this.state.userData.email);
         var message = "Inscripción a " + this.state.openRankings[this.state.selectedRankingIndex].name + ": " + this.state.formMessage;
 
         if (this.state.formMessage.trim() === "") {
