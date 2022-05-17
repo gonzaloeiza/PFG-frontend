@@ -75,9 +75,9 @@ class AdminPage extends Component {
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                             <AdminToolCard 
-                                tittle="Formularios Landing Page"
+                                tittle="Formularios Landing Page y rankings"
                                 icon="bi bi-chat-dots-fill"
-                                body="Aquí podrás ver todos los mensajes del formulario de la página de inicio"
+                                body="Aquí podrás ver todos los mensajes del formulario de la página de inicio y solicitudes de inscripción de rankings"
                                 color="#EE8CF3"
                                 href="/admin/contactMessages"
                             />

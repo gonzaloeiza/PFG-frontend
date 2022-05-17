@@ -115,3 +115,35 @@ export async function setResultOfMatch(props, matchId, partnerOneId, partnerOneW
         return ;
     }
 }
+
+export async function getOpenRankings(props) {
+    const response = await fetch(`${backendURL}/api/rankings/openInscription`, {
+        method: "GET",
+        headers: {
+            "x-access-token": localStorage.getItem("auth")
+        }
+    }).catch(() => {
+        return null;
+    });
+
+    if (response !== null) {
+        if (response.status === 200) {
+            const data = await response.json();
+            return data.message;
+        } else if (response.status === 401 || response.status === 403) {
+            message.error("Tu sesión ha caducado. Inicia sesión de nuevo");
+            logout(false);
+            return props.history.push("/login");
+        } else if (response.status === 400) {
+            const data = await response.json();
+            message.error(data.message);
+            return [];
+        } else {
+            message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
+            return [];
+        }
+    } else {
+        message.error("Ha ocurrido un error, intentalo de nuevo más tarde");
+        return [];
+    }   
+}

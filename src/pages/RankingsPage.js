@@ -1,8 +1,8 @@
 import React, { Component }  from 'react';
 import { Modal } from 'react-bootstrap';
 import { Layout, BlueCard, Loading } from '../components';
-import { getMyRankings } from '../services/rankings.services';
-import { getUsername } from '../services/user.services';
+import { getMyRankings, getOpenRankings } from '../services/rankings.services';
+import { getUserData, getUsername, sendForm } from '../services/user.services';
 
 class RankingsPage extends Component {
     constructor(props) {     
@@ -10,12 +10,19 @@ class RankingsPage extends Component {
         this.redirectToSpecificRanking = this.redirectToSpecificRanking.bind(this);
         this.showOpenRankingsModal = this.showOpenRankingsModal.bind(this);
         this.hideOpenRankingsModal = this.hideOpenRankingsModal.bind(this);
+        this.showInscriptionModal = this.showInscriptionModal.bind(this);
+        this.hideInscriptionModal = this.hideInscriptionModal.bind(this);
+        this.sendRankingRegistration = this.sendRankingRegistration.bind(this);
         this.state = {
             loading: true,
             showOpenRankingsModal: false,
+            showInscriptionModal: false,
             rankings: [],
             openRankings: [],
             username: null,
+            userData: null,
+            formMessage: "",
+            selectedRankingIndex: null,
         }
     }
 
@@ -23,7 +30,9 @@ class RankingsPage extends Component {
         await this.setState({
             loading: false,
             username: getUsername(),
-            rankings: await getMyRankings(this.props)
+            rankings: await getMyRankings(this.props),
+            userData: await getUserData(this.props),
+            openRankings: await getOpenRankings(this.props),
         });
     }
 
@@ -41,10 +50,41 @@ class RankingsPage extends Component {
     
     async hideOpenRankingsModal() {
         await this.setState({
-            showOpenRankingsModal: false
+            showOpenRankingsModal: false,
+            selectedRankingIndex: null,
+            formMessage: ""
         });
     }
 
+    async showInscriptionModal(e) {
+        await this.setState({
+            showInscriptionModal: true,
+            selectedRankingIndex: e.target.value
+        });
+    }
+
+    async hideInscriptionModal() {
+        await this.setState({
+            showInscriptionModal: false,
+            selectedRankingIndex: null,
+            formMessage: ""
+        });
+    }
+
+    async sendRankingRegistration() {
+        console.log(this.state.selectedRankingIndex);
+        console.log(this.state.userData.name);
+        console.log(this.state.userData.email);
+        var message = "Inscripción a " + this.state.openRankings[this.state.selectedRankingIndex].name + ": " + this.state.formMessage;
+
+        if (this.state.formMessage.trim() === "") {
+            message = "Inscripción a " + this.state.openRankings[this.state.selectedRankingIndex].name + ": Me gustaría apuntarme al ranking pero no tengo pareja."
+        }
+
+        await sendForm(this.state.userData.name , this.state.userData.firstSurname, this.state.userData.email, message);
+        this.hideInscriptionModal();
+        this.hideOpenRankingsModal();
+    }
 
 
     render() {
@@ -72,15 +112,17 @@ class RankingsPage extends Component {
 
         
         var openRankingCards = [];
-        for (var i = 0; i < this.state.openRankings.length; i++) {
+        for (i = 0; i < this.state.openRankings.length; i++) {
             openRankingCards.push(
-                <div key={i} className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-4">
-                    <div className="card">
-                    <div className="card-body">
-                        {/* <h5 className="card-title">{this.state.rankings[i]["ranking.name"]}</h5> */}
-                        {/* <p className="card-text">{this.state.rankings[i]["ranking.description"]}</p> */}
-                        {/* <button value={this.state.rankings[i].rankingId} className="btn btn-primary" onClick={this.redirectToSpecificRanking}>Ver ranking en detalle</button> */}
-                    </div>
+                <div  key={i} className='row justify-content-center'>
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-4">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">{this.state.openRankings[i].name}</h5>
+                                <p className="card-text">{this.state.openRankings[i].description}</p>
+                                <button value={i} onClick={this.showInscriptionModal} className="btn btn-primary">Enviar solicitud de inscripción</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -105,7 +147,7 @@ class RankingsPage extends Component {
                         <Modal.Title>Rankings con inscripción abierta</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        
+                        {openRankingCards}
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-light" onClick={this.hideOpenRankingsModal}>
@@ -113,6 +155,25 @@ class RankingsPage extends Component {
                         </button>
                     </Modal.Footer>
                 </Modal>
+
+                <Modal show={this.state.showInscriptionModal} onHide={this.hideInscriptionModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Enviar solicitud</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Mensaje de solicitud:</p>
+                        <textarea rows="5" type="text" value={this.state.formMessage} className="form-control" id="message" placeholder="Si no tienes pareja y quieres que se te busque una no modifiques el mensaje. Si tienes pareja especifica su nombre, apellidos y email." onChange={(e) => this.setState({formMessage: e.target.value})} required/>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-light" onClick={this.hideInscriptionModal}>
+                            Ocultar
+                        </button>
+                        <button className="btn btn-primary" onClick={this.sendRankingRegistration}>
+                            Enviar
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
             </Layout>
         ); 
     }
