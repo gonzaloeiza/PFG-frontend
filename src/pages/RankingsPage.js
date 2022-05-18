@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import React, { Component }  from 'react';
 import { Modal } from 'react-bootstrap';
 import { Layout, BlueCard, Loading } from '../components';
@@ -34,6 +35,9 @@ class RankingsPage extends Component {
             userData: await getUserData(this.props),
             openRankings: await getOpenRankings(this.props),
         });
+        if (this.state.rankings.length === 0) {
+            message.info("No estás inscrito en ningún ranking");
+        }
     }
 
 
