@@ -112,7 +112,7 @@ class RankingsPage extends Component {
         for (i = 0; i < this.state.openRankings.length; i++) {
             openRankingCards.push(
                 <div  key={i} className='row justify-content-center'>
-                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-4">
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">{this.state.openRankings[i].name}</h5>
