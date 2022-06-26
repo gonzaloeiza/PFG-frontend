@@ -454,7 +454,7 @@ class AdminCourtsPage extends Component {
                     <div className="row g-0">
                         <div className="col-md-4 px-2 d-flex flex-wrap align-items-center">
                             {this.state.courtsToShow[i].picture !== null && (
-                                <img src={`${backendURL}/images/courts/${this.state.courtsToShow[i].picture}`} className="img-fluid rounded-start" alt="Imagen de la pista" />
+                                <img src={`${backendURL}/images/courts/${this.state.courtsToShow[i].picture}`} className="img-fluid rounded-start" alt={`Imagen de la pista: ${backendURL}/images/courts/${this.state.courtsToShow[i].picture}`} />
                             )}
                         </div>
                         <div className="col-md-8 d-flex align-items-start flex-column">
